@@ -5,8 +5,8 @@ import java.util.Random;
 public class Dice {
 	
 	// Definition of Variables
-	private int diceValue;
-	private int maxValueDice = 6;
+	private int dice1;
+	private int dice2;
 	
 	// Random, Scanner etc
 	Random rand = new Random();
@@ -15,10 +15,11 @@ public class Dice {
 	public Dice () {}
 	
 	// Methods
-	public int getDiceValue() { return this.diceValue; }
+	public int getDice1() { return this.dice1;}
+	public int getDice2() { return this.dice2;}
 	
-	public int rollDice() {
-		this.diceValue = rand.nextInt(maxValueDice) + 1;
-		return diceValue;
+	public void rollDice() {
+		this.dice1 = rand.nextInt(6) + 1;
+		this.dice2 = rand.nextInt(6) + 1;
 	}
 }

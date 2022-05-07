@@ -2,20 +2,23 @@ package Model;
 
 import java.util.Scanner;
 import java.util.ArrayList;  // import the ArrayList class
-import java.util.Random;
+import java.util.Collections;
+import java.awt.Color;
+import Model.Player;
+import java.util.Comparator;
+
 
 public class Match {
 
-		// Definition of variables
-	
+		// Definition of variables	
 		// Players 
 		private int maxPlayers = 6;
 		private int minPlayers = 2;
-		
+
+		private ArrayList<Player> playerList = new ArrayList<Player>();
 		
 		// Scanner, Random etc		
 		Scanner scan = new Scanner(System.in);
-		Random rand = new Random();
 		
 		// Constructors
 		public Match() {}
@@ -36,19 +39,40 @@ public class Match {
 			return numPlayers;
 		}
 		
-		
-		public ArrayList<String> initPlayers(int numPlayers) {
-			int index, len = 6;
-			String colour, pawnColours[] = {"red", "yellow", "green", "blue", "white", "black"};
-			ArrayList<String> playerList = new ArrayList<String>();  // Create an ArrayList object
+		public ArrayList<Player> initPlayers(int numPlayers) {
 			
+			Color cor, pawnColours[] = {Color.red, Color.yellow, Color.green, Color.blue, Color.white, Color.black};
+			  // Create an ArrayList object
+
 			for (int i = 0; i < numPlayers; i++) {
-				index = rand.nextInt(len);
-				colour = pawnColours[index];
-				playerList.add(colour);
+				cor = pawnColours[i];
+
+				playerList.add(new Player(i+1 , 4000+i, cor ));
 			}
 			
 			return playerList;
 		}
 		
+
+		Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor
+			@Override
+			public int compare(Player p1, Player p2){
+				int m1, m2;
+					m1 = p1.getPlayerMoney();
+					m2 = p2.getPlayerMoney();
+					return m1 > m2 ? -1
+						: m1 < m2 ? 1
+						: 0;
+			}
+		};
+
+		public void Fim(){
+
+			Collections.sort(playerList, comparator);
+
+			System.out.println("RANKING:\n");
+			for(Player p: playerList){
+				System.out.printf("jogador: %d , dinheiro: %d, cor: %s \n", p.getPlayerNumber(), p.getPlayerMoney(), p.getPlayerColor().toString());
+			}
+		}
 }

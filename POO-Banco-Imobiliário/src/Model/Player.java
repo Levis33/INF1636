@@ -1,31 +1,58 @@
 package Model;
 
-import java.util.Random;
+import java.awt.Color;
 
 public class Player {
 	
 	// Definition of variables
+	
 	private int playerNumber;
-	private String playerColour;
-	private float playerMoney;
+	private int playerMoney;
+
+	private Color playerColor;
+	private Pawn pawn = new Pawn();
+
+	private boolean saidaLivrePrisao = false;
+	private boolean preso = false;
+	private boolean falencia = false;
 	
 	// Random, Scanner etc
-	Random rand = new Random();
 
 	// Constructors
-	public Player() {}
 	
-	public Player(float money, String colour) {
+	public Player(int playerNumb, int money, Color color) {
+		this.playerNumber = playerNumb;
 		this.playerMoney = money;
-		this.playerColour = colour;
+		this.playerColor = color;
 	}
-	
+
+
 	
 	// Methods
+
+	public void changeStatusPreso(){
+		this.preso = !this.preso;
+	}
+
+	public void changeStatusFalencia(){
+		this.falencia = true;
+	}
+
+	public void changeStatusSaidaPrisao(){
+		this.saidaLivrePrisao = !this.saidaLivrePrisao;
+	}
+
 	public int getPlayerNumber() { return this.playerNumber; }
 	
-	public String getPlayerColour() { return this.playerColour; }
+	public Color getPlayerColor() { return this.playerColor; }
 	
-	public float getPlayerMoney() { return this.playerMoney; }
+	public int getPlayerMoney() { return this.playerMoney; }
+
+	public boolean getSaidaLivrePrisao() { return this.saidaLivrePrisao; }
+
+	public boolean getPlayerPreso() { return this.preso; }
+
+	public boolean getPlayerFalencia() { return this.falencia; }
+
 
 }
