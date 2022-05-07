@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.ArrayList;  // import the ArrayList class
 import java.util.Random;
 
-public class Match extends Round {
+public class Match {
 
 		// Definition of variables
 	
