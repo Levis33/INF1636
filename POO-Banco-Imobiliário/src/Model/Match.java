@@ -71,7 +71,7 @@ public class Match {
 
 		Collections.sort(playerList, comparator);
 
-		System.out.println("RANKING:\n");
+		System.out.println("\nRANKING:\n");
 		for (Player p : playerList) {
 			System.out.printf("jogador: %d , dinheiro: %d, cor: %s \n", p.getPlayerNumber(), p.getPlayerMoney(),
 					p.getPlayerColor().toString());
