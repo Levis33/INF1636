@@ -23,11 +23,11 @@ public class Match {
 		
 		// Methods
 		public int getNumPlayers() {  // Get number of players
-			System.out.println("Digite a quantidade de jogadores:(Mínimo de 2 e máximo de 6)");
+			System.out.println("Digite a quantidade de jogadores:(MÃ­nimo de 2 e mÃ¡ximo de 6)");
 			int numPlayers = scan.nextInt();
 				
 			if (numPlayers > maxPlayers || numPlayers < minPlayers) {
-				System.out.println("Número de jogadores inválido. Tente novamente.");
+				System.out.println("NÃºmero de jogadores invÃ¡lido. Tente novamente.");
 				System.exit(1);
 			}
 				
