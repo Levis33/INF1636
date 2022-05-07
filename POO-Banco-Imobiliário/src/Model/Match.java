@@ -7,7 +7,7 @@ import Model.Player.Player;
 import java.util.ArrayList; // import the ArrayList class
 import java.util.Collections;
 import java.awt.Color;
-import Model.Player;
+//import Model.Player;
 import java.util.Comparator;
 
 public class Match {
@@ -49,7 +49,7 @@ public class Match {
 		for (int i = 0; i < numPlayers; i++) {
 			cor = pawnColours[i];
 
-			playerList.add(new Player(i + 1, 4000 + i, cor));
+			playerList.add(new Player(i + 1, 4000, cor));
 		}
 
 		return playerList;
