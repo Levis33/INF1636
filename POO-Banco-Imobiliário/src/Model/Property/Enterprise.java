@@ -4,11 +4,14 @@ package Model.Property;
 
 public class Enterprise extends Property {
 
-    private int value, rent, owner;
-    private String name;
+    private int[] loan;
 
-    public Enterprise(String n, int o, int[] r, int v) {
-        super(n, o, r, v);
+    public Enterprise(String name, int owner, int[] loan, int price) {
+        super(name, owner, loan, price);
+    }
+
+    public int getLoan(int sumDices) {
+        return loan[0] * sumDices;
     }
 
 }
