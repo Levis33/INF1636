@@ -43,7 +43,7 @@ public class Match {
 
 	public ArrayList<Player> initPlayers(int numPlayers) {
 
-		Color cor, pawnColours[] = { Color.red, Color.yellow, Color.green, Color.blue, Color.white, Color.black };
+		Color cor, pawnColours[] = { Color.red, Color.blue, Color.orange, Color.yellow, Color.magenta, Color.gray };
 		// Create an ArrayList object
 
 		for (int i = 0; i < numPlayers; i++) {
