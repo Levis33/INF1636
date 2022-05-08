@@ -3,6 +3,7 @@ package Model;
 import java.util.Scanner;
 
 import Model.Player.Player;
+import Model.Dice;
 
 import java.util.ArrayList; // import the ArrayList class
 import java.util.Collections;
@@ -18,6 +19,7 @@ public class Match {
 	private int minPlayers = 2;
 
 	private ArrayList<Player> playerList = new ArrayList<Player>();
+	// private int numPlayers = 0;
 
 	// Scanner, Random etc
 	Scanner scan = new Scanner(System.in);
@@ -44,7 +46,6 @@ public class Match {
 	public ArrayList<Player> initPlayers(int numPlayers) {
 
 		Color cor, pawnColours[] = { Color.red, Color.blue, Color.orange, Color.yellow, Color.magenta, Color.gray };
-		// Create an ArrayList object
 
 		for (int i = 0; i < numPlayers; i++) {
 			cor = pawnColours[i];
@@ -67,7 +68,7 @@ public class Match {
 		}
 	};
 
-	public void Fim() {
+	public void endGame() {
 
 		Collections.sort(playerList, comparator);
 

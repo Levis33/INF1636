@@ -8,16 +8,16 @@ public class Ground extends Property {
     private int priceBuilding;
     private int numHotels = 0;
     private int numHouses = 0;
-    private int[] loan;
+    private int[] rent;
 
-    public Ground(String name, int owner, int[] loan, int[] price, Color c) {
-        super(name, owner, loan, price[0]);
+    public Ground(String name, int owner, int[] rent, int[] price, Color c) {
+        super(name, owner, rent, price[0]);
         priceBuilding = price[1];
         color = c;
     }
 
-    public int getLoan() {
-        return loan[numHouses + numHotels];
+    public int getRent() {
+        return rent[numHouses + numHotels];
     }
 
     public Color getColor() {
