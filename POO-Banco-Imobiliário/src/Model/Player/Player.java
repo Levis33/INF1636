@@ -28,15 +28,15 @@ public class Player {
 
 	// Methods
 
-	public void changeStatusPreso() {
+	public void changeStatusPreso() { // player fica preso ou deixa de ficar preso
 		this.preso = !this.preso;
 	}
 
-	public void changeStatusFalencia() {
+	public void changeStatusFalencia() { // player fica falido
 		this.falencia = true;
 	}
 
-	public void changeStatusSaidaPrisao() {
+	public void changeStatusSaidaPrisao() { // troca o status da carta para sair da prisao livremente
 		this.saidaLivrePrisao = !this.saidaLivrePrisao;
 	}
 
