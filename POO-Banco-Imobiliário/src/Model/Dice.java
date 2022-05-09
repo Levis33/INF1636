@@ -30,7 +30,7 @@ public class Dice {
 		this.dice2 = rand.nextInt(6) + 1;
 	}
 
-	public int getSumDices(Dice dice1, Dice dice2) {
-		return this.sumDices = (int) dice1 + (int) dice2;
+	public int getSumDices(Dice dice) {
+		return this.sumDices = dice.getDice1() + dice.getDice2();
 	}
 }
