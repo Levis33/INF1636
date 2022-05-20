@@ -1,7 +1,6 @@
 package Main;
 
 import Model.*;
-import Model.Dice.Dice;
 
 public class Main {
 

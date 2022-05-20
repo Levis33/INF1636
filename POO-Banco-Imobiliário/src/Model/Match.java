@@ -2,8 +2,8 @@ package Model;
 
 import java.util.Scanner;
 
-import Model.Dice.Dice;
 import Model.Player.Player;
+import Model.Dice;
 
 import java.util.ArrayList; // import the ArrayList class
 import java.util.Collections;
