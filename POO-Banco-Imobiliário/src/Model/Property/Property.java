@@ -6,9 +6,8 @@ public abstract class Property {
     private int valorCompra, proprietario = -1; // -1 caso nao tenha, se tiver e a posicao no array de jogadores
     private int[] aluguel;
 
-    public Property(String n, int p, int[] a, int v) {
+    public Property(String n, int[] a, int v) {
         this.nome = n;
-        this.proprietario = p;
         this.aluguel = a;
         this.valorCompra = v;
     }

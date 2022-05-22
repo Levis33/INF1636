@@ -16,7 +16,7 @@ public class Match {
 	// Definition of variables
 	// Players
 	private int maxPlayers = 6;
-	private int minPlayers = 2;
+	private int minPlayers = 3;
 
 	private ArrayList<Player> playerList = new ArrayList<Player>();
 	// private int numPlayers = 0;
