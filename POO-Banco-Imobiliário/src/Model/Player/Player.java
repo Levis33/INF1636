@@ -55,6 +55,13 @@ public class Player {
 		}
 	}
 
+	public void changeMoney(int value){
+		this.playerMoney += value;
+		if(this.playerMoney <= 0){
+			this.falencia = true;
+		}
+	}
+
 
 	public void changeStatusPreso() { // player fica preso ou deixa de ficar preso
 		this.preso = !this.preso;
