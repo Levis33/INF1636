@@ -29,6 +29,20 @@ public class Match {
 	}
 
 	// Methods
+
+	// public String[] getPlayersName(int numPlayers) { // Get name of players
+	// String namePlayers[numPlayers];
+
+	// for (int i = 0; i < numPlayers; i++){
+	// System.out.println("Digite o seu nome: ");
+	// namePlayers[i] = scan.nextLine();
+	// }
+
+	// scan.close();
+
+	// return namePlayers;
+	// }
+
 	public int getNumPlayers() { // Get number of players
 		System.out.println("Digite a quantidade de jogadores:(Mínimo de 2 e máximo de 6)");
 		int numPlayers = scan.nextInt();
