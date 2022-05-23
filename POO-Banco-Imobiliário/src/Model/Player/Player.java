@@ -7,61 +7,61 @@ public class Player {
 
 	// Definition of variables
 
-	private int playerNumber;
-	private int playerMoney;
+	private int number;
+	private int money;
+	private String name;
 
-	private Color playerColor;
+	private Color color;
 	private Pawn pawn = new Pawn();
 
 	private boolean saidaLivrePrisao = false;
 	private boolean preso = false;
 	private boolean falencia = false;
 
-	private ArrayList<Integer> propriedades = new ArrayList<Integer>(); 
+	private ArrayList<Integer> propriedades = new ArrayList<Integer>();
 
 	// Random, Scanner etc
 
 	// Constructors
 
-	public Player(int playerNumb, int money, Color color) {
-		this.playerNumber = playerNumb;
-		this.playerMoney = money;
-		this.playerColor = color;
+	public Player(int playerNumb, int money, Color color, String name) {
+		this.number = playerNumb;
+		this.money = money;
+		this.color = color;
+		this.name = name;
 	}
 
 	// Methods
 
-	public void movePawn(int somaDados){ // move o Pawn
+	public void movePawn(int somaDados) { // move o Pawn
 		pawn.move(somaDados);
 	}
 
-	public void addPropriedade(int property){ // adiciona propriedade
+	public void addPropriedade(int property) { // adiciona propriedade
 		this.propriedades.add(property);
 	}
 
-	public void removePropriedade(int property){ // remove a propriedade
+	public void removePropriedade(int property) { // remove a propriedade
 		this.propriedades.remove(propriedades.indexOf(property));
 	}
 
-	public boolean goToPrison(){
+	public boolean goToPrison() {
 		pawn.goTo(10);
-		if(saidaLivrePrisao){
+		if (saidaLivrePrisao) {
 			saidaLivrePrisao = false;
 			return false;
-		}
-		else{
+		} else {
 			preso = true;
 			return true;
 		}
 	}
 
-	public void changeMoney(int value){
-		this.playerMoney += value;
-		if(this.playerMoney <= 0){
+	public void changeMoney(int value) {
+		this.money += value;
+		if (this.money <= 0) {
 			this.falencia = true;
 		}
 	}
-
 
 	public void changeStatusPreso() { // player fica preso ou deixa de ficar preso
 		this.preso = !this.preso;
@@ -75,16 +75,20 @@ public class Player {
 		this.saidaLivrePrisao = !this.saidaLivrePrisao;
 	}
 
-	public int getPlayerNumber() {
-		return this.playerNumber;
+	public int getNumber() {
+		return this.number;
 	}
 
-	public Color getPlayerColor() {
-		return this.playerColor;
+	public Color getColor() {
+		return this.color;
 	}
 
-	public int getPlayerMoney() {
-		return this.playerMoney;
+	public int getMoney() {
+		return this.money;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 
 	public boolean getSaidaLivrePrisao() {
@@ -102,14 +106,14 @@ public class Player {
 	public ArrayList<Integer> getPropriedades() {
 		ArrayList<Integer> props = new ArrayList<Integer>();
 		int i;
-		for(i=0;i < this.propriedades.size(); i++){
+		for (i = 0; i < this.propriedades.size(); i++) {
 			props.add(propriedades.get(i));
 		}
 
 		return props;
 	}
 
-	public int getPawnPos(){
+	public int getPawnPos() {
 		return pawn.getPos();
 	}
 }

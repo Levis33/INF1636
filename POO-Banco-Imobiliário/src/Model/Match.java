@@ -60,8 +60,8 @@ public class Match {
 		@Override
 		public int compare(Player p1, Player p2) {
 			int m1, m2;
-			m1 = p1.getPlayerMoney();
-			m2 = p2.getPlayerMoney();
+			m1 = p1.getmoney();
+			m2 = p2.getmoney();
 			return m1 > m2 ? -1
 					: m1 < m2 ? 1
 							: 0;
@@ -74,8 +74,8 @@ public class Match {
 
 		System.out.println("\nRANKING:\n");
 		for (Player p : playerList) {
-			System.out.printf("jogador: %d , dinheiro: %d, cor: %s \n", p.getPlayerNumber(), p.getPlayerMoney(),
-					p.getPlayerColor().toString());
+			System.out.printf("jogador: %d , dinheiro: %d, cor: %s \n", p.getnumber(), p.getmoney(),
+					p.getcolor().toString());
 		}
 	}
 }
