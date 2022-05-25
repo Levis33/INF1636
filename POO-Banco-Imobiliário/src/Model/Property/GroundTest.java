@@ -13,8 +13,8 @@ public class GroundTest {
 	public void testConstructor() {
 		int aluguel[]= {2, 5, 10};
 		int price[] = {100, 200, 300};
-		Ground g = new Ground("Lagoa", -1, aluguel, price, Color.green);
-		assertNotNull("criação de Ground falhou", g);
+		Ground g = new Ground("Lagoa",  aluguel, price, Color.green);
+		assertNotNull("criaï¿½ï¿½o de Ground falhou", g);
 	}
 
 	///////Tests Get///////
@@ -22,34 +22,34 @@ public class GroundTest {
 	public void testGetNome() {
 		int aluguel[]= {2, 5, 10};
 		int price[] = {100, 200, 300};
-		Ground g = new Ground("Lagoa", -1, aluguel, price, Color.green);
+		Ground g = new Ground("Lagoa",  aluguel, price, Color.green);
 		String expected = "Lagoa";
 		String actual = g.getNome();
-		assertNotNull("instaciação do nome do terreno falhou", actual);
-		assertEquals("atribuição incorreta do nome", expected, actual);
+		assertNotNull("instaciaï¿½ï¿½o do nome do terreno falhou", actual);
+		assertEquals("atribuiï¿½ï¿½o incorreta do nome", expected, actual);
 	}
 	
 	@Test(timeout= TIMEOUT)
 	public void testGetProprietario() {
 		int aluguel[]= {2, 5, 10};
 		int price[] = {100, 200, 300};
-		Ground g = new Ground("Lagoa", -1, aluguel, price, Color.green);
+		Ground g = new Ground("Lagoa",  aluguel, price, Color.green);
 		int expected = -1;
 		int actual = g.getProprietario();
-		assertNotNull("instaciação do proprietário do terreno falhou", actual);
-		assertEquals("atribuição incorreta do proprietário", expected, actual);
+		assertNotNull("instaciaï¿½ï¿½o do proprietï¿½rio do terreno falhou", actual);
+		assertEquals("atribuiï¿½ï¿½o incorreta do proprietï¿½rio", expected, actual);
 	}
 	
 	@Test(timeout= TIMEOUT)
 	public void testGetAluguel() {
 		int aluguel[]= {2, 5, 10};
 		int price[] = {100, 200, 300};
-		Ground g = new Ground("Lagoa", -1, aluguel, price, Color.green);
+		Ground g = new Ground("Lagoa",  aluguel, price, Color.green);
 		int[] expected = {2, 5, 10};
 		int[] actual = g.getAluguel();
-		assertNotNull("instaciação do aluguel do terreno falhou", actual);
+		assertNotNull("instaciaï¿½ï¿½o do aluguel do terreno falhou", actual);
 		for(int i=0; i<3; i++) {
-		assertEquals("atribuição incorreta do aluguel", expected[i], actual[i]);
+		assertEquals("atribuiï¿½ï¿½o incorreta do aluguel", expected[i], actual[i]);
 		}
 	}
 	
@@ -57,11 +57,11 @@ public class GroundTest {
 	public void testGetValorCompra() {
 		int aluguel[]= {2, 5, 10};
 		int price[] = {100, 200, 300};
-		Ground g = new Ground("Lagoa", -1, aluguel, price, Color.green);
+		Ground g = new Ground("Lagoa",  aluguel, price, Color.green);
 		int expected = 100;
 		int actual = g.getValorCompra();
-		assertNotNull("instaciação do valor do terreno falhou", actual);
-		assertEquals("atribuição incorreta do valor de compra", expected, actual);
+		assertNotNull("instaciaï¿½ï¿½o do valor do terreno falhou", actual);
+		assertEquals("atribuiï¿½ï¿½o incorreta do valor de compra", expected, actual);
 	}
 
 }

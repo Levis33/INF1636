@@ -64,7 +64,7 @@ public class Match {
 		for (int i = 0; i < numPlayers; i++) {
 			cor = pawnColours[i];
 
-			playerList.add(new Player(i + 1, 4000, cor));
+			playerList.add(new Player(i + 1, 4000, cor, "teste"));
 		}
 
 		return playerList;
@@ -74,8 +74,8 @@ public class Match {
 		@Override
 		public int compare(Player p1, Player p2) {
 			int m1, m2;
-			m1 = p1.getmoney();
-			m2 = p2.getmoney();
+			m1 = p1.getMoney();
+			m2 = p2.getMoney();
 			return m1 > m2 ? -1
 					: m1 < m2 ? 1
 							: 0;
@@ -88,8 +88,8 @@ public class Match {
 
 		System.out.println("\nRANKING:\n");
 		for (Player p : playerList) {
-			System.out.printf("jogador: %d , dinheiro: %d, cor: %s \n", p.getnumber(), p.getmoney(),
-					p.getcolor().toString());
+			System.out.printf("jogador: %d , dinheiro: %d, cor: %s \n", p.getNumber(), p.getMoney(),
+					p.getColor().toString());
 		}
 	}
 }
