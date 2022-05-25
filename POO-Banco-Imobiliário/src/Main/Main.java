@@ -10,7 +10,6 @@ public class Main {
 		int numPlayers = match.getNumPlayers();
 		System.out.println(match.initPlayers(numPlayers)); // OK!
 		match.endGame();
-
 	}
 
 }
