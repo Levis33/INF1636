@@ -25,7 +25,7 @@ public class Board extends JPanel {
 	
 	private void getBoard() {
 		try {
-			board=ImageIO.read(new File("tabuleiro.png"));
+			board=ImageIO.read(new File("Images/tabuleiro.png"));
 		}catch(IOException e){
 			System.out.print(e.getMessage());
 			System.exit(1);

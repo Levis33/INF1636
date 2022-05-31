@@ -13,7 +13,7 @@ public class ListaImagens{
 	
 	public ListaImagens() {
 		try {
-			i=ImageIO.read(new File("tabuleiro.png"));
+			i=ImageIO.read(new File("Images/tabuleiro.png"));
 			imgHeight= i.getHeight(null);
 			imgWidth= i.getWidth(null);
 		}catch(IOException e){

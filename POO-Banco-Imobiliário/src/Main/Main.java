@@ -15,14 +15,14 @@ public class Main {
 		System.out.println(propriedade[0].getNome());
 		System.out.println(propriedade[0].getAluguel()[0]);
 
-		////////Testando Frames///////////////
+		//////// Frames///////////////
 		
-		// GameIntro f2= new GameIntro("Banco Imobiliário");
-		// f2.setVisible(true);
-		// f2.repaint();
+		 GameIntro f2= new GameIntro("Banco Imobili�rio");
+		 f2.setVisible(true);
+		 f2.repaint();
 
-		Frame f= new Frame("Banco Imobiliário", 6);
-		f.setVisible(true);
+		//Frame f= new Frame("Banco Imobiliário", 6);
+//		f.setVisible(true);
 
 		/////////////////////////////////////
 
