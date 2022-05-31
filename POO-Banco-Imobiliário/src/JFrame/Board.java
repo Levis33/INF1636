@@ -14,6 +14,8 @@ public class Board extends JPanel {
 	private Image board;
 	private Image dice1, dice2;
 	private Image pin1, pin2, pin3, pin4, pin5, pin6;
+	private Image luckyCard;
+	private Image propertyCard;
 	private Image[] pins = {pin1, pin2, pin3, pin4, pin5, pin6};
 	private String[] dicesOptions= {"face1.png", "face2.png", "face3.png", "face4.png", "face5.png", "face6.png"};
 	private String[] pinsOptions= {"pin0.png", "pin1.png", "pin2.png", "pin3.png", "pin4.png", "pin5.png"};
@@ -38,8 +40,8 @@ public class Board extends JPanel {
 	public void getDices() {
 		Random gerador = new Random();
 		try {
-			String diceOption1 = dicesOptions[gerador.nextInt(5)];
-			String diceOption2 = dicesOptions[gerador.nextInt(5)];
+			String diceOption1 = dicesOptions[gerador.nextInt(6)];
+			String diceOption2 = dicesOptions[gerador.nextInt(6)];
 			dice1=ImageIO.read(new File("Images/dados/"+diceOption1));
 			dice2=ImageIO.read(new File("Images/dados/"+diceOption2));
 		}catch(IOException e){
@@ -59,6 +61,27 @@ public class Board extends JPanel {
 		}
 		
 	}
+
+	public void getLuckyCards(){
+		Random gerador = new Random();
+		try{
+			luckyCard= ImageIO.read(new File("Images/sorteReves/chance"+gerador.nextInt(30)+".png"));
+		}
+		catch(IOException e){
+			System.out.print(e.getMessage());
+			System.exit(1);
+		}
+	}
+
+	public void getPropertyCard(){
+		try{
+			propertyCard = ImageIO.read(new File("Images/territorios/Leblon.png"));
+		}
+		catch(IOException e){
+			System.out.print(e.getMessage());
+			System.exit(1);
+		}
+	}
 	
 	
 	public void paintComponent(Graphics g) {
@@ -67,10 +90,14 @@ public class Board extends JPanel {
 		this.getBoard();
 		this.getDices();
 		this.getPawns();
+		this.getLuckyCards();
+		this.getPropertyCard();
 		int larg=IMG_X, alt=IMG_Y;
 		g2d.drawImage(board, larg, alt, 700, 665, null);
 		g2d.drawImage(dice1, 750, 30, 150, 150, null);
 		g2d.drawImage(dice2, 750, 180, 150, 150, null);
+		g2d.drawImage(luckyCard, 395, 350, 200, 200, null);
+		g2d.drawImage(propertyCard, 395, 100, 200, 200, null);
 		for(int k=0; k<11; k++) {
 		int dist;
 			if(k==0) {
