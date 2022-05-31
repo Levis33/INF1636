@@ -12,23 +12,28 @@ public class Main {
 
 		Property[] propriedade = CriaPropriedades.cria();
 
-		System.out.println(propriedade[0].getNome());
-		System.out.println(propriedade[0].getAluguel()[0]);
+
 
 		//////// Frames///////////////
 		
-		 GameIntro f2= new GameIntro("Banco Imobili�rio");
-		 f2.setVisible(true);
-		 f2.repaint();
+//		 GameIntro f2= new GameIntro("Banco Imobili�rio");
+//		 f2.setVisible(true);
+//		 f2.repaint();
 
-		//Frame f= new Frame("Banco Imobiliário", 6);
-//		f.setVisible(true);
+		Frame f= new Frame("Banco Imobiliário", 6);
+		f.setVisible(true);
 
 		/////////////////////////////////////
 
+		Property[] propriedades = CriaPropriedades.cria();
+		
+		for(int i =0;i < propriedades.length; i++){
+			System.out.println(propriedades[i].getNome());
+			System.out.println(propriedade[i].getValorCompra());
+		}
 
-		int numPlayers = match.getNumPlayers();
-		System.out.println(match.initPlayers(numPlayers)); // OK!
+//		int numPlayers = match.getNumPlayers();
+//		System.out.println(match.initPlayers(numPlayers)); // OK!
 		match.endGame();
 
 	}
