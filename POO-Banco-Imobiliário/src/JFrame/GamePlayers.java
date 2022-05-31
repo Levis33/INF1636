@@ -80,7 +80,7 @@ public class GamePlayers extends JFrame implements ItemListener{
 				if(!isBlocked){
 					setVisible(false);
 					ListaImagens li = new ListaImagens();
-					Frame f= new Frame("Banco Imobiliário", li, nPlayers);
+					Frame f= new Frame("Banco Imobiliário", nPlayers);
 					f.setVisible(true);
 					li.novaImagem();
 					f.repaint();

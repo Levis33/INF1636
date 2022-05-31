@@ -10,7 +10,7 @@ public class Frame extends JFrame {
 	private int nPlayers;
 	JPanel p;	
 	
-	public Frame(String s, ListaImagens l, int n) {
+	public Frame(String s, int n) {
 		super(s);
 		nPlayers = n;
 		//////////Frame/////////////
