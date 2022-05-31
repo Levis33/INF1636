@@ -19,6 +19,9 @@ public class Board extends JPanel {
 	private String[] pinsOptions= {"pin0.png", "pin1.png", "pin2.png", "pin3.png", "pin4.png", "pin5.png"};
 	private int nPlayers;
 	
+	private int pinHeight = 23;
+	private int pinWidth = 15;
+	
 	public Board(int n) {
 		nPlayers = n;
 	}
@@ -69,48 +72,48 @@ public class Board extends JPanel {
 		g2d.drawImage(dice1, 750, 30, 150, 150, null);
 		g2d.drawImage(dice2, 750, 180, 150, 150, null);
 		for(int k=0; k<11; k++) {
-		// int dist;
-		// 	if(k==0) {
-		// 		dist = 15;
-		// 		for(int j=0; j<9; j++) {
-		// 		for(int i=0; i<nPlayers; i++) {
-		// 			if(i%2 ==0) {
-		// 				g2d.drawImage(pins[i], dist+i*8, 105+j*525/10, 15, 23, null);
-		// 			}else {
-		// 				g2d.drawImage(pins[i], dist+(i-1)*8, 125+j*525/10, 15, 23, null);
-		// 			}
-		// 		}
-		// 		}
-		// 	}else if(k==10){
-		// 		dist = 630;
-		// 		for(int j=0; j<9; j++) {
-		// 			for(int i=0; i<nPlayers; i++) {
-		// 				if(i%2 ==0) {
-		// 					g2d.drawImage(pins[i], dist+i*8, 105+j*525/10, 15, 23, null);
-		// 				}else {
-		// 					g2d.drawImage(pins[i], dist+(i-1)*8, 125+j*525/10, 15, 23, null);
-		// 				}
-		// 			}
-		// 			}
-		// 	}else {
-		// 		dist = 105+ 55*(k-1);				
-		// 	}
-		// for(int i=0; i<nPlayers; i++) {
-		// 	if(i%2 ==0) {
-		// 		g2d.drawImage(pins[i], dist+i*8, 30, 15, 23, null);
-		// 	}else {
-		// 		g2d.drawImage(pins[i], dist+(i-1)*8, 50, 15, 23, null);
-		// 	}
+		int dist;
+			if(k==0) {
+				dist = 15;
+				for(int j=0; j<9; j++) {
+				for(int i=0; i<nPlayers; i++) {
+					if(i%2 ==0) {
+						g2d.drawImage(pins[i], dist+i*8, 105+j*525/10, pinWidth, pinHeight, null);
+					}else {
+						g2d.drawImage(pins[i], dist+(i-1)*8, 125+j*525/10, pinWidth, pinHeight, null);
+					}
+				}
+				}
+			}else if(k==10){
+				dist = 630;
+				for(int j=0; j<9; j++) {
+					for(int i=0; i<nPlayers; i++) {
+						if(i%2 ==0) {
+							g2d.drawImage(pins[i], dist+i*8, 105+j*525/10, pinWidth, pinHeight, null);
+						}else {
+							g2d.drawImage(pins[i], dist+(i-1)*8, 125+j*525/10, pinWidth, pinHeight, null);
+						}
+					}
+					}
+			}else {
+				dist = 105+ 55*(k-1);				
+			}
+		for(int i=0; i<nPlayers; i++) {
+			if(i%2 ==0) {
+				g2d.drawImage(pins[i], dist+i*8, 30, pinWidth, pinHeight, null);
+			}else {
+				g2d.drawImage(pins[i], dist+(i-1)*8, 50, pinWidth, pinHeight, null);
+			}
 			
-		// }
-		// for(int i=0; i<nPlayers; i++) {
-		// 	if(i%2 ==0) {
-		// 		g2d.drawImage(pins[i], dist+i*8, 615, 15, 23, null);
-		// 	}else {
-		// 		g2d.drawImage(pins[i], dist+(i-1)*8, 635, 15, 23, null);
-		// 	}
+		}
+		for(int i=0; i<nPlayers; i++) {
+			if(i%2 ==0) {
+				g2d.drawImage(pins[i], dist+i*8, 615, pinWidth, pinHeight, null);
+			}else {
+				g2d.drawImage(pins[i], dist+(i-1)*8, 635, pinWidth, pinHeight, null);
+			}
 			
-		// }
+		}
 
 		}
 
