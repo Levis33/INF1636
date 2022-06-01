@@ -9,7 +9,7 @@ public class GamePlayers extends JFrame implements ItemListener{
 	private final int LARGURA = 700;
 	
 	JPanel p;	
-	static String Cores[]= {"vermelho","azul", "preto", "amarelo", "verde", "branco"};
+	static String Cores[]= {"vermelho", "azul", "laranja", "amarelo", "roxo", "preto"};
 	static JComboBox j1=new JComboBox(Cores);
 	static JComboBox j2=new JComboBox(Cores);
 	static JComboBox j3=new JComboBox(Cores);
