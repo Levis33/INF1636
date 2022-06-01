@@ -16,12 +16,12 @@ public class Main {
 
 		//////// Frames///////////////
 		
-//		 GameIntro f2= new GameIntro("Banco Imobili�rio");
-//		 f2.setVisible(true);
-//		 f2.repaint();
+		GameIntro f2= new GameIntro("Banco Imobili�rio");
+		f2.setVisible(true);
+		f2.repaint();
 
-		Frame f= new Frame("Banco Imobiliário", 6);
-		f.setVisible(true);
+		//Frame f= new Frame("Banco Imobiliário", 6);
+		//f.setVisible(true);
 
 		/////////////////////////////////////
 
