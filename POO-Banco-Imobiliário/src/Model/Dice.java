@@ -30,7 +30,17 @@ public class Dice {
 		this.dice2 = rand.nextInt(6) + 1;
 	}
 
-	public int getSumDices(Dice dice) {
-		return this.sumDices = dice.getDice1() + dice.getDice2();
+	public int getSumDices() {
+		return this.sumDices = this.getDice1() + this.getDice2();
 	}
+
+	public boolean dadosIguais(){
+		if(this.dice1 == this.dice2){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
 }
