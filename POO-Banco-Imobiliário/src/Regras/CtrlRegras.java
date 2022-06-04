@@ -36,6 +36,10 @@ public class CtrlRegras implements ObservadoIF {
 	private int dadosRepetidos = 0;
 	private Dice dados = new Dice();
 
+	int[] posicaoPropriedade = {
+		1,3,4,5,6,7,8,9,11,13,14,15,17,19,21,23,25,26,28,29,31,32,33,34,35,36,39,39
+	}; // para achar o index no criaPropriedades usar Arrays.asList(posicaoPropriedade).indexOf(posicao);
+
 	// Scanner, Random etc
 	Scanner scan = new Scanner(System.in);
 
