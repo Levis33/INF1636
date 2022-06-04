@@ -11,7 +11,7 @@ import java.awt.Color;
 //import Model.Player;
 import java.util.Comparator;
 
-import javax.swing.JOptionPane;
+// import javax.swing.JOptionPane;
 
 import Controller.Observer.ObservadoIF;
 import Controller.Observer.ObservadorIF;
@@ -28,6 +28,8 @@ public class CtrlRegras implements ObservadoIF {
 
 	private int numPlayers;
 
+	private Player player_atual;
+
 	private ArrayList<Player> playerList = new ArrayList<Player>();
 	private int playerAtual;
 
@@ -36,32 +38,36 @@ public class CtrlRegras implements ObservadoIF {
 	private int dadosRepetidos = 0;
 	private Dice dados = new Dice();
 
+	private int cartaAtual = -1;
+
 	int[] posicaoPropriedade = {
-		1,3,4,5,6,7,8,9,11,13,14,15,17,19,21,23,25,26,28,29,31,32,33,34,35,36,39,39
-	}; // para achar o index no criaPropriedades usar Arrays.asList(posicaoPropriedade).indexOf(posicao);
+			1, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 17, 19, 21, 23, 25, 26, 28, 29, 31, 32, 33, 34, 35, 36, 38, 39
+	};
+	// para achar o index no criaPropriedades usar
+	// Arrays.asList(posicaoPropriedade).indexOf(posicao);
+
+	private ArrayList<Integer> cartas = new ArrayList<Integer>();
+	private int[] cartasSorteReves = { // Cartas especiais: 9, 11, 23
+			25, 150, 80, 200, 50, 50, 100, 100, 0, 200, 50, 45, 100, 100, 20, -15, -25, -45, -30, -100, -100, -40, -1,
+			-30, -50, -25, -30, -45, -50, -50,
+	};
+	// Carta especial 9 (index 8): valor 0 -> saída livre da prisão
+	// Carta especial 11 (index 10): valor 50 -> receba 50 de cada jogador
+	// Carta especial 23 (index 22): valor -1 -> ir para a prisão
 
 	// Scanner, Random etc
 	Scanner scan = new Scanner(System.in);
 
 	// Constructors
 	public CtrlRegras() {
+
+		for (int i = 0; i < 30; i++) {
+			cartas.add(i);
+		}
+		Collections.shuffle(cartas);
 	}
 
 	// Methods
-
-	// public String[] getPlayersName(int numPlayers) { // Get name of players
-	// String namePlayers[numPlayers];
-
-	// for (int i = 0; i < numPlayers; i++){
-	// System.out.println("Digite o seu nome: ");
-	// namePlayers[i] = scan.nextLine();
-	// }
-
-	// scan.close();
-
-	// return namePlayers;
-	// }
-
 	public void getNumPlayers() { // Get number of players
 		System.out.println("Digite a quantidade de jogadores:(Mínimo de 2 e máximo de 6)");
 		numPlayers = scan.nextInt();
@@ -75,32 +81,27 @@ public class CtrlRegras implements ObservadoIF {
 	}
 
 	public ArrayList<Player> initPlayers(int numPlayers) {
-
 		Color cor, pawnColours[] = { Color.red, Color.blue, Color.orange, Color.yellow, Color.magenta, Color.gray };
-
 		for (int i = 0; i < numPlayers; i++) {
 			cor = pawnColours[i];
-
 			playerList.add(new Player(i + 1, 4000, cor, "teste"));
 		}
-
 		return playerList;
 	}
 
 	public void controlePlayers() {
-
 		int primPlayer = playerAtual;
-
 		playerAtual = (playerAtual + 1) % numPlayers; // proximo jogador
-
-		Player player_atual = playerList.get(playerAtual);
+		player_atual = playerList.get(playerAtual);
 
 		while (player_atual.getPlayerFalencia()) {
 			if (primPlayer == playerAtual) {
 				endGame();
 			}
 			playerAtual = (playerAtual + 1) % numPlayers;
+			player_atual = playerList.get(playerAtual);
 		}
+
 		if (playerAtual == primPlayer) { // todos menos atual foram a falencia
 			endGame();
 		}
@@ -110,31 +111,24 @@ public class CtrlRegras implements ObservadoIF {
 	}
 
 	public int jogaDados() {
-
 		if (podeJogar == false) {
 			return 0;
 		}
-
-		Player player_atual = playerList.get(playerAtual);
-
+		player_atual = playerList.get(playerAtual);
 		dados.rollDice();
-
 		if (dados.dadosIguais()) {
-
 			dadosRepetidos += 1;
-
 			if (player_atual.getPlayerPreso()) {
 				player_atual.changeStatusPreso();
-				// JOptionPane.showMessageDialog(null,"você está livre da prisão");
+				// JOptionPane.showMessageDialog(null,"Você está livre da prisão");
 			}
-
 			if (dadosRepetidos >= 3) {
 				player_atual.goToPrison();
-				// JOptionPane.showMessageDialog(null,"você foi preso por tirar o dado 3 vezes
+				// JOptionPane.showMessageDialog(null,"Você foi preso por tirar o dado 3 vezes
 				// iguais");
 				if (player_atual.getSaidaLivrePrisao()) {
 					player_atual.changeStatusSaidaPrisao();
-					// JOptionPane.showMessageDialog(null,"você usou sua carta de sair da prisão");
+					// JOptionPane.showMessageDialog(null,"Você usou sua carta de sair da prisão");
 				}
 				podeJogar = false;
 				return 0;
@@ -150,6 +144,21 @@ public class CtrlRegras implements ObservadoIF {
 		if (instance == null)
 			instance = new CtrlRegras();
 		return instance;
+	}
+
+	public int lidarComCartas() {
+		cartaAtual = cartas.remove(0);
+
+		if (cartaAtual == 8) { // Saída da prisão
+			player_atual.changeStatusSaidaPrisao();
+			return cartaAtual;
+		} else if (cartaAtual == 10) { // receba 50 de cada jogador
+
+		} else if (cartaAtual == 22) { // vai para a prisão
+
+		} else {
+
+		}
 	}
 
 	Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor

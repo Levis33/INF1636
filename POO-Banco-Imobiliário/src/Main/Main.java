@@ -31,9 +31,7 @@ public class Main {
 			System.out.println(propriedade[i].getValorCompra());
 		}
 
-		// int numPlayers = match.getNumPlayers();
-		// System.out.println(match.initPlayers(numPlayers)); // OK!
-		match.endGame();
+		match.lidarComCartas();
 
 	}
 
