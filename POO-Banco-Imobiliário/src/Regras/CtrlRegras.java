@@ -114,15 +114,6 @@ public class CtrlRegras implements ObservadoIF {
 
 		dados.rollDice();
 
-
-
-		if(playerList[playerAtual].getPlayerPreso()){
-			if (dados.dadosIguais()){
-				playerList[playerAtual].changeStatusPreso();
-				//JOptionPane.showMessageDialog(null,"você está livre da prisão");
-			}
-		}
-
 		if(dados.dadosIguais()){
 
 			dadosRepetidos += 1;
