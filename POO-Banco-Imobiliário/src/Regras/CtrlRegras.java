@@ -84,7 +84,6 @@ public class CtrlRegras implements ObservadoIF {
 
 	public int doubleDices() {
 		dados.rollDice();
-		if playerList[playerAtual]
 	}
 
 	Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor
