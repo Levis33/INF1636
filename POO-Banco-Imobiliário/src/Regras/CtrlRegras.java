@@ -23,7 +23,6 @@ public class CtrlRegras implements ObservadoIF {
 
 	private ArrayList<ObservadorIF> observers = new ArrayList<ObservadorIF>();
 
-	// Players
 	private int maxPlayers = 6;
 	private int minPlayers = 3;
 
@@ -34,7 +33,6 @@ public class CtrlRegras implements ObservadoIF {
 
 	private boolean podeJogar;
 
-	// Dice
 	private int dadosRepetidos = 0;
 	private Dice dados = new Dice();
 
@@ -85,19 +83,21 @@ public class CtrlRegras implements ObservadoIF {
 		return playerList;
 	}
 
-	public void controlePlayers(){
+	public void controlePlayers() {
 
 		int primPlayer = playerAtual;
 
 		playerAtual = (playerAtual + 1) % numPlayers; // proximo jogador
-		
-		while(playerList[playerAtual].getPlayerFalencia()){
-			if(primPlayer == playerAtual){
+
+		Player player_atual = playerList.get(playerAtual);
+
+		while (player_atual.getPlayerFalencia()) {
+			if (primPlayer == playerAtual) {
 				endGame();
 			}
-			playerAtual = (playerAtual + 1)%numPlayers;
+			playerAtual = (playerAtual + 1) % numPlayers;
 		}
-		if(playerAtual == primPlayer){ // todos menos atual foram a falencia
+		if (playerAtual == primPlayer) { // todos menos atual foram a falencia
 			endGame();
 		}
 
@@ -105,40 +105,47 @@ public class CtrlRegras implements ObservadoIF {
 		podeJogar = true;
 	}
 
-
 	public int jogaDados() {
 
-		if(podeJogar == false){
+		if (podeJogar == false) {
 			return 0;
 		}
 
+		Player player_atual = playerList.get(playerAtual);
+
 		dados.rollDice();
 
-		if(dados.dadosIguais()){
+		if (dados.dadosIguais()) {
 
 			dadosRepetidos += 1;
 
-			if(playerList[playerAtual].getPlayerPreso()){
-				playerList[playerAtual].changeStatusPreso();
-				//JOptionPane.showMessageDialog(null,"você está livre da prisão");
+			if (player_atual.getPlayerPreso()) {
+				player_atual.changeStatusPreso();
+				// JOptionPane.showMessageDialog(null,"você está livre da prisão");
 			}
 
-			if(dadosRepetidos >= 3){
-				playerList[playerAtual].goToPrison();
-				//JOptionPane.showMessageDialog(null,"você foi preso por tirar o dado 3 vezes iguais");
-				if (playerList[playerAtual].getSaidaLivrePrisao()){
-					playerList[playerAtual].changeStatusSaidaPrisao();
-					//JOptionPane.showMessageDialog(null,"você usou sua carta de sair da prisão");
+			if (dadosRepetidos >= 3) {
+				player_atual.goToPrison();
+				// JOptionPane.showMessageDialog(null,"você foi preso por tirar o dado 3 vezes
+				// iguais");
+				if (player_atual.getSaidaLivrePrisao()) {
+					player_atual.changeStatusSaidaPrisao();
+					// JOptionPane.showMessageDialog(null,"você usou sua carta de sair da prisão");
 				}
 				podeJogar = false;
 				return 0;
 			}
-		}
-		else{
+		} else {
 			podeJogar = false;
 		}
 
 		return dados.getSumDices();
+	}
+
+	public static CtrlRegras getInstance() {
+		if (instance == null)
+			instance = new CtrlRegras();
+		return instance;
 	}
 
 	Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor
