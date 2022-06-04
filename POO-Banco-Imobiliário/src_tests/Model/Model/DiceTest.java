@@ -6,19 +6,19 @@ import org.junit.Test;
 
 public class DiceTest {
 	private static final int TIMEOUT = 1000;
-	
-	@Test(timeout= TIMEOUT)
-	public void testRollAndGetDice1() {
+
+	@Test(timeout = TIMEOUT)
+	private void testRollAndGetDice1() {
 		Dice dices = new Dice();
 		dices.rollDice();
-		assertNotNull("Lançamento Inválido", dices.getDice1());
+		assertNotNull("Lanï¿½amento Invï¿½lido", dices.getDice1());
 	}
-	
-	@Test(timeout= TIMEOUT)
-	public void testRollAndGetDice2() {
+
+	@Test(timeout = TIMEOUT)
+	private void testRollAndGetDice2() {
 		Dice dices = new Dice();
 		dices.rollDice();
-		assertNotNull("Lançamento Inválido", dices.getDice2());
+		assertNotNull("Lanï¿½amento Invï¿½lido", dices.getDice2());
 	}
-	
+
 }
