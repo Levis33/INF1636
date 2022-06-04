@@ -128,6 +128,7 @@ public class CtrlRegras implements ObservadoIF {
 				// iguais");
 				if (player_atual.getSaidaLivrePrisao()) {
 					player_atual.changeStatusSaidaPrisao();
+					cartas.add(8);
 					// JOptionPane.showMessageDialog(null,"Você usou sua carta de sair da prisão");
 				}
 				podeJogar = false;
@@ -146,20 +147,42 @@ public class CtrlRegras implements ObservadoIF {
 		return instance;
 	}
 
+
+
 	public int lidarComCartas() {
 		cartaAtual = cartas.remove(0);
 
 		if (cartaAtual == 8) { // Saída da prisão
 			player_atual.changeStatusSaidaPrisao();
 			return cartaAtual;
-		} else if (cartaAtual == 10) { // receba 50 de cada jogador
-
-		} else if (cartaAtual == 22) { // vai para a prisão
-
-		} else {
+		} 
+		else if (cartaAtual == 10) { // receba 50 de cada jogador
+			for(int i=0; i < numPlayers; i++){
+				if(i != playerAtual){
+					playerList.get(i).changeMoney(-50);
+				}
+			}
+			player_atual.changeMoney(50*(numPlayers-1));
 
 		}
+		else if (cartaAtual == 22) { // vai para a prisão
+			player_atual.goToPrison();
+			podeJogar=false;
+			if(player_atual.getSaidaLivrePrisao()){
+				player_atual.changeStatusPreso();
+				cartas.add(8);
+			}
+		}
+		else {
+			player_atual.changeMoney(cartasSorteReves[cartaAtual]);
+		}
+
+		cartas.add(cartaAtual);	
+
+		return cartaAtual;
 	}
+
+
 
 	Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor
 		@Override

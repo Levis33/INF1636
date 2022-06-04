@@ -47,14 +47,10 @@ public class Player {
 
 	public boolean goToPrison() {
 		pawn.goTo(10);
-		if (saidaLivrePrisao) {
-			saidaLivrePrisao = false;
-			return false;
-		} else {
-			preso = true;
-			return true;
-		}
+		preso = true;
+		return true;
 	}
+	
 
 	public void changeMoney(int value) {
 		this.money += value;
