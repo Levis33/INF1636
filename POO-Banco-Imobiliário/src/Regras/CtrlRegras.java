@@ -1,15 +1,17 @@
 package Regras;
 
-import java.util.Scanner;
-
 import Model.Player.Player;
 import Model.Dice;
 
 import java.util.ArrayList; // import the ArrayList class
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Scanner;
+
 import java.awt.Color;
 //import Model.Player;
-import java.util.Comparator;
+
 
 // import javax.swing.JOptionPane;
 
@@ -182,6 +184,58 @@ public class CtrlRegras implements ObservadoIF {
 		return cartaAtual;
 	}
 
+	public int movePlayer(int valDados){
+
+		player_atual.movePawn(valDados);
+
+		int posicao = player_atual.getPawnPos();
+
+		int casaPrisao = 10;
+		int casaLucros = 18;
+		int casaImposto = 23;
+		int casaVaParaPrisao = 30;
+
+		Integer[] casaCartas = {2,12,16,22,27,37};
+
+		if(posicao == casaPrisao){
+			player_atual.changeStatusPreso();
+			if(player_atual.getSaidaLivrePrisao()){
+				player_atual.changeStatusPreso(); // deixa de estar preso
+				cartas.add(8);
+			}
+		}
+		else if(posicao == casaLucros){
+			player_atual.changeMoney(200);
+		}
+		else if(posicao == casaImposto){
+			player_atual.changeMoney(-200);
+		}
+		else if(posicao == casaVaParaPrisao){
+			player_atual.goToPrison();
+			if(player_atual.getSaidaLivrePrisao()){
+				player_atual.changeStatusPreso(); // deixa de estar preso
+				cartas.add(8); 
+			}
+		}
+		else if(Arrays.asList(casaCartas).contains(posicao)){
+			return lidarComCartas();
+		}
+		else{
+			for(int i =0; i < posicaoPropriedade.length; i++){
+				if(posicaoPropriedade[i] == posicao){
+					// criar funcao que faz o handle de propriedades / comprar / vender
+					int mostrarProp = lidarComPropriedade(posicao);
+					return mostrarProp;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	private int lidarComPropriedade(int propriedade){
+		return 0;
+	}
 
 
 	Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor
