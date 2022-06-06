@@ -30,7 +30,8 @@ public class Frame extends JFrame {
 		getContentPane().add(p);
 		p.setLayout(null);
 		setSize(LARGURA, ALTURA);
-		JButton diceButton = new JButton("lançar");
+
+		JButton diceButton = new JButton("Roll");
 		diceButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				p.getDices();
@@ -45,11 +46,26 @@ public class Frame extends JFrame {
 			}
 		});
 
-		diceButton.setBounds(750, 0, 150, 30);
+		JButton passButton = new JButton("Passar a vez");
+		// passButton.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// CtrlRegras.getInstance().passa_vez();
+		// }
+		// });
+
+		JButton saveButton = new JButton("Salvar");
+
+		diceButton.setBounds(770, 4, 150, 30);
 		p.add(diceButton);
 
-		finishButton.setBounds(1025, 620, 150, 30);
+		passButton.setBounds(730, 620, 140, 30);
+		p.add(passButton);
+
+		finishButton.setBounds(920, 620, 100, 30);
 		p.add(finishButton);
+
+		saveButton.setBounds(1070, 620, 100, 30);
+		p.add(saveButton);
 
 	}
 

@@ -103,8 +103,8 @@ public class Board extends JPanel implements ObservadorIF {
 		this.getPropertyCard();
 		int larg = IMG_X, alt = IMG_Y;
 		g2d.drawImage(board, larg, alt, 700, 665, null);
-		g2d.drawImage(dice1, 750, 30, 150, 150, null);
-		g2d.drawImage(dice2, 750, 180, 150, 150, null);
+		g2d.drawImage(dice1, 750, 40, 90, 90, null);
+		g2d.drawImage(dice2, 850, 40, 90, 90, null);
 		g2d.drawImage(luckyCard, 395, 350, 200, 200, null);
 		g2d.drawImage(propertyCard, 395, 100, 200, 200, null);
 		for (int k = 0; k < 11; k++) {
