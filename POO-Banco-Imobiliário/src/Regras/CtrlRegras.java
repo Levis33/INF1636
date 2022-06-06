@@ -9,9 +9,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 //import Model.Player;
-
 
 // import javax.swing.JOptionPane;
 
@@ -30,10 +31,10 @@ public class CtrlRegras implements ObservadoIF {
 
 	private int numPlayers;
 
-	private Player player_atual;
-
 	private ArrayList<Player> playerList = new ArrayList<Player>();
-	private int playerAtual;
+	private int playerAtual = 0;
+	private Player player_atual;
+	private String cor;
 
 	private boolean podeJogar;
 
@@ -71,14 +72,12 @@ public class CtrlRegras implements ObservadoIF {
 
 	// Methods
 	public void getNumPlayers() { // Get number of players
-		System.out.println("Digite a quantidade de jogadores:(Mínimo de 2 e máximo de 6)");
+		System.out.println("Digite a quantidade de jogadores:(Minimo de 2 e maximo de 6)");
 		numPlayers = scan.nextInt();
-
 		if (numPlayers > maxPlayers || numPlayers < minPlayers) {
 			System.out.println("Número de jogadores inválido. Tente novamente.");
 			System.exit(1);
 		}
-
 		scan.close();
 	}
 
@@ -86,12 +85,12 @@ public class CtrlRegras implements ObservadoIF {
 		Color cor, pawnColours[] = { Color.red, Color.blue, Color.orange, Color.yellow, Color.magenta, Color.gray };
 		for (int i = 0; i < numPlayers; i++) {
 			cor = pawnColours[i];
-			playerList.add(new Player(i + 1, 4000, cor, "teste"));
+			playerList.add(new Player(i + 1, 4000, cor));
 		}
 		return playerList;
 	}
 
-	public void controlePlayers() {
+	public void controlePlayers(int playerAtual) {
 		int primPlayer = playerAtual;
 		playerAtual = (playerAtual + 1) % numPlayers; // proximo jogador
 		player_atual = playerList.get(playerAtual);
@@ -112,7 +111,7 @@ public class CtrlRegras implements ObservadoIF {
 		podeJogar = true;
 	}
 
-	public int jogaDados() {
+	public int jogaDados(int playerAtual) {
 		if (podeJogar == false) {
 			return 0;
 		}
@@ -149,42 +148,39 @@ public class CtrlRegras implements ObservadoIF {
 		return instance;
 	}
 
-
-
 	public int lidarComCartas() {
+		player_atual = playerList.get(playerAtual);
+		System.out.println(playerAtual);
 		cartaAtual = cartas.remove(0);
 
-		if (cartaAtual == 8) { // Saída da prisão
+		if (cartaAtual == 8) { // Saida da prisão
 			player_atual.changeStatusSaidaPrisao();
 			return cartaAtual;
-		} 
-		else if (cartaAtual == 10) { // receba 50 de cada jogador
-			for(int i=0; i < numPlayers; i++){
-				if(i != playerAtual){
+		} else if (cartaAtual == 10) { // receba 50 de cada jogador
+			for (int i = 0; i < numPlayers; i++) {
+				if (i != playerAtual) {
 					playerList.get(i).changeMoney(-50);
 				}
 			}
-			player_atual.changeMoney(50*(numPlayers-1));
+			player_atual.changeMoney(50 * (numPlayers - 1));
 
-		}
-		else if (cartaAtual == 22) { // vai para a prisão
+		} else if (cartaAtual == 22) { // vai para a prisao
 			player_atual.goToPrison();
-			podeJogar=false;
-			if(player_atual.getSaidaLivrePrisao()){
+			podeJogar = false;
+			if (player_atual.getSaidaLivrePrisao()) {
 				player_atual.changeStatusPreso();
 				cartas.add(8);
 			}
-		}
-		else {
+		} else {
 			player_atual.changeMoney(cartasSorteReves[cartaAtual]);
 		}
 
-		cartas.add(cartaAtual);	
+		cartas.add(cartaAtual);
 
 		return cartaAtual;
 	}
 
-	public int movePlayer(int valDados){
+	public int movePlayer(int valDados) {
 
 		player_atual.movePawn(valDados);
 
@@ -195,34 +191,29 @@ public class CtrlRegras implements ObservadoIF {
 		int casaImposto = 23;
 		int casaVaParaPrisao = 30;
 
-		Integer[] casaCartas = {2,12,16,22,27,37};
+		Integer[] casaCartas = { 2, 12, 16, 22, 27, 37 };
 
-		if(posicao == casaPrisao){
+		if (posicao == casaPrisao) {
 			player_atual.changeStatusPreso();
-			if(player_atual.getSaidaLivrePrisao()){
+			if (player_atual.getSaidaLivrePrisao()) {
 				player_atual.changeStatusPreso(); // deixa de estar preso
 				cartas.add(8);
 			}
-		}
-		else if(posicao == casaLucros){
+		} else if (posicao == casaLucros) {
 			player_atual.changeMoney(200);
-		}
-		else if(posicao == casaImposto){
+		} else if (posicao == casaImposto) {
 			player_atual.changeMoney(-200);
-		}
-		else if(posicao == casaVaParaPrisao){
+		} else if (posicao == casaVaParaPrisao) {
 			player_atual.goToPrison();
-			if(player_atual.getSaidaLivrePrisao()){
+			if (player_atual.getSaidaLivrePrisao()) {
 				player_atual.changeStatusPreso(); // deixa de estar preso
-				cartas.add(8); 
+				cartas.add(8);
 			}
-		}
-		else if(Arrays.asList(casaCartas).contains(posicao)){
+		} else if (Arrays.asList(casaCartas).contains(posicao)) {
 			return lidarComCartas();
-		}
-		else{
-			for(int i =0; i < posicaoPropriedade.length; i++){
-				if(posicaoPropriedade[i] == posicao){
+		} else {
+			for (int i = 0; i < posicaoPropriedade.length; i++) {
+				if (posicaoPropriedade[i] == posicao) {
 					// criar funcao que faz o handle de propriedades / comprar / vender
 					int mostrarProp = lidarComPropriedade(posicao);
 					return mostrarProp;
@@ -233,10 +224,9 @@ public class CtrlRegras implements ObservadoIF {
 		return 0;
 	}
 
-	private int lidarComPropriedade(int propriedade){
+	private int lidarComPropriedade(int propriedade) {
 		return 0;
 	}
-
 
 	Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor
 		@Override
@@ -250,32 +240,67 @@ public class CtrlRegras implements ObservadoIF {
 		}
 	};
 
+	public void passa_vez() {
+		int initVez = playerAtual;
+		playerAtual = (playerAtual + 1) % numPlayers;
+		player_atual = playerList.get(playerAtual);
+
+		while (player_atual.getMoney() <= 0) {
+			if (initVez == playerAtual) {
+				JOptionPane.showMessageDialog(null, "Fim de jogo!");
+				endGame();
+			}
+			playerAtual = (playerAtual + 1) % numPlayers;
+		}
+
+		if (initVez == playerAtual) {
+			JOptionPane.showMessageDialog(null, "Fim de jogo!");
+			endGame();
+		}
+
+		podeJogar = true;
+		dadosRepetidos = 0;
+
+		cartaAtual = -1;
+		this.notificaAll();
+	}
+
 	public void endGame() {
 
 		Collections.sort(playerList, comparator);
 
-		System.out.println("\nRANKING:\n");
+		String ranking = "RANKING:\n";
 		for (Player p : playerList) {
-			System.out.printf("jogador: %d , dinheiro: %d, cor: %s \n", p.getNumber(), p.getMoney(),
+			ranking += String.format("jogador: %d , dinheiro: %d, cor: %s \n", p.getNumber(), p.getMoney(),
 					p.getColor().toString());
 		}
+		JOptionPane.showMessageDialog(null, ranking);
+		System.exit(1);
 	}
 
 	@Override
 	public void add(ObservadorIF o) {
-		// TODO Auto-generated method stub
+		observers.add(o);
 
 	}
 
 	@Override
 	public void remove(ObservadorIF o) {
-		// TODO Auto-generated method stub
+		observers.remove(o);
 
 	}
 
 	@Override
 	public int get(int var) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (var == 1) {
+			return cartaAtual;
+		}
+		return -1;
+	}
+
+	private void notificaAll() {
+		for (ObservadorIF obs : observers) {
+			obs.notify(this);
+		}
 	}
 }

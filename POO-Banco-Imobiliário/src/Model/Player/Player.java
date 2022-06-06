@@ -24,11 +24,11 @@ public class Player {
 
 	// Constructors
 
-	public Player(int playerNumb, int money, Color color, String name) {
+	public Player(int playerNumb, int money, Color color) {
 		this.number = playerNumb;
 		this.money = money;
 		this.color = color;
-		this.name = name;
+		// this.name = name;
 	}
 
 	// Methods
@@ -50,7 +50,6 @@ public class Player {
 		preso = true;
 		return true;
 	}
-	
 
 	public void changeMoney(int value) {
 		this.money += value;

@@ -15,11 +15,11 @@ public class Main {
 
 		//////// Frames///////////////
 
-		GameIntro f2 = new GameIntro("Banco Imobili�rio");
+		GameIntro f2 = new GameIntro("Banco Imobiliario");
 		f2.setVisible(true);
 		f2.repaint();
 
-		// Frame f= new Frame("Banco Imobiliário", 6);
+		// Frame f= new Frame("Banco Imobiliario", 6);
 		// f.setVisible(true);
 
 		/////////////////////////////////////
@@ -30,8 +30,6 @@ public class Main {
 			System.out.println(propriedades[i].getNome());
 			System.out.println(propriedade[i].getValorCompra());
 		}
-
-		match.lidarComCartas();
 
 	}
 
