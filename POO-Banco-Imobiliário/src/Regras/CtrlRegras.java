@@ -271,8 +271,12 @@ public class CtrlRegras implements ObservadoIF {
 
 		String ranking = "RANKING:\n";
 		for (Player p : playerList) {
+			int cor_red = p.getColor().getRed();
+			int cor_green = p.getColor().getGreen();
+			int cor_blue = p.getColor().getBlue();
+			cor = String.format("(%d, %d, %d)", cor_red, cor_green, cor_blue);
 			ranking += String.format("jogador: %d , dinheiro: %d, cor: %s \n", p.getNumber(), p.getMoney(),
-					p.getColor().toString());
+					cor);
 		}
 		JOptionPane.showMessageDialog(null, ranking);
 		System.exit(1);
