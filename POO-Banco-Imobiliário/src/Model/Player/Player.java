@@ -41,8 +41,8 @@ public class Player {
 		pawn.move(somaDados);
 	}
 
-	public void addPropriedade(int propriedade) { // adiciona propriedade
-		this.propriedades.add(propriedade);
+	public void addPropriedade(int property) { // adiciona propriedade
+		this.propriedades.add(property);
 	}
 
 	public void removePropriedade(int property) { // remove a propriedade
