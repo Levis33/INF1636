@@ -2,6 +2,7 @@ package Regras;
 
 import Model.Player.Player;
 import Model.Dice;
+import Model.Property.*;
 
 import java.util.ArrayList; // import the ArrayList class
 import java.util.Arrays;
@@ -40,6 +41,7 @@ public class CtrlRegras implements ObservadoIF {
 
 	private int dadosRepetidos = 0;
 	private Dice dados = new Dice();
+	private Property[] propriedades = CriaPropriedades.cria();
 
 	private int cartaAtual = -1;
 
@@ -116,7 +118,7 @@ public class CtrlRegras implements ObservadoIF {
 			return 0;
 		}
 		player_atual = playerList.get(playerAtual);
-		dados.rollDice();
+		`
 		if (dados.dadosIguais()) {
 			dadosRepetidos += 1;
 			if (player_atual.getPlayerPreso()) {
@@ -215,8 +217,9 @@ public class CtrlRegras implements ObservadoIF {
 			for (int i = 0; i < posicaoPropriedade.length; i++) {
 				if (posicaoPropriedade[i] == posicao) {
 					// criar funcao que faz o handle de propriedades / comprar / vender
-					int mostrarProp = lidarComPropriedade(posicao);
-					return mostrarProp;
+					//int mostrarProp = lidarComPropriedade(posicao);
+					//return mostrarProp;
+					lidarComPropriedade(posicao);
 				}
 			}
 		}
@@ -224,7 +227,91 @@ public class CtrlRegras implements ObservadoIF {
 		return 0;
 	}
 
+	public void venderPropriedade(){
+		return;
+	}
+
 	private int lidarComPropriedade(int propriedade) {
+
+		int proprietario = propriedades[propriedade].getProprietario();
+		int valorCompra = propriedades[propriedade].getValorCompra();
+		String nomePropriedade = propriedades[propriedade].getNome();
+
+		if(proprietario == -1){ // nao existe proprietario
+
+			String[] simnao = {"sim", "nao"};
+			int opcao = JOptionPane.showOptionDialog(null, "voce gostaria de comprar a propriedade"+ nomePropriedade + " pelo preço: R$" + valorCompra, "click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, simnao, simnao[0]);
+
+			if(opcao == 0){
+				if (player_atual.getMoney() >= valorCompra){
+					propriedades[propriedade].setProprietario(playerAtual);
+					player_atual.changeMoney(-valorCompra);
+					player_atual.addPropriedade(propriedade);
+					JOptionPane.showMessageDialog(null, "A propriedade:"+ nomePropriedade+ " foi comprada por: R$" + valorCompra);
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Voce nao tem dinheiro suficiente para comprar a propriedade: "+ nomePropriedade+" pelo valor: R$" +valorCompra);
+				}
+			}
+
+
+		}
+		else{ //existe proprietario
+			if(proprietario != playerAtual){ //player atual nao e o proprietario
+				if(propriedades[propriedade] instanceof Enterprise ){ // ENTERPRISE
+					int aluguel = ((Enterprise)propriedades[propriedade]).getRent(dados.getSumDices());
+					player_atual.changeMoney(-aluguel);
+					int playerMoney = player_atual.getMoney();
+					while(playerMoney <= 0 && player_atual.getPlayerFalencia()){
+						int playerMoneyAntes = playerMoney;
+						venderPropriedade();
+						playerMoney = player_atual.getMoney();
+
+						JOptionPane.showMessageDialog(null, "Voce nao possui dinheiro suficiente, venda uma de suas propriedades para pagar o Aluguel de R$"+ aluguel);
+
+						if(playerMoneyAntes == playerMoney){
+							player_atual.changeStatusFalencia();
+						}
+					}
+
+					Player playerProprietario = playerList.get(proprietario);
+					playerProprietario.changeMoney(aluguel);
+
+					if(player_atual.getPlayerFalencia()){
+						JOptionPane.showMessageDialog(null, " o player " + player_atual.getCor() + " foi a falencia, pois nao conseguiu pagar o aluguel de R$"+aluguel+" para o player "+ playerProprietario.getCor());
+					}
+					else{
+						JOptionPane.showMessageDialog(null, " o player " + player_atual.getCor() + " pagou o aluguel de R$"+aluguel+" para o player "+ playerProprietario.getCor());
+					}
+
+				}
+				else{ // GROUND
+					int aluguel = ((Ground)propriedades[propriedade]).getRent();
+					player_atual.changeMoney(-aluguel);
+					int playerMoney = player_atual.getMoney();
+					while(playerMoney <= 0 && player_atual.getPlayerFalencia()){
+						int playerMoneyAntes = playerMoney;
+						venderPropriedade();
+						playerMoney = player_atual.getMoney();
+
+						if(playerMoney == playerMoneyAntes){
+							player_atual.changeStatusFalencia();
+						}
+					}
+
+					Player playerProprietario = playerList.get(proprietario);
+					playerProprietario.changeMoney(aluguel);
+
+					if(player_atual.getPlayerFalencia()){
+						JOptionPane.showMessageDialog(null, " o player " + player_atual.getCor() + " foi a falencia, pois nao conseguiu pagar o aluguel de R$"+aluguel+" para o player "+ playerProprietario.getCor());
+					}
+					else{
+						JOptionPane.showMessageDialog(null, " o player " + player_atual.getCor() + " pagou o aluguel de R$"+aluguel+" para o player "+ playerProprietario.getCor());
+					}
+				}
+			}
+		}
+
 		return 0;
 	}
 
