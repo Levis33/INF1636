@@ -29,4 +29,8 @@ public abstract class Property {
         return this.valorCompra;
     }
 
+    public void setProprietario(int novoProprietario){
+        this.proprietario = novoProprietario;
+    }
+
 }

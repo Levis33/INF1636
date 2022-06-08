@@ -2,6 +2,7 @@ package Regras;
 
 import Model.Player.Player;
 import Model.Dice;
+import Model.Property.*;
 
 import java.util.ArrayList; // import the ArrayList class
 import java.util.Arrays;
@@ -40,6 +41,7 @@ public class CtrlRegras implements ObservadoIF {
 
 	private int dadosRepetidos = 0;
 	private Dice dados = new Dice();
+	private Property[] propriedades = CriaPropriedades.cria();
 
 	private int cartaAtual = -1;
 
@@ -123,10 +125,6 @@ public class CtrlRegras implements ObservadoIF {
 
 	public int lidarComDados() {
 		player_atual = playerList.get(playerAtual);
-<<<<<<< HEAD
-=======
-		dados.rollDice();
->>>>>>> parent of 9993bce (Handle de propriedades(pagamentos e compras))
 		if (dados.dadosIguais()) {
 			dadosRepetidos += 1;
 			if (player_atual.getPlayerPreso()) {
@@ -225,14 +223,9 @@ public class CtrlRegras implements ObservadoIF {
 			for (int i = 0; i < posicaoPropriedade.length; i++) {
 				if (posicaoPropriedade[i] == posicao) {
 					// criar funcao que faz o handle de propriedades / comprar / vender
-<<<<<<< HEAD
 					// int mostrarProp = lidarComPropriedade(posicao);
 					// return mostrarProp;
 					lidarComPropriedade(posicao);
-=======
-					int mostrarProp = lidarComPropriedade(posicao);
-					return mostrarProp;
->>>>>>> parent of 9993bce (Handle de propriedades(pagamentos e compras))
 				}
 			}
 		}
@@ -240,7 +233,6 @@ public class CtrlRegras implements ObservadoIF {
 		return 0;
 	}
 
-<<<<<<< HEAD
 	public void venderPropriedade() {
 		return;
 	}
@@ -335,9 +327,6 @@ public class CtrlRegras implements ObservadoIF {
 			}
 		}
 
-=======
-	private int lidarComPropriedade(int propriedade) {
->>>>>>> parent of 9993bce (Handle de propriedades(pagamentos e compras))
 		return 0;
 	}
 
