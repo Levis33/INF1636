@@ -9,7 +9,7 @@ public class Player {
 
 	private int number;
 	private int money;
-	private String name;
+	private String cor;
 
 	private Color color;
 	private Pawn pawn = new Pawn();
@@ -24,14 +24,18 @@ public class Player {
 
 	// Constructors
 
-	public Player(int playerNumb, int money, Color color) {
+	public Player(int playerNumb, int money, Color color, String cor) {
 		this.number = playerNumb;
 		this.money = money;
 		this.color = color;
-		// this.name = name;
+		this.cor = cor;
 	}
 
 	// Methods
+
+	public String getCor() {
+		return this.cor;
+	}
 
 	public void movePawn(int somaDados) { // move o Pawn
 		pawn.move(somaDados);
@@ -80,10 +84,6 @@ public class Player {
 
 	public int getMoney() {
 		return this.money;
-	}
-
-	public String getName() {
-		return this.name;
 	}
 
 	public boolean getSaidaLivrePrisao() {

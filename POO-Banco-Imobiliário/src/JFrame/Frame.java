@@ -34,8 +34,8 @@ public class Frame extends JFrame {
 		JButton diceButton = new JButton("Roll");
 		diceButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				p.getDices();
-				repaint();
+				CtrlRegras.getInstance().jogaDados();
+				p.repaint();
 			}
 		});
 
@@ -46,20 +46,10 @@ public class Frame extends JFrame {
 			}
 		});
 
-		JButton passButton = new JButton("Passar a vez");
-		// passButton.addActionListener(new ActionListener() {
-		// public void actionPerformed(ActionEvent e) {
-		// CtrlRegras.getInstance().passa_vez();
-		// }
-		// });
-
 		JButton saveButton = new JButton("Salvar");
 
 		diceButton.setBounds(770, 4, 150, 30);
 		p.add(diceButton);
-
-		passButton.setBounds(730, 620, 140, 30);
-		p.add(passButton);
 
 		finishButton.setBounds(920, 620, 100, 30);
 		p.add(finishButton);
