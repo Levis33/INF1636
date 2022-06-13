@@ -16,8 +16,8 @@ public abstract class Property {
         this.posX = posX;
         this.posY = posY;
     }
-    
-    public Property(String n, int posX, int posY){
+
+    public Property(String n, int posX, int posY) {
         this.nome = n;
         this.posX = posX;
         this.posY = posY;
@@ -40,12 +40,19 @@ public abstract class Property {
         return this.valorCompra;
     }
 
-    public int[] getPos() {
-        int[] positions = {this.posX, this.posY};
+    public int[] getPos(int i) {
+        int[] positions = { this.posX, this.posY };
+        if (i % 2 == 0) {
+            positions[0] = this.posX + i * 8;
+            positions[1] = this.posY;
+        } else {
+            positions[0] = this.posX + (i-1) * 8;
+            positions[1] = this.posY - 20;
+        }
         return positions;
     }
 
-    public void setProprietario(int novoProprietario){
+    public void setProprietario(int novoProprietario) {
         this.proprietario = novoProprietario;
     }
 

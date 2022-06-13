@@ -98,7 +98,7 @@ public class CtrlRegras implements ObservadoIF {
 	public void initPlayers(JComboBox pColors[], JTextField pNames[]) {
 		Color auxColor = Color.red;
 		String auxColorName = "Vermelho";
-		int pinNumber =0;
+		int pinNumber = 0;
 		for (int i = 0; i < numPlayers; i++) {
 			switch (pColors[i].getSelectedIndex()) {
 				case 0: {
@@ -128,7 +128,7 @@ public class CtrlRegras implements ObservadoIF {
 				case 4: {
 					auxColor = Color.magenta;
 					auxColorName = "Roxo";
-					pinNumber =4;
+					pinNumber = 4;
 					break;
 				}
 				case 5: {
@@ -146,7 +146,6 @@ public class CtrlRegras implements ObservadoIF {
 		}
 	}
 
-
 	public Player getPlayer(int i) {
 		return playerList.get(i);
 	}
@@ -155,6 +154,24 @@ public class CtrlRegras implements ObservadoIF {
 		return playerList;
 	}
 
+	public Property[] getAllProperties() {
+		return propriedades;
+	}
+
+	public Property getProperty(int i) {
+		return propriedades[i];
+	}
+
+	public void organizePlay() {
+		for (int i = 0; i < numPlayers; i++) {
+			int posX = propriedades[0].getPos(i)[0];
+			int posY = propriedades[0].getPos(i)[1];
+			playerList.get(i).setPosition(0);
+			playerList.get(i).setCoordenates(posX, posY);
+		}
+	}
+
+	////////////////////////////////////////////////////
 	public void controlePlayers(int playerAtual) {
 		int primPlayer = playerAtual;
 		playerAtual = (playerAtual + 1) % numPlayers; // proximo jogador
@@ -215,7 +232,7 @@ public class CtrlRegras implements ObservadoIF {
 
 	public int lidarComCartas() {
 		player_atual = playerList.get(playerAtual);
-		System.out.println(playerAtual);
+		// System.out.println(playerAtual);
 		cartaAtual = cartas.remove(0);
 
 		if (cartaAtual == 8) { // Saida da prisão
@@ -251,43 +268,40 @@ public class CtrlRegras implements ObservadoIF {
 
 		int posicao = player_atual.getPawnPos();
 
-		int casaPrisao = 10;
-		int casaLucros = 18;
-		int casaImposto = 23;
-		int casaVaParaPrisao = 30;
-
-		Integer[] casaCartas = { 2, 12, 16, 22, 27, 37 };
-
-		if (posicao == casaPrisao) {
-			player_atual.changeStatusPreso();
-			if (player_atual.getSaidaLivrePrisao()) {
-				player_atual.changeStatusPreso(); // deixa de estar preso
-				cartas.add(8);
-			}
-		} else if (posicao == casaLucros) {
-			player_atual.changeMoney(200);
-		} else if (posicao == casaImposto) {
-			player_atual.changeMoney(-200);
-		} else if (posicao == casaVaParaPrisao) {
-			player_atual.goToPrison();
-			if (player_atual.getSaidaLivrePrisao()) {
-				player_atual.changeStatusPreso(); // deixa de estar preso
-				cartas.add(8);
-			}
-		} else if (Arrays.asList(casaCartas).contains(posicao)) {
-			return lidarComCartas();
+		if (propriedades[posicao] instanceof Enterprise || propriedades[posicao] instanceof Ground) {
+			int displayC = lidarComPropriedade(posicao);
+			this.notificaAll();
+			return displayC;
 		} else {
-			for (int i = 0; i < posicaoPropriedade.length; i++) {
-				if (posicaoPropriedade[i] == posicao) {
-					// criar funcao que faz o handle de propriedades / comprar / vender
-					// int mostrarProp = lidarComPropriedade(posicao);
-					// return mostrarProp;
-					lidarComPropriedade(posicao);
+			switch (propriedades[posicao].getNome()) {
+				case "Sorte/Reves": {
+					return lidarComCartas();
 				}
+				case "Ganhe": {
+					player_atual.changeMoney(200);
+					break;
+				}
+				case "Perde": {
+					player_atual.changeMoney(-200);
+					break;
+				}
+				case "Prisao": {//rever
+					break;
+				}
+				case "Va para a prisao": {
+					player_atual.goToPrison();
+					if (player_atual.getSaidaLivrePrisao()) {
+						player_atual.changeStatusPreso(); // deixa de estar preso
+						cartas.add(8);
+					}
+					break;
+				}
+
 			}
 		}
 
-		return 0;
+		this.notificaAll();
+		return -1;
 	}
 
 	public void venderPropriedade() {

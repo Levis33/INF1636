@@ -9,7 +9,6 @@ public class Player {
 
 	private int number;
 	private int money;
-	private int pin;
 	private String cor;
 	private String name;
 
@@ -123,4 +122,18 @@ public class Player {
 	public int getPawnPos() {
 		return pawn.getPos();
 	}
+
+	public int[] getPawnCoordenates(){
+		return pawn.getCoordenates();
+	}
+
+	public void setPosition(int x){
+		pawn.setPosition(x);
+		return; 
+	}
+	public void setCoordenates(int x, int y){
+		pawn.setCoordenates(x, y);
+		return;
+	}
+
 }

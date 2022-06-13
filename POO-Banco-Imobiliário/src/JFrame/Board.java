@@ -110,62 +110,16 @@ public class Board extends JPanel implements ObservadorIF {
 
 		g2d.drawImage(dice1, 750, 40, 90, 90, null);
 		g2d.drawImage(dice2, 850, 40, 90, 90, null);
-		g2d.drawImage(luckyCards[0], 395, 350, 200, 200, null);
-		g2d.drawImage(propertyCards[0], 395, 100, 200, 200, null);
-		for (int k = 0; k < 11; k++) {
-			int dist;
-			if (k == 0) {
-				dist = 15;
-				for (int j = 0; j < 9; j++) {
-					for (int i = 0; i < numPlayers; i++) {
-						if (i % 2 == 0) {
-							g2d.drawImage(pins[i], dist + i * 8, 105 + j * 525 / 10, pinWidth, pinHeight,
-									null);
-						} else {
-							g2d.drawImage(pins[i], dist + (i - 1) * 8, 125 + j * 525 / 10, pinWidth,
-									pinHeight, null);
-						}
-					}
-				}
-			} else if (k == 10) {
-				dist = 630;
-				for (int j = 0; j < 9; j++) {
-					for (int i = 0; i < numPlayers; i++) {
-						if (i % 2 == 0) {
-							g2d.drawImage(pins[i], dist + i * 8, 105 + j * 525 / 10, pinWidth, pinHeight,
-									null);
-						} else {
-							g2d.drawImage(pins[i], dist + (i - 1) * 8, 125 + j * 525 / 10, pinWidth,
-									pinHeight, null);
-						}
-					}
-				}
-			}
-			
-			else {
-				dist = 105 + 55 * (k - 1);
-			}
-
-			for (int i = 0; i < numPlayers; i++) {
-				if (i % 2 == 0) {
-					g2d.drawImage(pins[i], dist + i * 8, 30, pinWidth, pinHeight, null);
-				} else {
-					g2d.drawImage(pins[i], dist + (i - 1) * 8, 50, pinWidth, pinHeight, null);
-				}
-
-			}
-
-			for (int i = 0; i < numPlayers; i++) {
-				if (i % 2 == 0) {
-					g2d.drawImage(pins[i], dist + i * 8, 615, pinWidth, pinHeight, null);
-				} else {
-					g2d.drawImage(pins[i], dist + (i - 1) * 8, 635, pinWidth, pinHeight, null);
-				}
-
-			}
-
+		// g2d.drawImage(luckyCards[0], 395, 350, 200, 200, null);
+		// g2d.drawImage(propertyCards[0], 395, 100, 200, 200, null);
+		CtrlRegras control = CtrlRegras.getInstance();
+		for (int j = 0; j < numPlayers; j++) {
+			int x = control.getPlayer(j).getPawnCoordenates()[0];
+			int y = control.getPlayer(j).getPawnCoordenates()[1];
+			g2d.drawImage(pins[j], x, y, pinWidth, pinHeight, null);
 		}
-		CtrlRegras.getInstance().add(this);
+
+		control.add(this);
 	}
 
 	public void notify(ObservadoIF o) {

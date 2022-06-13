@@ -24,8 +24,22 @@ public class Pawn {
         return this.pos;
     }
 
+    int[] getCoordenates() {
+        int[] position = {this.posX, this.posY};
+        return position;
+    }
+
     int getPawnNumber(){
         return this.pawnNumber;
     }
+
+    public void setPosition(int x){
+		this.pos = x;
+        return;
+	}
+	public void setCoordenates(int x, int y){
+		this.posX = x;
+        this.posY = y;
+	}
 
 }

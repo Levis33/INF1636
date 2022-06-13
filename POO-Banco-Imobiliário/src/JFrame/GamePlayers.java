@@ -92,6 +92,7 @@ public class GamePlayers extends JFrame implements ItemListener, ObservadorIF {
 					setVisible(false);
 					Frame f = new Frame("Banco Imobiliario");
 					CtrlRegras.getInstance().initPlayers(playerColors, playerNames);
+					CtrlRegras.getInstance().organizePlay();
 					f.setVisible(true);
 					removeSelf();
 				}

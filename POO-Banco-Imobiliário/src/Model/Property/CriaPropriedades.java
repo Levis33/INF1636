@@ -14,7 +14,7 @@ public class CriaPropriedades {
                 "Av. Europa", "Sorte/Reves", "Rua Augusta", "Av. Pacaembu", "Companhia de Taxi",
                 "Sorte/Reves", "Interlagos", "Ganhe", "Morumbi", "Parada Livre",
                 "Flamengo", "Sorte/Reves", "Botafogo", "Pague", "Companhia de Navegacao",
-                "Av. Brasil", "Sorte/Reves", "Av. Paulista", "Jardim Europa", "Vá para a prisão",
+                "Av. Brasil", "Sorte/Reves", "Av. Paulista", "Jardim Europa", "Va para a prisao",
                 "Copacabana", "Companhia de Aviacao", "Av. Vieira Souto", "Av. Atlantica", "Companhia de Helicoptero",
                 "Ipanema", "Sorte/Reves", "Jardim Paulista", "Brooklin"
         };
@@ -47,17 +47,50 @@ public class CriaPropriedades {
         };
 
         int[][] pos = {
-                { 0, 0 }, { 100, 50 }, { 0, 0 }, { 60, 50 }, { 60, 50 }, { 200, 100 }, { 240, 150 }, { 200, 100 },
-                { 220, 150 },
-                { 220, 150 },
-                { 220, 100 }, { 310, 100 }, { 310, 100 }, { 150, 100 }, { 350, 200 }, { 400, 200 }, { 120, 50 },
-                { 100, 50 },
-                { 150, 100 }, { 160, 100 }, { 140, 100 }, { 140, 100 }, { 260, 150 }, { 200, 100 }, { 320, 200 },
-                { 300, 200 },
-                { 200, 100 }, { 300, 200 }, { 280, 150 }, { 260, 150 },
-                { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },
-                { 0, 0 }, { 0, 0 },
-                { 0, 0 }, { 0, 0 } };
+                { 638, 600 },
+                { 553, 630 },
+                { 493, 630 },
+                { 443, 630 },
+                { 383, 630 },
+                { 330, 630 },
+                { 275, 630 },
+                { 220, 630 },
+                { 165, 630 },
+                { 110, 630 },
+                { 20, 600 },
+                
+                { 15, 545 },
+                { 15, 492 },
+                { 15, 440 },
+                { 15, 387 },
+                { 15, 335 },
+                { 15, 282 },
+                { 15, 230 }, 
+                { 15, 177 }, 
+                { 15, 125 },
+                
+                { 15, 50 }, 
+                { 105, 50 },
+                { 160, 20 }, 
+                { 215, 50 },
+                { 270, 20 },
+                { 325, 20 }, 
+                { 380, 50 }, 
+                { 435, 20 }, 
+                { 490, 50 }, 
+                { 545, 50 },
+                { 630, 50 },
+
+                { 630, 125 },
+                { 650, 177 },
+                { 630, 230 },
+                { 630, 282 },
+                { 650, 335 },
+                { 630, 387 },
+                { 650, 440 },
+                { 630, 492 },
+                { 630, 545 },
+             };
 
         Color[] color = {
                 Color.pink, Color.pink, Color.pink, Color.blue, Color.blue, Color.blue, Color.magenta, Color.magenta,
@@ -71,11 +104,11 @@ public class CriaPropriedades {
         int fieldsWithoutColor = 0;
         for (i = 0; i < 40; i++) {
             if (i == 0 || i == 10 || i == 20 || i == 30) {
-                properties[i] = new Corner(name[i], pos[i][0], pos[i][1]);
+                properties[i] = new SpecialProperty(name[i], pos[i][0], pos[i][1]);
                 inserted_fields += 1;
                 fieldsWithoutColor += 1;
             } else if (i == 2 || i == 12 || i == 16 || i == 18 || i == 22 || i == 24 || i == 27 || i == 37) {
-                properties[i] = new Corner(name[i], pos[i][0], pos[i][1]);
+                properties[i] = new SpecialProperty(name[i], pos[i][0], pos[i][1]);
                 inserted_fields += 1;
                 fieldsWithoutColor += 1;
             } else if (i == 5 || i == 7 || i == 15 || i == 25 || i == 32 || i == 35) {
@@ -84,7 +117,7 @@ public class CriaPropriedades {
                 fieldsWithoutColor += 1;
             } else {
                 properties[i] = new Ground(name[i], rent[i - inserted_fields], price[i - inserted_fields], pos[i][0],
-                        pos[i][0],
+                        pos[i][1],
                         color[i - fieldsWithoutColor]);
             }
         }
