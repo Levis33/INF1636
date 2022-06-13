@@ -8,6 +8,7 @@ import Controller.Observer.ObservadorIF;
 import Model.Player.Pawn;
 import Model.Property.CriaPropriedades;
 import Model.Property.Property;
+import Regras.CtrlRegras;
 
 import java.awt.*;
 import java.io.File;
@@ -18,24 +19,21 @@ public class Board extends JPanel implements ObservadorIF {
 	public static final int IMG_X = 0;
 	public static final int IMG_Y = 0;
 	private Image board;
+	private Image[] pins;
+	private Image[] dices = new Image[6];
+	private Image[] luckyCards = new Image[30];
+	private Image[] propertyCards = new Image[28];
+
 	private Image dice1, dice2;
-	private Image pin1, pin2, pin3, pin4, pin5, pin6;
-	private Image luckyCard;
-	private Image propertyCard;
-	private Image[] pins = { pin1, pin2, pin3, pin4, pin5, pin6 };
-	private String[] dicesOptions = { "face1.png", "face2.png", "face3.png", "face4.png", "face5.png", "face6.png" };
-	private String[] pinsOptions = { "pin0.png", "pin1.png", "pin2.png", "pin3.png", "pin4.png", "pin5.png" };
+
 	// private Property[] properties = CriaPropriedades.cria();
-	private int nPlayers;
+	private int numPlayers = CtrlRegras.getInstance().getNumPlayers();
 
 	private int pinHeight = 23;
 	private int pinWidth = 15;
 	private int displayCarta;
 
-	public Board(int n) {
-		nPlayers = n;
-	}
-
+	// imagem tabuleiro
 	private void getBoard() {
 		try {
 			board = ImageIO.read(new File("Images/tabuleiro.png"));
@@ -45,23 +43,25 @@ public class Board extends JPanel implements ObservadorIF {
 		}
 	}
 
+	// imagem dados
 	public void getDices() {
-		Random gerador = new Random();
 		try {
-			String diceOption1 = dicesOptions[gerador.nextInt(6)];
-			String diceOption2 = dicesOptions[gerador.nextInt(6)];
-			dice1 = ImageIO.read(new File("Images/dados/" + diceOption1));
-			dice2 = ImageIO.read(new File("Images/dados/" + diceOption2));
+			for (int i = 0; i < 6; i++) {
+				dices[i] = ImageIO.read(new File("Images/dados/face" + (i + 1) + ".png"));
+			}
 		} catch (IOException e) {
 			System.out.print(e.getMessage());
 			System.exit(1);
 		}
 	}
 
+	// imagens peoes
 	public void getPawns() {
+		pins = new Image[numPlayers];
 		try {
-			for (int i = 0; i < nPlayers; i++) {
-				pins[i] = ImageIO.read(new File("Images/peoes/" + pinsOptions[i]));
+			for (int i = 0; i < numPlayers; i++) {
+				int pinNumber = CtrlRegras.getInstance().getPlayer(i).getPin();
+				pins[i] = ImageIO.read(new File("Images/peoes/pin" + pinNumber + ".png"));
 			}
 		} catch (IOException e) {
 			System.out.print(e.getMessage());
@@ -71,9 +71,10 @@ public class Board extends JPanel implements ObservadorIF {
 	}
 
 	public void getLuckyCards() {
-		Random gerador = new Random();
 		try {
-			luckyCard = ImageIO.read(new File("Images/sorteReves/chance" + gerador.nextInt(30) + ".png"));
+			for (int i = 0; i < 30; i++) {
+				luckyCards[i] = ImageIO.read(new File("Images/sorteReves/chance" + (i + 1) + ".png"));
+			}
 		} catch (IOException e) {
 			System.out.print(e.getMessage());
 			System.exit(1);
@@ -86,7 +87,9 @@ public class Board extends JPanel implements ObservadorIF {
 			// propertyCard = ImageIO.read(new File("Images/territorios/" + el.getNome() +
 			// ".png"));
 			// }
-			propertyCard = ImageIO.read(new File("Images/territorios/Leblon.png"));
+			for (int i = 0; i < 28; i++) {
+				propertyCards[i] = ImageIO.read(new File("Images/territorios/territorio" + (i + 1) + ".png"));
+			}
 		} catch (IOException e) {
 			System.out.print(e.getMessage());
 			System.exit(1);
@@ -101,40 +104,49 @@ public class Board extends JPanel implements ObservadorIF {
 		this.getPawns();
 		this.getLuckyCards();
 		this.getPropertyCard();
+
 		int larg = IMG_X, alt = IMG_Y;
 		g2d.drawImage(board, larg, alt, 700, 665, null);
+
 		g2d.drawImage(dice1, 750, 40, 90, 90, null);
 		g2d.drawImage(dice2, 850, 40, 90, 90, null);
-		g2d.drawImage(luckyCard, 395, 350, 200, 200, null);
-		g2d.drawImage(propertyCard, 395, 100, 200, 200, null);
+		g2d.drawImage(luckyCards[0], 395, 350, 200, 200, null);
+		g2d.drawImage(propertyCards[0], 395, 100, 200, 200, null);
 		for (int k = 0; k < 11; k++) {
 			int dist;
 			if (k == 0) {
 				dist = 15;
 				for (int j = 0; j < 9; j++) {
-					for (int i = 0; i < nPlayers; i++) {
+					for (int i = 0; i < numPlayers; i++) {
 						if (i % 2 == 0) {
-							g2d.drawImage(pins[i], dist + i * 8, 105 + j * 525 / 10, pinWidth, pinHeight, null);
+							g2d.drawImage(pins[i], dist + i * 8, 105 + j * 525 / 10, pinWidth, pinHeight,
+									null);
 						} else {
-							g2d.drawImage(pins[i], dist + (i - 1) * 8, 125 + j * 525 / 10, pinWidth, pinHeight, null);
+							g2d.drawImage(pins[i], dist + (i - 1) * 8, 125 + j * 525 / 10, pinWidth,
+									pinHeight, null);
 						}
 					}
 				}
 			} else if (k == 10) {
 				dist = 630;
 				for (int j = 0; j < 9; j++) {
-					for (int i = 0; i < nPlayers; i++) {
+					for (int i = 0; i < numPlayers; i++) {
 						if (i % 2 == 0) {
-							g2d.drawImage(pins[i], dist + i * 8, 105 + j * 525 / 10, pinWidth, pinHeight, null);
+							g2d.drawImage(pins[i], dist + i * 8, 105 + j * 525 / 10, pinWidth, pinHeight,
+									null);
 						} else {
-							g2d.drawImage(pins[i], dist + (i - 1) * 8, 125 + j * 525 / 10, pinWidth, pinHeight, null);
+							g2d.drawImage(pins[i], dist + (i - 1) * 8, 125 + j * 525 / 10, pinWidth,
+									pinHeight, null);
 						}
 					}
 				}
-			} else {
+			}
+			
+			else {
 				dist = 105 + 55 * (k - 1);
 			}
-			for (int i = 0; i < nPlayers; i++) {
+
+			for (int i = 0; i < numPlayers; i++) {
 				if (i % 2 == 0) {
 					g2d.drawImage(pins[i], dist + i * 8, 30, pinWidth, pinHeight, null);
 				} else {
@@ -142,7 +154,8 @@ public class Board extends JPanel implements ObservadorIF {
 				}
 
 			}
-			for (int i = 0; i < nPlayers; i++) {
+
+			for (int i = 0; i < numPlayers; i++) {
 				if (i % 2 == 0) {
 					g2d.drawImage(pins[i], dist + i * 8, 615, pinWidth, pinHeight, null);
 				} else {
@@ -152,7 +165,7 @@ public class Board extends JPanel implements ObservadorIF {
 			}
 
 		}
-
+		CtrlRegras.getInstance().add(this);
 	}
 
 	public void notify(ObservadoIF o) {

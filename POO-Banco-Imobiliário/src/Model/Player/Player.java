@@ -9,10 +9,12 @@ public class Player {
 
 	private int number;
 	private int money;
+	private int pin;
 	private String cor;
+	private String name;
 
 	private Color color;
-	private Pawn pawn = new Pawn();
+	private Pawn pawn;
 
 	private boolean saidaLivrePrisao = false;
 	private boolean preso = false;
@@ -24,14 +26,24 @@ public class Player {
 
 	// Constructors
 
-	public Player(int playerNumb, int money, Color color, String cor) {
+	public Player(int playerNumb, int money, Color color, String cor, int pin, String name) {
 		this.number = playerNumb;
 		this.money = money;
 		this.color = color;
 		this.cor = cor;
+		this.name = name;
+		this.pawn = new Pawn(pin);
 	}
 
 	// Methods
+	public int getPin() {
+		return this.pawn.getPawnNumber();
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
 
 	public String getCor() {
 		return this.cor;

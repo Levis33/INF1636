@@ -11,7 +11,7 @@ public class Main {
 	public static void main(String[] args) {
 		CtrlRegras match = new CtrlRegras();
 
-		Property[] propriedade = CriaPropriedades.cria();
+//		Property[] propriedade = CriaPropriedades.cria();
 
 		//////// Frames///////////////
 
@@ -28,7 +28,8 @@ public class Main {
 
 		for (int i = 0; i < propriedades.length; i++) {
 			System.out.println(propriedades[i].getNome());
-			System.out.println(propriedade[i].getValorCompra());
+			System.out.println(propriedades[i].getValorCompra());
+			System.out.println(i);
 		}
 
 	}

@@ -10,7 +10,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import java.awt.Color;
 //import Model.Player;
@@ -72,23 +74,84 @@ public class CtrlRegras implements ObservadoIF {
 		Collections.shuffle(cartas);
 	}
 
-	// Methods
-	public void getNumPlayers() { // Get number of players
-		System.out.println("Digite a quantidade de jogadores:(Minimo de 2 e maximo de 6)");
-		numPlayers = scan.nextInt();
-		if (numPlayers > maxPlayers || numPlayers < minPlayers) {
-			System.out.println("Número de jogadores inválido. Tente novamente.");
-			System.exit(1);
-		}
-		scan.close();
+	// instance
+	public static CtrlRegras getInstance() {
+		if (instance == null)
+			instance = new CtrlRegras();
+		return instance;
 	}
 
-	public ArrayList<Player> initPlayers(int numPlayers) {
-		Color pawnColours[] = { Color.red, Color.blue, Color.orange, Color.yellow, Color.magenta, Color.gray };
-		String[] cores = { "Vermelho", "Azul", "Laranja", "Amarelo", "Roxo", "Cinza" };
-		for (int i = 0; i < numPlayers; i++) {
-			playerList.add(new Player(i + 1, 4000, pawnColours[i], cores[i]));
+	// Methods
+	public boolean checkNumPlayers(int num) { // Check number of players
+		if (num > maxPlayers || num < minPlayers) {
+			System.out.println("Número de jogadores inválido. Tente novamente.");
+			return false;
 		}
+		numPlayers = num;
+		return true;
+	}
+
+	public int getNumPlayers() {
+		return numPlayers;
+	}
+
+	public void initPlayers(JComboBox pColors[], JTextField pNames[]) {
+		Color auxColor = Color.red;
+		String auxColorName = "Vermelho";
+		int pinNumber =0;
+		for (int i = 0; i < numPlayers; i++) {
+			switch (pColors[i].getSelectedIndex()) {
+				case 0: {
+					auxColor = Color.red;
+					auxColorName = "Vermelho";
+					pinNumber = 0;
+					break;
+				}
+				case 1: {
+					auxColor = Color.blue;
+					auxColorName = "Azul";
+					pinNumber = 1;
+					break;
+				}
+				case 2: {
+					auxColor = Color.orange;
+					auxColorName = "Laranja";
+					pinNumber = 2;
+					break;
+				}
+				case 3: {
+					auxColor = Color.yellow;
+					auxColorName = "Amarelo";
+					pinNumber = 3;
+					break;
+				}
+				case 4: {
+					auxColor = Color.magenta;
+					auxColorName = "Roxo";
+					pinNumber =4;
+					break;
+				}
+				case 5: {
+					auxColor = Color.gray;
+					auxColorName = "Cinza";
+					pinNumber = 5;
+					break;
+				}
+				default:
+					auxColor = Color.red;
+					auxColorName = "Vermelho";
+					pinNumber = 0;
+			}
+			playerList.add(new Player(i + 1, 4000, auxColor, auxColorName, pinNumber, pNames[i].getText()));
+		}
+	}
+
+
+	public Player getPlayer(int i) {
+		return playerList.get(i);
+	}
+
+	public ArrayList<Player> getAllPlayers() {
 		return playerList;
 	}
 
@@ -148,12 +211,6 @@ public class CtrlRegras implements ObservadoIF {
 		}
 
 		return dados.getSumDices();
-	}
-
-	public static CtrlRegras getInstance() {
-		if (instance == null)
-			instance = new CtrlRegras();
-		return instance;
 	}
 
 	public int lidarComCartas() {

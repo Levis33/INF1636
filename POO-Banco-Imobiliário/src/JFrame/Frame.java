@@ -2,20 +2,22 @@ package JFrame;
 
 import javax.swing.*;
 
+import Controller.Observer.ObservadoIF;
+import Controller.Observer.ObservadorIF;
 import Regras.CtrlRegras;
 
 import java.awt.*;
 import java.awt.event.*;
 
-public class Frame extends JFrame {
+public class Frame extends JFrame implements ObservadorIF {
 	private final int ALTURA = 700;
 	private final int LARGURA = 1200;
 	private int nPlayers;
 	JPanel p;
 
-	public Frame(String s, int n) {
+	public Frame(String s) {
 		super(s);
-		nPlayers = n;
+		nPlayers = CtrlRegras.getInstance().getNumPlayers();
 		////////// Frame/////////////
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		Dimension screenSize = tk.getScreenSize();
@@ -26,7 +28,7 @@ public class Frame extends JFrame {
 		setBounds(x, y, LARGURA, ALTURA);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//////////////////////////
-		Board p = new Board(nPlayers);
+		Board p = new Board();
 		getContentPane().add(p);
 		p.setLayout(null);
 		setSize(LARGURA, ALTURA);
@@ -57,6 +59,12 @@ public class Frame extends JFrame {
 		saveButton.setBounds(1070, 620, 100, 30);
 		p.add(saveButton);
 
+		CtrlRegras.getInstance().add(this);
+	}
+
+	@Override
+	public void notify(ObservadoIF o) {
+		this.repaint();	
 	}
 
 }

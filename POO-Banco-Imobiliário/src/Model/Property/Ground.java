@@ -10,8 +10,8 @@ public class Ground extends Property {
     private int numHouses = 0;
     private int[] rent;
 
-    public Ground(String name, int[] rent, int[] price, Color c) {
-        super(name, rent, price[0]);
+    public Ground(String name, int[] rent, int[] price, int x, int y, Color c) {
+        super(name, rent, price[0], x, y);
         priceBuilding = price[1];
         color = c;
     }

@@ -16,7 +16,7 @@ public class GamePlayers extends JFrame implements ItemListener, ObservadorIF {
 	private final int LARGURA = 700;
 
 	JPanel p;
-	static String Cores[] = { "vermelho", "azul", "laranja", "amarelo", "roxo", "preto" };
+	static String Cores[] = {"Vermelho", "Azul", "Laranja", "Amarelo", "Roxo", "Cinza" };
 	static JComboBox j1 = new JComboBox(Cores);
 	static JComboBox j2 = new JComboBox(Cores);
 	static JComboBox j3 = new JComboBox(Cores);
@@ -30,18 +30,15 @@ public class GamePlayers extends JFrame implements ItemListener, ObservadorIF {
 	static JTextField name5 = new JTextField(8);
 	static JTextField name6 = new JTextField(8);
 	JLabel error = new JLabel("");
-
-	ArrayList<Player> playerList;
-	int actualPos;
-
+	
 	static int nPlayers = 0;
 
 	private static boolean isBlocked = false;
 
-	static JComboBox players[] = { j1, j2, j3, j4, j5, j6 };
-	static JTextField names[] = { name1, name2, name3, name4, name5, name6 };
+	static JComboBox playerColors[] = { j1, j2, j3, j4, j5, j6 };
+	static JTextField playerNames[] = { name1, name2, name3, name4, name5, name6 };
 
-	public GamePlayers(String s, int n) {
+	public GamePlayers(String s) {
 		super(s);
 		///// FRAME SIZE AND LOCATION/////
 		Toolkit tk = Toolkit.getDefaultToolkit();
@@ -53,18 +50,19 @@ public class GamePlayers extends JFrame implements ItemListener, ObservadorIF {
 		setBounds(x, y, LARGURA, ALTURA);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		/////////////////
-		nPlayers = n;
+
+		nPlayers = CtrlRegras.getInstance().getNumPlayers();
 		p = new JPanel();
 		// p.setLayout(new FlowLayout());
 		p.setLayout(null);
 		getContentPane().add(p);
 		JButton start = new JButton("Iniciar");
 		for (int i = 0; i < nPlayers; i++) {
-			players[i].setSelectedIndex(i);
-			players[i].addItemListener(this);
-			players[i].setBounds(50 + (100 * i), 30, 80, 30);
-			names[i].setBounds(50 + (100 * i), 90, 80, 30);
-			names[i].addKeyListener(new KeyAdapter() {
+			playerColors[i].setSelectedIndex(i);
+			playerColors[i].addItemListener(this);
+			playerColors[i].setBounds(50 + (100 * i), 30, 80, 30);
+			playerNames[i].setBounds(50 + (100 * i), 90, 80, 30);
+			playerNames[i].addKeyListener(new KeyAdapter() {
 				int n = 0;
 
 				public void keyTyped(KeyEvent e) {
@@ -83,20 +81,19 @@ public class GamePlayers extends JFrame implements ItemListener, ObservadorIF {
 					}
 				}
 			});
-			p.add(players[i]);
-			p.add(names[i]);
+			p.add(playerColors[i]);
+			p.add(playerNames[i]);
 		}
+
 		start.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				if (!isBlocked) {
 					setVisible(false);
-					ListaImagens li = new ListaImagens();
-					Frame f = new Frame("Banco Imobili�rio", nPlayers);
-					playerList = CtrlRegras.getInstance().initPlayers(nPlayers);
+					Frame f = new Frame("Banco Imobiliario");
+					CtrlRegras.getInstance().initPlayers(playerColors, playerNames);
 					f.setVisible(true);
-					li.novaImagem();
-					f.repaint();
+					removeSelf();
 				}
 			}
 
@@ -106,15 +103,16 @@ public class GamePlayers extends JFrame implements ItemListener, ObservadorIF {
 		p.add(error);
 		p.add(start);
 		setVisible(true);
+		CtrlRegras.getInstance().add(this);
 	}
 
 	public void itemStateChanged(ItemEvent e) {
 		boolean entrou = false;
 		// if the state combobox is changed
 		for (int i = 0; i < nPlayers; i++) {
-			String a = (String) players[i].getSelectedItem();
+			String a = (String) playerColors[i].getSelectedItem();
 			for (int j = 0; j < nPlayers; j++) {
-				String b = (String) players[j].getSelectedItem();
+				String b = (String) playerColors[j].getSelectedItem();
 				if (i != j && b == a) {
 					entrou = true;
 					isBlocked = true;
@@ -128,6 +126,10 @@ public class GamePlayers extends JFrame implements ItemListener, ObservadorIF {
 			isBlocked = false;
 		}
 		entrou = false;
+	}
+
+	private void removeSelf(){
+		CtrlRegras.getInstance().remove(this);
 	}
 
 	@Override
