@@ -47,9 +47,6 @@ public class CtrlRegras implements ObservadoIF {
 
 	private int cartaAtual = -1;
 
-	int[] posicaoPropriedade = {
-			1, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 17, 19, 21, 23, 25, 26, 28, 29, 31, 32, 33, 34, 35, 36, 38, 39
-	};
 	// para achar o index no criaPropriedades usar
 	// Arrays.asList(posicaoPropriedade).indexOf(posicao);
 
@@ -305,6 +302,44 @@ public class CtrlRegras implements ObservadoIF {
 	}
 
 	public void venderPropriedade() {
+
+		ArrayList<Integer> PlayerPropriedades = player_atual.getPropriedades();
+		String[] listaNomesPropriedades = new String[PlayerPropriedades.size()];
+
+		for(int i=0;i<PlayerPropriedades.size();i++){
+			listaNomesPropriedades[i] = propriedades[PlayerPropriedades.get(i)].getNome();
+		}
+
+		if(player_atual.getPropriedades().size() > 0){
+			JComboBox<String> listaPropriedades = new JComboBox<String>(listaNomesPropriedades);
+			Object[] display = {"escolha uma das suas propriedades para vender", listaPropriedades};
+			int pane = JOptionPane.showOptionDialog(null, display, "Vender propriedades", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+			if(pane == JOptionPane.OK_OPTION){
+				int propriedade = player_atual.getPropriedades().get(listaPropriedades.getSelectedIndex());
+				if(propriedades[propriedade] instanceof Enterprise){
+					player_atual.removePropriedade(propriedade);
+					propriedades[propriedade].setProprietario(-1);
+					player_atual.changeMoney(propriedades[propriedade].getValorCompra()*9/10);
+					this.notificaAll();
+					JOptionPane.showMessageDialog(null, "voce acabou de vender sua propriedade "+ listaPropriedades.getSelectedIndex() + " por R$: " + propriedades[propriedade].getValorCompra()*9/10);
+
+				}
+
+				else{
+					player_atual.removePropriedade(propriedade);
+					propriedades[propriedade].setProprietario(-1);
+					player_atual.changeMoney(((Ground)propriedades[propriedade]).getPriceToSellBuildings()*9/10);
+					this.notificaAll();
+					JOptionPane.showMessageDialog(null, "voce acabou de vender sua propriedade "+ listaPropriedades.getSelectedIndex() + " por R$: " + (((Ground)propriedades[propriedade]).getPriceToSellBuildings()*9/10));
+				}
+			}
+		}
+
+		return;
+	}
+
+	public void comprarCasa(){
 		return;
 	}
 
