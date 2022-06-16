@@ -5,7 +5,7 @@ import java.awt.Color;
 public class Ground extends Property {
 
     private Color color;
-    private int priceBuilding;
+    private int priceBuilding = 0;
     private int numHotels = 0;
     private int numHouses = 0;
     private int[] rent;

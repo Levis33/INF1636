@@ -395,7 +395,85 @@ public class CtrlRegras implements ObservadoIF {
 	}
 
 	public void comprarCasa() {
-		return;
+
+		ArrayList<Integer> PlayerPropriedades = playerAtual.getPropriedades();
+		String[] listaNomesPropriedades = new String[PlayerPropriedades.size()];
+
+		ArrayList<String> propriedadesGroundNome = new ArrayList<String>();
+
+		for (int i = 0; i < PlayerPropriedades.size(); i++) {
+			listaNomesPropriedades[i] = propriedades[PlayerPropriedades.get(i)].getNome();
+		}
+
+		for(int i=0, j=0; i < listaNomesPropriedades.length; i++){
+			if(propriedades[PlayerPropriedades.get(i)] instanceof Ground){
+				propriedadesGroundNome.add(listaNomesPropriedades[i]);
+			}
+			else{
+				PlayerPropriedades.remove(j);
+				j--;
+			}
+			j++;
+		}
+
+		if(propriedadesGroundNome.size() == 0){
+			JOptionPane.showMessageDialog(null, "Você não possui propriedades que dispoe da compra de casas e hoteis.");
+		}
+		else{
+			String[] nomePropriedades = propriedadesGroundNome.toArray(new String[propriedadesGroundNome.size()]);
+
+			JComboBox<String> listaPropriedades = new JComboBox<String>(listaNomesPropriedades);
+
+			Object[] display = { "escolha uma das suas propriedades para comprar uma casa/hotel", listaPropriedades };
+			int pane = JOptionPane.showOptionDialog(null, display, "Vender propriedades", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+			if (pane == JOptionPane.OK_OPTION) {
+				int propriedadeEscolhida = PlayerPropriedades.get(listaPropriedades.getSelectedIndex());
+
+
+				int casasEhotel =((Ground) propriedades[propriedadeEscolhida]).getHotels() + ((Ground) propriedades[propriedadeEscolhida]).getHouses();
+				int precoCompra = 0;
+				String compra = "";
+
+				if(casasEhotel == 5){
+					JOptionPane.showMessageDialog(null, "Voce ja comporou todas as casas e hoteis disponiveis para essa propriedade");
+				}
+				else if(casasEhotel == 4){
+					precoCompra = ((Ground)propriedades[propriedadeEscolhida]).buyHotel();
+					compra = "hotel";
+				}
+				else if(casasEhotel >= 1){
+					String[] casahotel = {"Casa", "Hotel"};
+					int opcao = JOptionPane.showOptionDialog(null,
+					"voce gostaria de comprar um hotel ou uma casa nao propriedade" +((Ground)propriedades[propriedadeEscolhida]).getNome(),
+					"click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, casahotel,
+					casahotel[0]);
+					if(opcao == 0){
+						precoCompra = ((Ground)propriedades[propriedadeEscolhida]).buyHouse();
+						compra = "casa";
+					}
+					else{
+						for(int i = casasEhotel; i<4;i++){
+							precoCompra += ((Ground)propriedades[propriedadeEscolhida]).buyHouse();
+						}
+						precoCompra += ((Ground)propriedades[propriedadeEscolhida]).buyHotel();
+						compra = "hotel";
+					}
+				}
+				else{
+					precoCompra = ((Ground)propriedades[propriedadeEscolhida]).buyHouse();
+					compra = "casa";
+				}
+				playerAtual.changeMoney(-precoCompra);
+				this.notificaAll();
+				if(precoCompra != 0){
+					JOptionPane.showMessageDialog(null, "Voce comprou " + compra + " pelo valor de R$ "+ precoCompra +" na propriedade " + propriedades[propriedadeEscolhida].getNome());
+				}
+				
+			}
+		}
+		
 	}
 
 	private int lidarComPropriedade(int propriedade) {
