@@ -36,8 +36,9 @@ public class Frame extends JFrame implements ObservadorIF {
 		JButton diceButton = new JButton("Roll");
 		diceButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("'rolou'");
 				CtrlRegras.getInstance().jogaDados();
-				p.repaint();
+				// p.repaint();
 			}
 		});
 
@@ -50,7 +51,7 @@ public class Frame extends JFrame implements ObservadorIF {
 
 		JButton saveButton = new JButton("Salvar");
 
-		diceButton.setBounds(770, 4, 150, 30);
+		diceButton.setBounds(740, 10, 150, 30);
 		p.add(diceButton);
 
 		finishButton.setBounds(920, 620, 100, 30);

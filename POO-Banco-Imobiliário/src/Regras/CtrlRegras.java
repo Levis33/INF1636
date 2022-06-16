@@ -35,8 +35,10 @@ public class CtrlRegras implements ObservadoIF {
 	private int numPlayers;
 
 	private ArrayList<Player> playerList = new ArrayList<Player>();
-	private int playerAtual = 0;
-	private Player player_atual;
+	private int playerIndex = 0;
+	private Player playerAtual;
+	private int[] diceValues = new int[2];
+	private int diceSum;
 	private String cor;
 
 	private boolean podeJogar;
@@ -147,6 +149,10 @@ public class CtrlRegras implements ObservadoIF {
 		return playerList.get(i);
 	}
 
+	public Player getPlayerAtual() {
+		return playerAtual;
+	}
+
 	public ArrayList<Player> getAllPlayers() {
 		return playerList;
 	}
@@ -166,23 +172,32 @@ public class CtrlRegras implements ObservadoIF {
 			playerList.get(i).setPosition(0);
 			playerList.get(i).setCoordenates(posX, posY);
 		}
+		playerIndex = 0;
+		playerAtual = playerList.get(playerIndex);
+		diceValues[0] = 1;
+		diceValues[1] = 1;
+		podeJogar = true;
+	}
+
+	public int[] getDicesValue() {
+		return diceValues;
 	}
 
 	////////////////////////////////////////////////////
-	public void controlePlayers(int playerAtual) {
-		int primPlayer = playerAtual;
-		playerAtual = (playerAtual + 1) % numPlayers; // proximo jogador
-		player_atual = playerList.get(playerAtual);
+	public void controlePlayers(int playerIndex) {
+		int primPlayer = playerIndex;
+		playerIndex = (playerIndex + 1) % numPlayers; // proximo jogador
+		playerAtual = playerList.get(playerIndex);
 
-		while (player_atual.getPlayerFalencia()) {
-			if (primPlayer == playerAtual) {
+		while (playerAtual.getPlayerFalencia()) {
+			if (primPlayer == playerIndex) {
 				endGame();
 			}
-			playerAtual = (playerAtual + 1) % numPlayers;
-			player_atual = playerList.get(playerAtual);
+			playerIndex = (playerIndex + 1) % numPlayers;
+			playerAtual = playerList.get(playerIndex);
 		}
 
-		if (playerAtual == primPlayer) { // todos menos atual foram a falencia
+		if (playerIndex == primPlayer) { // todos menos atual foram a falencia
 			endGame();
 		}
 
@@ -190,68 +205,90 @@ public class CtrlRegras implements ObservadoIF {
 		podeJogar = true;
 	}
 
-	public int jogaDados() {
+	public void jogaDados() {
 		if (podeJogar == false) {
-			return 0;
+			return;
 		}
 
 		dados.rollDice();
 
-		return lidarComDados();
+		diceValues[0] = dados.getDice1();
+		diceValues[1] = dados.getDice2();
+		diceSum = dados.getSumDices();
+
+		notificaAll();
+
+		lidarComDados();
+		return;
 	}
 
-	public int lidarComDados() {
-		player_atual = playerList.get(playerAtual);
+	public void lidarComDados() {
+		playerAtual = playerList.get(playerIndex);
+		int playerPosition = playerAtual.getPawnPos();
+		int playerPin = playerAtual.getPin();
+		int newPosition = (playerPosition + diceSum)%40;
+
 		if (dados.dadosIguais()) {
 			dadosRepetidos += 1;
-			if (player_atual.getPlayerPreso()) {
-				player_atual.changeStatusPreso();
-				// JOptionPane.showMessageDialog(null,"Você está livre da prisão");
-			}
-			if (dadosRepetidos >= 3) {
-				player_atual.goToPrison();
-				// JOptionPane.showMessageDialog(null,"Você foi preso por tirar o dado 3 vezes
-				// iguais");
-				if (player_atual.getSaidaLivrePrisao()) {
-					player_atual.changeStatusSaidaPrisao();
+			if (playerAtual.getPlayerPreso()) {
+				playerAtual.changeStatusPreso();
+				JOptionPane.showMessageDialog(null, "Você está livre da prisão");
+			} else if (dadosRepetidos >= 3) {
+				playerAtual.goToPrison();
+				JOptionPane.showMessageDialog(null, "Você foi preso por tirar o dado 3 vezes iguais");
+				if (playerAtual.getSaidaLivrePrisao()) {
+					playerAtual.changeStatusSaidaPrisao();
 					cartas.add(8);
-					// JOptionPane.showMessageDialog(null,"Você usou sua carta de sair da prisão");
+					JOptionPane.showMessageDialog(null, "Você usou sua carta de sair da prisão");
+				} else {
+					playerAtual.setPosition(10);
+					playerAtual.setCoordenates(propriedades[10].getPos(playerPin)[0],
+							propriedades[10].getPos(playerPin)[1]);
 				}
 				podeJogar = false;
-				return 0;
+			} else {
+				dadosRepetidos = 0;
+				playerAtual.setPosition(newPosition);
+				playerAtual.setCoordenates(propriedades[newPosition].getPos(playerPin)[0],
+						propriedades[newPosition].getPos(playerPin)[1]);
 			}
 		} else {
-			podeJogar = false;
+			playerAtual.setPosition(newPosition);
+			playerAtual.setCoordenates(propriedades[newPosition].getPos(playerPin)[0],
+					propriedades[newPosition].getPos(playerPin)[1]);
+			// podeJogar = false;
 		}
 
-		return dados.getSumDices();
+		notificaAll();
+
+		return;
 	}
 
 	public int lidarComCartas() {
-		player_atual = playerList.get(playerAtual);
-		// System.out.println(playerAtual);
+		playerAtual = playerList.get(playerIndex);
+		// System.out.println(playerIndex);
 		cartaAtual = cartas.remove(0);
 
 		if (cartaAtual == 8) { // Saida da prisão
-			player_atual.changeStatusSaidaPrisao();
+			playerAtual.changeStatusSaidaPrisao();
 			return cartaAtual;
 		} else if (cartaAtual == 10) { // receba 50 de cada jogador
 			for (int i = 0; i < numPlayers; i++) {
-				if (i != playerAtual) {
+				if (i != playerIndex) {
 					playerList.get(i).changeMoney(-50);
 				}
 			}
-			player_atual.changeMoney(50 * (numPlayers - 1));
+			playerAtual.changeMoney(50 * (numPlayers - 1));
 
 		} else if (cartaAtual == 22) { // vai para a prisao
-			player_atual.goToPrison();
+			playerAtual.goToPrison();
 			podeJogar = false;
-			if (player_atual.getSaidaLivrePrisao()) {
-				player_atual.changeStatusPreso();
+			if (playerAtual.getSaidaLivrePrisao()) {
+				playerAtual.changeStatusPreso();
 				cartas.add(8);
 			}
 		} else {
-			player_atual.changeMoney(cartasSorteReves[cartaAtual]);
+			playerAtual.changeMoney(cartasSorteReves[cartaAtual]);
 		}
 
 		cartas.add(cartaAtual);
@@ -261,9 +298,9 @@ public class CtrlRegras implements ObservadoIF {
 
 	public int movePlayer(int valDados) {
 
-		player_atual.movePawn(valDados);
+		playerAtual.movePawn(valDados);
 
-		int posicao = player_atual.getPawnPos();
+		int posicao = playerAtual.getPawnPos();
 
 		if (propriedades[posicao] instanceof Enterprise || propriedades[posicao] instanceof Ground) {
 			int displayC = lidarComPropriedade(posicao);
@@ -275,20 +312,20 @@ public class CtrlRegras implements ObservadoIF {
 					return lidarComCartas();
 				}
 				case "Ganhe": {
-					player_atual.changeMoney(200);
+					playerAtual.changeMoney(200);
 					break;
 				}
 				case "Perde": {
-					player_atual.changeMoney(-200);
+					playerAtual.changeMoney(-200);
 					break;
 				}
-				case "Prisao": {//rever
+				case "Prisao": {// rever
 					break;
 				}
 				case "Va para a prisao": {
-					player_atual.goToPrison();
-					if (player_atual.getSaidaLivrePrisao()) {
-						player_atual.changeStatusPreso(); // deixa de estar preso
+					playerAtual.goToPrison();
+					if (playerAtual.getSaidaLivrePrisao()) {
+						playerAtual.changeStatusPreso(); // deixa de estar preso
 						cartas.add(8);
 					}
 					break;
@@ -303,35 +340,41 @@ public class CtrlRegras implements ObservadoIF {
 
 	public void venderPropriedade() {
 
-		ArrayList<Integer> PlayerPropriedades = player_atual.getPropriedades();
+		ArrayList<Integer> PlayerPropriedades = playerAtual.getPropriedades();
 		String[] listaNomesPropriedades = new String[PlayerPropriedades.size()];
 
-		for(int i=0;i<PlayerPropriedades.size();i++){
+		for (int i = 0; i < PlayerPropriedades.size(); i++) {
 			listaNomesPropriedades[i] = propriedades[PlayerPropriedades.get(i)].getNome();
 		}
 
-		if(player_atual.getPropriedades().size() > 0){
+		if (playerAtual.getPropriedades().size() > 0) {
 			JComboBox<String> listaPropriedades = new JComboBox<String>(listaNomesPropriedades);
-			Object[] display = {"escolha uma das suas propriedades para vender", listaPropriedades};
-			int pane = JOptionPane.showOptionDialog(null, display, "Vender propriedades", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+			Object[] display = { "escolha uma das suas propriedades para vender", listaPropriedades };
+			int pane = JOptionPane.showOptionDialog(null, display, "Vender propriedades", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-			if(pane == JOptionPane.OK_OPTION){
-				int propriedade = player_atual.getPropriedades().get(listaPropriedades.getSelectedIndex());
-				if(propriedades[propriedade] instanceof Enterprise){
-					player_atual.removePropriedade(propriedade);
+			if (pane == JOptionPane.OK_OPTION) {
+				int propriedade = playerAtual.getPropriedades().get(listaPropriedades.getSelectedIndex());
+				if (propriedades[propriedade] instanceof Enterprise) {
+					playerAtual.removePropriedade(propriedade);
 					propriedades[propriedade].setProprietario(-1);
-					player_atual.changeMoney(propriedades[propriedade].getValorCompra()*9/10);
+					playerAtual.changeMoney(propriedades[propriedade].getValorCompra() * 9 / 10);
 					this.notificaAll();
-					JOptionPane.showMessageDialog(null, "voce acabou de vender sua propriedade "+ listaPropriedades.getSelectedIndex() + " por R$: " + propriedades[propriedade].getValorCompra()*9/10);
+					JOptionPane.showMessageDialog(null,
+							"voce acabou de vender sua propriedade " + listaPropriedades.getSelectedIndex()
+									+ " por R$: " + propriedades[propriedade].getValorCompra() * 9 / 10);
 
 				}
 
-				else{
-					player_atual.removePropriedade(propriedade);
+				else {
+					playerAtual.removePropriedade(propriedade);
 					propriedades[propriedade].setProprietario(-1);
-					player_atual.changeMoney(((Ground)propriedades[propriedade]).getPriceToSellBuildings()*9/10);
+					playerAtual.changeMoney(((Ground) propriedades[propriedade]).getPriceToSellBuildings() * 9 / 10);
 					this.notificaAll();
-					JOptionPane.showMessageDialog(null, "voce acabou de vender sua propriedade "+ listaPropriedades.getSelectedIndex() + " por R$: " + (((Ground)propriedades[propriedade]).getPriceToSellBuildings()*9/10));
+					JOptionPane.showMessageDialog(null,
+							"voce acabou de vender sua propriedade " + listaPropriedades.getSelectedIndex()
+									+ " por R$: "
+									+ (((Ground) propriedades[propriedade]).getPriceToSellBuildings() * 9 / 10));
 				}
 			}
 		}
@@ -339,7 +382,7 @@ public class CtrlRegras implements ObservadoIF {
 		return;
 	}
 
-	public void comprarCasa(){
+	public void comprarCasa() {
 		return;
 	}
 
@@ -358,10 +401,10 @@ public class CtrlRegras implements ObservadoIF {
 					simnao[0]);
 
 			if (opcao == 0) {
-				if (player_atual.getMoney() >= valorCompra) {
-					propriedades[propriedade].setProprietario(playerAtual);
-					player_atual.changeMoney(-valorCompra);
-					player_atual.addPropriedade(propriedade);
+				if (playerAtual.getMoney() >= valorCompra) {
+					propriedades[propriedade].setProprietario(playerIndex);
+					playerAtual.changeMoney(-valorCompra);
+					playerAtual.addPropriedade(propriedade);
 					JOptionPane.showMessageDialog(null,
 							"A propriedade:" + nomePropriedade + " foi comprada por: R$" + valorCompra);
 				} else {
@@ -371,62 +414,62 @@ public class CtrlRegras implements ObservadoIF {
 			}
 
 		} else { // existe proprietario
-			if (proprietario != playerAtual) { // player atual nao e o proprietario
+			if (proprietario != playerIndex) { // player atual nao e o proprietario
 				if (propriedades[propriedade] instanceof Enterprise) { // ENTERPRISE
 					int aluguel = ((Enterprise) propriedades[propriedade]).getRent(dados.getSumDices());
-					player_atual.changeMoney(-aluguel);
-					int playerMoney = player_atual.getMoney();
-					while (playerMoney <= 0 && player_atual.getPlayerFalencia()) {
+					playerAtual.changeMoney(-aluguel);
+					int playerMoney = playerAtual.getMoney();
+					while (playerMoney <= 0 && playerAtual.getPlayerFalencia()) {
 						int playerMoneyAntes = playerMoney;
 						venderPropriedade();
-						playerMoney = player_atual.getMoney();
+						playerMoney = playerAtual.getMoney();
 
 						JOptionPane.showMessageDialog(null,
 								"Voce nao possui dinheiro suficiente, venda uma de suas propriedades para pagar o Aluguel de R$"
 										+ aluguel);
 
 						if (playerMoneyAntes == playerMoney) {
-							player_atual.changeStatusFalencia();
+							playerAtual.changeStatusFalencia();
 						}
 					}
 
 					Player playerProprietario = playerList.get(proprietario);
 					playerProprietario.changeMoney(aluguel);
 
-					if (player_atual.getPlayerFalencia()) {
+					if (playerAtual.getPlayerFalencia()) {
 						JOptionPane.showMessageDialog(null,
-								" o player " + player_atual.getCor()
+								" o player " + playerAtual.getCor()
 										+ " foi a falencia, pois nao conseguiu pagar o aluguel de R$" + aluguel
 										+ " para o player " + playerProprietario.getCor());
 					} else {
-						JOptionPane.showMessageDialog(null, " o player " + player_atual.getCor()
+						JOptionPane.showMessageDialog(null, " o player " + playerAtual.getCor()
 								+ " pagou o aluguel de R$" + aluguel + " para o player " + playerProprietario.getCor());
 					}
 
 				} else { // GROUND
 					int aluguel = ((Ground) propriedades[propriedade]).getRent();
-					player_atual.changeMoney(-aluguel);
-					int playerMoney = player_atual.getMoney();
-					while (playerMoney <= 0 && player_atual.getPlayerFalencia()) {
+					playerAtual.changeMoney(-aluguel);
+					int playerMoney = playerAtual.getMoney();
+					while (playerMoney <= 0 && playerAtual.getPlayerFalencia()) {
 						int playerMoneyAntes = playerMoney;
 						venderPropriedade();
-						playerMoney = player_atual.getMoney();
+						playerMoney = playerAtual.getMoney();
 
 						if (playerMoney == playerMoneyAntes) {
-							player_atual.changeStatusFalencia();
+							playerAtual.changeStatusFalencia();
 						}
 					}
 
 					Player playerProprietario = playerList.get(proprietario);
 					playerProprietario.changeMoney(aluguel);
 
-					if (player_atual.getPlayerFalencia()) {
+					if (playerAtual.getPlayerFalencia()) {
 						JOptionPane.showMessageDialog(null,
-								" o player " + player_atual.getCor()
+								" o player " + playerAtual.getCor()
 										+ " foi a falencia, pois nao conseguiu pagar o aluguel de R$" + aluguel
 										+ " para o player " + playerProprietario.getCor());
 					} else {
-						JOptionPane.showMessageDialog(null, " o player " + player_atual.getCor()
+						JOptionPane.showMessageDialog(null, " o player " + playerAtual.getCor()
 								+ " pagou o aluguel de R$" + aluguel + " para o player " + playerProprietario.getCor());
 					}
 				}

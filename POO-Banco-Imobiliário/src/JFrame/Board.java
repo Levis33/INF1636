@@ -31,6 +31,8 @@ public class Board extends JPanel implements ObservadorIF {
 
 	private int pinHeight = 23;
 	private int pinWidth = 15;
+	private int pinWidthAtual = 20;
+	private int pinHeightAtual = 30;
 	private int displayCarta;
 
 	// imagem tabuleiro
@@ -108,16 +110,34 @@ public class Board extends JPanel implements ObservadorIF {
 		int larg = IMG_X, alt = IMG_Y;
 		g2d.drawImage(board, larg, alt, 700, 665, null);
 
-		g2d.drawImage(dice1, 750, 40, 90, 90, null);
-		g2d.drawImage(dice2, 850, 40, 90, 90, null);
 		// g2d.drawImage(luckyCards[0], 395, 350, 200, 200, null);
 		// g2d.drawImage(propertyCards[0], 395, 100, 200, 200, null);
 		CtrlRegras control = CtrlRegras.getInstance();
 		for (int j = 0; j < numPlayers; j++) {
 			int x = control.getPlayer(j).getPawnCoordenates()[0];
 			int y = control.getPlayer(j).getPawnCoordenates()[1];
-			g2d.drawImage(pins[j], x, y, pinWidth, pinHeight, null);
+			if(control.getPlayerAtual() == control.getPlayer(j)){
+				g2d.drawImage(pins[j], x, y, pinWidthAtual, pinHeightAtual, null); 
+			}else{
+				g2d.drawImage(pins[j], x, y, pinWidth, pinHeight, null); 
+			}
 		}
+		
+		System.out.println("'paint'");
+		dice1 = dices[control.getDicesValue()[0]-1];
+		dice2 = dices[control.getDicesValue()[1]-1];
+		
+		g2d.setColor(control.getPlayerAtual().getColor());
+		g2d.fillRect(710, 0, 210, 150);
+		g2d.drawImage(dice1, 720, 50, 90, 90, null);
+		g2d.drawImage(dice2, 820, 50, 90, 90, null);
+
+		g2d.setFont(new Font("Arial", Font.PLAIN, 18));
+		g2d.setColor(Color.BLACK);
+		g2d.drawString("Vez: Player", 950, 50);
+		g2d.setFont(new Font("Arial", Font.BOLD, 20));
+		g2d.setColor(control.getPlayerAtual().getColor());
+		g2d.drawString(String.valueOf(control.getPlayerAtual().getNumber()), 1045, 50);
 
 		control.add(this);
 	}

@@ -31,7 +31,8 @@ public class Dice {
 	}
 
 	public int getSumDices() {
-		return this.sumDices = this.getDice1() + this.getDice2();
+		this.sumDices = this.getDice1() + this.getDice2();
+		return this.sumDices;
 	}
 
 	public boolean dadosIguais(){
