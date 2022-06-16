@@ -44,6 +44,8 @@ public class CtrlRegras implements ObservadoIF {
 	private int dadosRepetidos = 0;
 	private Dice dados = new Dice();
 	private Property[] propriedades = CriaPropriedades.cria();
+	private Boolean viciado = false;
+	private int dado1, dado2;
 
 	private int cartaAtual = -1;
 
@@ -282,7 +284,7 @@ public class CtrlRegras implements ObservadoIF {
 					player_atual.changeMoney(-200);
 					break;
 				}
-				case "Prisao": {//rever
+				case "Prisao": {// rever
 					break;
 				}
 				case "Va para a prisao": {
@@ -306,32 +308,38 @@ public class CtrlRegras implements ObservadoIF {
 		ArrayList<Integer> PlayerPropriedades = player_atual.getPropriedades();
 		String[] listaNomesPropriedades = new String[PlayerPropriedades.size()];
 
-		for(int i=0;i<PlayerPropriedades.size();i++){
+		for (int i = 0; i < PlayerPropriedades.size(); i++) {
 			listaNomesPropriedades[i] = propriedades[PlayerPropriedades.get(i)].getNome();
 		}
 
-		if(player_atual.getPropriedades().size() > 0){
+		if (player_atual.getPropriedades().size() > 0) {
 			JComboBox<String> listaPropriedades = new JComboBox<String>(listaNomesPropriedades);
-			Object[] display = {"escolha uma das suas propriedades para vender", listaPropriedades};
-			int pane = JOptionPane.showOptionDialog(null, display, "Vender propriedades", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+			Object[] display = { "escolha uma das suas propriedades para vender", listaPropriedades };
+			int pane = JOptionPane.showOptionDialog(null, display, "Vender propriedades", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-			if(pane == JOptionPane.OK_OPTION){
+			if (pane == JOptionPane.OK_OPTION) {
 				int propriedade = player_atual.getPropriedades().get(listaPropriedades.getSelectedIndex());
-				if(propriedades[propriedade] instanceof Enterprise){
+				if (propriedades[propriedade] instanceof Enterprise) {
 					player_atual.removePropriedade(propriedade);
 					propriedades[propriedade].setProprietario(-1);
-					player_atual.changeMoney(propriedades[propriedade].getValorCompra()*9/10);
+					player_atual.changeMoney(propriedades[propriedade].getValorCompra() * 9 / 10);
 					this.notificaAll();
-					JOptionPane.showMessageDialog(null, "voce acabou de vender sua propriedade "+ listaPropriedades.getSelectedIndex() + " por R$: " + propriedades[propriedade].getValorCompra()*9/10);
+					JOptionPane.showMessageDialog(null,
+							"voce acabou de vender sua propriedade " + listaPropriedades.getSelectedIndex()
+									+ " por R$: " + propriedades[propriedade].getValorCompra() * 9 / 10);
 
 				}
 
-				else{
+				else {
 					player_atual.removePropriedade(propriedade);
 					propriedades[propriedade].setProprietario(-1);
-					player_atual.changeMoney(((Ground)propriedades[propriedade]).getPriceToSellBuildings()*9/10);
+					player_atual.changeMoney(((Ground) propriedades[propriedade]).getPriceToSellBuildings() * 9 / 10);
 					this.notificaAll();
-					JOptionPane.showMessageDialog(null, "voce acabou de vender sua propriedade "+ listaPropriedades.getSelectedIndex() + " por R$: " + (((Ground)propriedades[propriedade]).getPriceToSellBuildings()*9/10));
+					JOptionPane.showMessageDialog(null,
+							"voce acabou de vender sua propriedade " + listaPropriedades.getSelectedIndex()
+									+ " por R$: "
+									+ (((Ground) propriedades[propriedade]).getPriceToSellBuildings() * 9 / 10));
 				}
 			}
 		}
@@ -339,7 +347,7 @@ public class CtrlRegras implements ObservadoIF {
 		return;
 	}
 
-	public void comprarCasa(){
+	public void comprarCasa() {
 		return;
 	}
 
@@ -434,6 +442,30 @@ public class CtrlRegras implements ObservadoIF {
 		}
 
 		return 0;
+	}
+
+	public int dadoViciado() { // Usado para pegar manualmente o valor dos dados
+		if (!podeJogar) {
+			JOptionPane.showMessageDialog(null, "Você não pode mais rolar o dado.");
+			return 0;
+		}
+
+		String[] valDados = { "1", "2", "3", "4", "5", "6" };
+		JComboBox<String> d1 = new JComboBox<String>(valDados);
+		JComboBox<String> d2 = new JComboBox<String>(valDados);
+
+		Object[] diags = { "Escolha valores para os dois dados\nDado 1:", d1, "Dado 2:", d2 };
+		int esc = JOptionPane.showOptionDialog(null, diags, "Valor dos Dados",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+		if (esc != JOptionPane.OK_OPTION) {
+			dados.rollDice();
+		}
+
+		dado1 = dados.getDice1() + 1;
+		dado2 = dados.getDice2() + 1;
+
+		return lidarComDados();
 	}
 
 	Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor

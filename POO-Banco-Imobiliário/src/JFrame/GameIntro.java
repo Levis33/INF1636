@@ -32,8 +32,8 @@ public class GameIntro extends JFrame implements ItemListener, ObservadorIF {
 		getContentPane().add(p);
 		p.setLayout(null);
 		cb.addItemListener(this);
-		JButton newGameButton = new JButton("Pr�ximo");
-		
+		JButton newGameButton = new JButton("Proximo");
+
 		title.setBounds(250, 70, 300, 20);
 		cb.setSelectedItem("3");
 		cb.setBounds(280, 95, 50, 20);
@@ -62,7 +62,8 @@ public class GameIntro extends JFrame implements ItemListener, ObservadorIF {
 		p.add(newGameButton);
 		// p.add(continueGameButton);
 		setVisible(true);
-		CtrlRegras.getInstance().add(this);;
+		CtrlRegras.getInstance().add(this);
+		;
 	}
 
 	public void itemStateChanged(ItemEvent e) {
@@ -73,10 +74,10 @@ public class GameIntro extends JFrame implements ItemListener, ObservadorIF {
 		}
 	}
 
-	private void removeSelf(){
+	private void removeSelf() {
 		CtrlRegras.getInstance().remove(this);
 	}
-	
+
 	@Override
 	public void notify(ObservadoIF o) {
 		this.repaint();
