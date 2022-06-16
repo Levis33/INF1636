@@ -42,6 +42,14 @@ public class Frame extends JFrame implements ObservadorIF {
 			}
 		});
 
+		JCheckBox dadoRoubar = new JCheckBox();
+		dadoRoubar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CtrlRegras.getInstance().dadoViciado();
+				p.repaint();
+			}
+		});
+
 		JButton finishButton = new JButton("Finalizar");
 		finishButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -54,6 +62,9 @@ public class Frame extends JFrame implements ObservadorIF {
 		diceButton.setBounds(740, 10, 150, 30);
 		p.add(diceButton);
 
+		dadoRoubar.setBounds(925, 4, 2, 2);
+		p.add(dadoRoubar);
+
 		finishButton.setBounds(920, 620, 100, 30);
 		p.add(finishButton);
 
@@ -65,7 +76,7 @@ public class Frame extends JFrame implements ObservadorIF {
 
 	@Override
 	public void notify(ObservadoIF o) {
-		this.repaint();	
+		this.repaint();
 	}
 
 }

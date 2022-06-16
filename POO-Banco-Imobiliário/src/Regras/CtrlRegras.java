@@ -46,6 +46,8 @@ public class CtrlRegras implements ObservadoIF {
 	private int dadosRepetidos = 0;
 	private Dice dados = new Dice();
 	private Property[] propriedades = CriaPropriedades.cria();
+	private Boolean viciado = false;
+	private int dado1, dado2;
 
 	private int cartaAtual = -1;
 
@@ -477,6 +479,31 @@ public class CtrlRegras implements ObservadoIF {
 		}
 
 		return 0;
+	}
+
+	public void dadoViciado() { // Usado para pegar manualmente o valor dos dados
+		if (!podeJogar) {
+			JOptionPane.showMessageDialog(null, "Você não pode mais rolar o dado.");
+			return;
+		}
+
+		String[] valDados = { "1", "2", "3", "4", "5", "6" };
+		JComboBox<String> d1 = new JComboBox<String>(valDados);
+		JComboBox<String> d2 = new JComboBox<String>(valDados);
+
+		Object[] diags = { "Escolha valores para os dois dados\nDado 1:", d1, "Dado 2:", d2 };
+		int esc = JOptionPane.showOptionDialog(null, diags, "Valor dos Dados",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+		if (esc != JOptionPane.OK_OPTION) {
+			dados.rollDice();
+		}
+
+		dado1 = dados.getDice1() + 1;
+		dado2 = dados.getDice2() + 1;
+		
+		lidarComDados();
+		return;
 	}
 
 	Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor
