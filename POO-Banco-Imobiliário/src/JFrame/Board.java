@@ -139,6 +139,13 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.setColor(control.getPlayerAtual().getColor());
 		g2d.drawString(String.valueOf(control.getPlayerAtual().getNumber()), 1045, 50);
 
+		//desenho button terminar jogada
+		
+		g2d.fillRect(740, 210, 150, 30);
+		g2d.setColor(Color.BLACK);
+		g2d.setFont(new Font("Arial", Font.BOLD, 16));
+		g2d.drawString("Terminar Jogada", 750, 230);
+
 		control.add(this);
 	}
 

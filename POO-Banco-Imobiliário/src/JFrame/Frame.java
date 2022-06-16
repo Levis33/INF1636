@@ -2,6 +2,8 @@ package JFrame;
 
 import javax.swing.*;
 
+import org.w3c.dom.events.MouseEvent;
+
 import Controller.Observer.ObservadoIF;
 import Controller.Observer.ObservadorIF;
 import Regras.CtrlRegras;
@@ -9,7 +11,7 @@ import Regras.CtrlRegras;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Frame extends JFrame implements ObservadorIF {
+public class Frame extends JFrame implements ObservadorIF{
 	private final int ALTURA = 700;
 	private final int LARGURA = 1200;
 	private int nPlayers;
@@ -46,7 +48,7 @@ public class Frame extends JFrame implements ObservadorIF {
 				CtrlRegras.getInstance().toggleDiceOptions();
 			}
 		});
-		JButton dadosRoubarButton = new JButton("Choose Dices");
+		JButton dadosRoubarButton = new JButton("Dados Viciados");
 		dadosRoubarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(CtrlRegras.getInstance().isStealing());
@@ -65,6 +67,13 @@ public class Frame extends JFrame implements ObservadorIF {
 
 		JButton saveButton = new JButton("Salvar");
 
+		JButton terminarJogada = new JButton("terminar jogada");
+		terminarJogada.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				CtrlRegras.getInstance().controlePlayers();
+			}
+		});
+
 		diceButton.setBounds(740, 10, 150, 30);
 		p.add(diceButton);
 		
@@ -80,7 +89,36 @@ public class Frame extends JFrame implements ObservadorIF {
 		saveButton.setBounds(1070, 620, 100, 30);
 		p.add(saveButton);
 
+		terminarJogada.setBounds(940, 220, 150, 30);
+		p.add(terminarJogada);
+
 		CtrlRegras.getInstance().add(this);
+
+		
+	}
+
+	// public void mousePressed(MouseEvent e){
+	// 	int x = e.getX();
+	// 	int y = e.getY();
+	// 	System.out.println(x);
+	// 	System.out.println(y);
+
+	// 	if ( x > 740 && x < 890 && y >210 && y < 240){
+	// 		CtrlRegras.getInstance().controlePlayers();
+	// 	}
+	// }
+
+	// public void mouseClicked(MouseEvent e){
+
+	// }
+	// public void mouseEntered(MouseEvent e){
+		
+	// }
+	// public void mouseExited(MouseEvent e){
+		
+	// }
+	// public void mouseReleased(MouseEvent e){
+		
 	}
 
 	@Override

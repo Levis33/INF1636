@@ -187,7 +187,7 @@ public class CtrlRegras implements ObservadoIF {
 	}
 
 	////////////////////////////////////////////////////
-	public void controlePlayers(int playerIndex) {
+	public void controlePlayers() {
 		int primPlayer = playerIndex;
 		playerIndex = (playerIndex + 1) % numPlayers; // proximo jogador
 		playerAtual = playerList.get(playerIndex);
@@ -206,6 +206,7 @@ public class CtrlRegras implements ObservadoIF {
 
 		dadosRepetidos = 0;
 		podeJogar = true;
+		this.notificaAll();
 	}
 
 	public void toggleDiceOptions(){
@@ -218,7 +219,9 @@ public class CtrlRegras implements ObservadoIF {
 		return this.stealing;
 	}
 	public void jogaDados() {
+		System.out.println(podeJogar);
 		if (podeJogar == false) {
+			JOptionPane.showMessageDialog(null, "voce nao pode mais rolar o dado");
 			return;
 		}
 
@@ -268,7 +271,7 @@ public class CtrlRegras implements ObservadoIF {
 			playerAtual.setPosition(newPosition);
 			playerAtual.setCoordenates(propriedades[newPosition].getPos(playerPin)[0],
 					propriedades[newPosition].getPos(playerPin)[1]);
-			// podeJogar = false;
+			podeJogar = false;
 		}
 
 		notificaAll();
