@@ -36,17 +36,23 @@ public class Frame extends JFrame implements ObservadorIF {
 		JButton diceButton = new JButton("Roll");
 		diceButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("'rolou'");
 				CtrlRegras.getInstance().jogaDados();
-				// p.repaint();
 			}
 		});
-
+		
 		JCheckBox dadoRoubar = new JCheckBox();
 		dadoRoubar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CtrlRegras.getInstance().dadoViciado();
-				p.repaint();
+				CtrlRegras.getInstance().toggleDiceOptions();
+			}
+		});
+		JButton dadosRoubarButton = new JButton("Choose Dices");
+		dadosRoubarButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(CtrlRegras.getInstance().isStealing());
+				if(CtrlRegras.getInstance().isStealing()){
+					CtrlRegras.getInstance().dadoViciado();
+				}
 			}
 		});
 
@@ -61,9 +67,12 @@ public class Frame extends JFrame implements ObservadorIF {
 
 		diceButton.setBounds(740, 10, 150, 30);
 		p.add(diceButton);
-
-		dadoRoubar.setBounds(925, 4, 2, 2);
+		
+		dadoRoubar.setBounds(710, 160, 30, 30);
 		p.add(dadoRoubar);
+		
+		dadosRoubarButton.setBounds(740, 160, 150, 30);
+		p.add(dadosRoubarButton);
 
 		finishButton.setBounds(920, 620, 100, 30);
 		p.add(finishButton);

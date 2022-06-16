@@ -39,6 +39,7 @@ public class CtrlRegras implements ObservadoIF {
 	private Player playerAtual;
 	private int[] diceValues = new int[2];
 	private int diceSum;
+	private boolean stealing = false;
 	private String cor;
 
 	private boolean podeJogar;
@@ -207,6 +208,15 @@ public class CtrlRegras implements ObservadoIF {
 		podeJogar = true;
 	}
 
+	public void toggleDiceOptions(){
+		this.stealing = !this.stealing;
+		notificaAll();
+		return;
+	}
+
+	public boolean isStealing(){
+		return this.stealing;
+	}
 	public void jogaDados() {
 		if (podeJogar == false) {
 			return;
@@ -499,9 +509,10 @@ public class CtrlRegras implements ObservadoIF {
 			dados.rollDice();
 		}
 
-		dado1 = dados.getDice1() + 1;
-		dado2 = dados.getDice2() + 1;
-		
+		diceValues[0] = d1.getSelectedIndex()+1;
+		diceValues[1] = d2.getSelectedIndex()+1;
+		diceSum = diceValues[0]+diceValues[1];
+
 		lidarComDados();
 		return;
 	}
