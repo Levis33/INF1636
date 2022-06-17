@@ -264,7 +264,7 @@ public class CtrlRegras implements ObservadoIF {
 
 	public void dadoViciado() { // Usado para pegar manualmente o valor dos dados
 		if (!podeJogar) {
-			JOptionPane.showMessageDialog(null, "Você não pode mais rolar o dado.");
+			JOptionPane.showMessageDialog(null, "Voce nao pode mais rolar o dado.");
 			return;
 		}
 
@@ -300,18 +300,18 @@ public class CtrlRegras implements ObservadoIF {
 			dadosRepetidos += 1;
 			if (playerAtual.getPlayerPreso()) {
 				playerAtual.changeStatusPreso();
-				JOptionPane.showMessageDialog(null, "Você está livre da prisão");
+				JOptionPane.showMessageDialog(null, "Voce esta livre da prisao");
 				dadosRepetidos = 0;
 				// dados iguais e jogador preso: como proceder? por enquanto, joga novamente os
 				// dados nessa rodada para andar
 				shouldPlayAgain = true;
 			} else if (dadosRepetidos >= 3) {
 				playerAtual.goToPrison();
-				JOptionPane.showMessageDialog(null, "Você foi preso por tirar o dado 3 vezes iguais");
+				JOptionPane.showMessageDialog(null, "Voce foi preso por tirar o dado 3 vezes iguais");
 				if (playerAtual.getSaidaLivrePrisao()) {
 					playerAtual.changeStatusSaidaPrisao();
 					cartas.add(8);
-					JOptionPane.showMessageDialog(null, "Você usou sua carta de sair da prisão");
+					JOptionPane.showMessageDialog(null, "Voce usou sua carta de sair da prisao");
 					// jogou 3 vezes e usou carta da prisão como proceder?
 				} else {
 					movePlayer(10);
@@ -324,7 +324,7 @@ public class CtrlRegras implements ObservadoIF {
 			if (!playerAtual.getPlayerPreso()) {
 				movePlayer(newPosition);
 			} else {
-				JOptionPane.showMessageDialog(null, "Para sair da prisão você precisa tirar dados iguais");
+				JOptionPane.showMessageDialog(null, "Para sair da prisao voce precisa tirar dados iguais");
 			}
 		}
 
@@ -376,7 +376,7 @@ public class CtrlRegras implements ObservadoIF {
 				}
 				case "Va para a prisao": {
 					JOptionPane.showMessageDialog(null,
-							"Você caiu na casa: Vá para a prisão,\npara sair deve tirar dados iguais na sua rodada");
+							"Voce caiu na casa: Va para a prisao,\npara sair deve tirar dados iguais na sua rodada");
 					playerAtual.goToPrison();
 					movePlayer(10);
 					if (playerAtual.getSaidaLivrePrisao()) {
@@ -398,8 +398,13 @@ public class CtrlRegras implements ObservadoIF {
 		// System.out.println(playerIndex);
 		cartaAtual = cartas.remove(0);
 
+		String mensagem = "";
+
+
 		if (cartaAtual == 8) { // Saida da prisão
 			playerAtual.changeStatusSaidaPrisao();
+			mensagem = "voce recebeu a carta de saida livre da prisao";
+			JOptionPane.showMessageDialog(null, mensagem);
 			return cartaAtual;
 		} else if (cartaAtual == 10) { // receba 50 de cada jogador
 			for (int i = 0; i < numPlayers; i++) {
@@ -407,6 +412,7 @@ public class CtrlRegras implements ObservadoIF {
 					playerList.get(i).changeMoney(-50);
 				}
 			}
+			mensagem = "Todos os players te deram R$ 50, voce ganhou R$ " + 50 * (numPlayers - 1);
 			playerAtual.changeMoney(50 * (numPlayers - 1));
 
 		} else if (cartaAtual == 22) { // vai para a prisao
@@ -418,9 +424,18 @@ public class CtrlRegras implements ObservadoIF {
 			}
 		} else {
 			playerAtual.changeMoney(cartasSorteReves[cartaAtual]);
+			if(cartasSorteReves[cartaAtual] > 0){
+				mensagem = "voce ganhou R$ " + cartasSorteReves[cartaAtual];
+			}
+			else{
+				mensagem = "voce perdeu " + cartasSorteReves[cartaAtual];
+			}
 		}
 
 		cartas.add(cartaAtual);
+
+		
+		JOptionPane.showMessageDialog(null, mensagem);
 
 		return cartaAtual;
 	}
@@ -491,7 +506,7 @@ public class CtrlRegras implements ObservadoIF {
 		}
 
 		if (propriedadesGroundNome.size() == 0) {
-			JOptionPane.showMessageDialog(null, "Você não possui propriedades que dispoe da compra de casas e hoteis.");
+			JOptionPane.showMessageDialog(null, "Voce nao possui propriedades que dispoe da compra de casas e hoteis.");
 		} else {
 			String[] nomePropriedades = propriedadesGroundNome.toArray(new String[propriedadesGroundNome.size()]);
 
@@ -518,7 +533,7 @@ public class CtrlRegras implements ObservadoIF {
 				} else if (casasEhotel >= 1) {
 					String[] casahotel = { "Casa", "Hotel" };
 					int opcao = JOptionPane.showOptionDialog(null,
-							"voce gostaria de comprar um hotel ou uma casa nao propriedade"
+							"voce gostaria de comprar um hotel ou uma casa nessa propriedade"
 									+ ((Ground) propriedades[propriedadeEscolhida]).getNome(),
 							"click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
 							casahotel,
@@ -555,12 +570,14 @@ public class CtrlRegras implements ObservadoIF {
 		int valorCompra = propriedades[propriedade].getValorCompra();
 		String nomePropriedade = propriedades[propriedade].getNome();
 
+
+
 		if (proprietario == -1) { // nao existe proprietario
 			propriedadeAtual = propriedades[propriedade].getCardNumber();
 			notificaAll();
 			String[] simnao = { "sim", "nao" };
 			int opcao = JOptionPane.showOptionDialog(null,
-					"Você gostaria de comprar a propriedade\n" + nomePropriedade + "\npelo preço:\nR$" + valorCompra,
+					"Você gostaria de comprar a propriedade\n" + nomePropriedade + "\npelo valor:\nR$" + valorCompra,
 					"click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, simnao,
 					simnao[0]);
 
@@ -570,7 +587,7 @@ public class CtrlRegras implements ObservadoIF {
 					playerAtual.changeMoney(-valorCompra);
 					playerAtual.addPropriedade(propriedade);
 					JOptionPane.showMessageDialog(null,
-							"A propriedade:\n" + nomePropriedade + "\nfoi comprada por:\n R$" + valorCompra);
+							"A propriedade:\n" + nomePropriedade + "\nfoi comprada pelo player " + playerAtual.getCor() + " por:\n R$" + valorCompra);
 				} else {
 					JOptionPane.showMessageDialog(null, "Voce nao tem dinheiro suficiente para comprar a propriedade:\n"
 							+ nomePropriedade + " pelo valor: R$" + valorCompra);
@@ -578,6 +595,7 @@ public class CtrlRegras implements ObservadoIF {
 			}
 
 		} else { // existe proprietario
+
 			if (proprietario != playerIndex) { // player atual nao e o proprietario
 				if (propriedades[propriedade] instanceof Enterprise) { // ENTERPRISE
 					int aluguel = ((Enterprise) propriedades[propriedade]).getRent(dados.getSumDices());
