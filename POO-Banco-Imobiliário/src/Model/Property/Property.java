@@ -4,14 +4,14 @@ public abstract class Property {
 
     private String nome;
     private int valorCompra, proprietario = -1; // -1 caso nao tenha, se tiver e a posicao no array de jogadores
-    private int[] aluguel;
+    int[] rent;
     private int posX;
     private int posY;
     private int cardNumber;
 
-    public Property(String n, int[] a, int v, int posX, int posY, int cardNumber) {
+    public Property(String n, int[] r, int v, int posX, int posY, int cardNumber) {
         this.nome = n;
-        this.aluguel = a;
+        this.rent = r;
         this.valorCompra = v;
         this.nome = n;
         this.posX = posX;
@@ -32,10 +32,6 @@ public abstract class Property {
 
     public int getProprietario() {
         return this.proprietario;
-    }
-
-    public int[] getAluguel() {
-        return this.aluguel;
     }
 
     public int getValorCompra() {

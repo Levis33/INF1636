@@ -36,18 +36,6 @@ public class EnterpriseTest {
 	}
 
 	@Test(timeout = TIMEOUT)
-	private void testGetAluguel() {
-		int aluguel[] = { 2, 5, 10 };
-		Enterprise e = new Enterprise("Lagoa", aluguel, 100);
-		int[] expected = { 2, 5, 10 };
-		int[] actual = e.getAluguel();
-		assertNotNull("instacia��o do aluguel da empresa falhou", actual);
-		for (int i = 0; i < 3; i++) {
-			assertEquals("atribui��o incorreta do aluguel", expected[i], actual[i]);
-		}
-	}
-
-	@Test(timeout = TIMEOUT)
 	private void testGetValorCompra() {
 		int aluguel[] = { 2, 5, 10 };
 		Enterprise e = new Enterprise("Lagoa", aluguel, 100);

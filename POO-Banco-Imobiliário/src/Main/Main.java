@@ -3,8 +3,12 @@ package Main;
 import Model.*;
 import Model.Property.CriaPropriedades;
 import Model.Property.Property;
+import Model.Property.Ground;
 import JFrame.*;
 import Regras.CtrlRegras;
+
+
+import java.awt.Color;
 
 public class Main {
 
@@ -30,6 +34,7 @@ public class Main {
 			System.out.println(propriedades[i].getNome());
 			System.out.println(propriedades[i].getValorCompra());
 			System.out.println(i);
+
 		}
 
 	}

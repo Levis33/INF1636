@@ -628,7 +628,8 @@ public class CtrlRegras implements ObservadoIF {
 								+ " pagou o aluguel de R$" + aluguel + " para o player " + playerProprietario.getCor());
 					}
 
-				} else { // GROUND
+				} 
+				else { // GROUND
 					int aluguel = ((Ground) propriedades[propriedade]).getRent();
 					playerAtual.changeMoney(-aluguel);
 					int playerMoney = playerAtual.getMoney();

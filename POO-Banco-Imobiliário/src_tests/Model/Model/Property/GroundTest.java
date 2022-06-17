@@ -41,19 +41,6 @@ public class GroundTest {
 	}
 
 	@Test(timeout = TIMEOUT)
-	private void testGetAluguel() {
-		int aluguel[] = { 2, 5, 10 };
-		int price[] = { 100, 200, 300 };
-		Ground g = new Ground("Lagoa", aluguel, price, Color.green);
-		int[] expected = { 2, 5, 10 };
-		int[] actual = g.getAluguel();
-		assertNotNull("instacia��o do aluguel do terreno falhou", actual);
-		for (int i = 0; i < 3; i++) {
-			assertEquals("atribui��o incorreta do aluguel", expected[i], actual[i]);
-		}
-	}
-
-	@Test(timeout = TIMEOUT)
 	private void testGetValorCompra() {
 		int aluguel[] = { 2, 5, 10 };
 		int price[] = { 100, 200, 300 };
