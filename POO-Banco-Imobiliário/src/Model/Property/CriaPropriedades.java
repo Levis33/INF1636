@@ -13,7 +13,7 @@ public class CriaPropriedades {
                 "Av. 9 de Julho", "Prisao",
                 "Av. Europa", "Sorte/Reves", "Rua Augusta", "Av. Pacaembu", "Companhia de Taxi",
                 "Sorte/Reves", "Interlagos", "Ganhe", "Morumbi", "Parada Livre",
-                "Flamengo", "Sorte/Reves", "Botafogo", "Pague", "Companhia de Navegacao",
+                "Flamengo", "Sorte/Reves", "Botafogo", "Imposto", "Companhia de Navegacao",
                 "Av. Brasil", "Sorte/Reves", "Av. Paulista", "Jardim Europa", "Va para a prisao",
                 "Copacabana", "Companhia de Aviacao", "Av. Vieira Souto", "Av. Atlantica", "Companhia de Helicoptero",
                 "Ipanema", "Sorte/Reves", "Jardim Paulista", "Brooklin"

@@ -292,9 +292,9 @@ public class CtrlRegras implements ObservadoIF {
 	public void lidarComDados() {
 		playerAtual = playerList.get(playerIndex);
 		int playerPosition = playerAtual.getPawnPos();
-		int newPosition = (playerPosition + diceSum) % 40;
 		jogou = true;
 		podeJogar = false;
+		int newPosition = (playerPosition + diceSum) % 40;
 
 		if (dados.dadosIguais()) {
 			dadosRepetidos += 1;
@@ -333,6 +333,11 @@ public class CtrlRegras implements ObservadoIF {
 		}
 
 		notificaAll();
+		//verifica se passou pelo inicio
+		if((playerPosition + diceSum)/40 > 0 ){
+			JOptionPane.showMessageDialog(null, "Honorários: recebe R$200,00"); 
+			playerAtual.changeMoney(200);
+		}
 
 		return;
 	}
@@ -359,7 +364,7 @@ public class CtrlRegras implements ObservadoIF {
 							"Sua ação subiu :)\n ganhou R$200,00");
 					break;
 				}
-				case "Perde": {
+				case "Imposto": {
 					playerAtual.changeMoney(-200);
 					JOptionPane.showMessageDialog(null,
 							"Pagamento de imposto:\n pague R$200,00");

@@ -137,12 +137,13 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.drawString("Vez: Player", 970, 20);
 		g2d.setFont(new Font("Arial", Font.BOLD, 20));
 		g2d.setColor(control.getPlayerAtual().getColor());
-		g2d.drawString(String.valueOf(control.getPlayerAtual().getNumber()), 1085, 20);
+		g2d.drawString(String.valueOf(control.getPlayerAtual().getNumber()), 1065, 20);
 		g2d.setFont(new Font("Arial", Font.PLAIN, 16));
 		g2d.setColor(Color.BLACK);
 		g2d.drawString("nome: "+ control.getPlayerAtual().getName(), 970, 40);
 		g2d.drawString("dinheiro: "+ control.getPlayerAtual().getMoney(), 970, 60);
-		g2d.drawString("propriedades: ", 970, 60);
+		g2d.drawString("propriedades: ", 970, 80);
+		// new JComboBox(control.getPlayerAtual().getPropriedades())		
 
 		
 		
