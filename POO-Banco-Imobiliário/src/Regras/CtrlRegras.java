@@ -13,6 +13,7 @@ import java.util.Scanner;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultStyledDocument.ElementSpec;
 
 import java.awt.Color;
 //import Model.Player;
@@ -41,6 +42,8 @@ public class CtrlRegras implements ObservadoIF {
 	private int diceSum;
 	private boolean jogou = false;
 	private boolean stealing = false;
+
+	private boolean jaComprouCasa = false;
 
 	private boolean podeJogar;
 	private boolean shouldPlayAgain;
@@ -223,6 +226,7 @@ public class CtrlRegras implements ObservadoIF {
 
 		dadosRepetidos = 0;
 		podeJogar = true;
+		jaComprouCasa = false;
 		this.notificaAll();
 	}
 
@@ -468,7 +472,7 @@ public class CtrlRegras implements ObservadoIF {
 					playerAtual.changeMoney(propriedades[propriedade].getValorCompra() * 9 / 10);
 					this.notificaAll();
 					JOptionPane.showMessageDialog(null,
-							"voce acabou de vender sua propriedade " + listaPropriedades.getSelectedIndex()
+							"voce acabou de vender sua propriedade " + propriedades[propriedade].getNome()
 									+ " por R$: " + propriedades[propriedade].getValorCompra() * 9 / 10);
 
 				}
@@ -479,11 +483,14 @@ public class CtrlRegras implements ObservadoIF {
 					playerAtual.changeMoney(((Ground) propriedades[propriedade]).getPriceToSellBuildings() * 9 / 10);
 					this.notificaAll();
 					JOptionPane.showMessageDialog(null,
-							"voce acabou de vender sua propriedade " + listaPropriedades.getSelectedIndex()
+							"voce acabou de vender sua propriedade " + propriedades[propriedade].getNome()
 									+ " por R$: "
 									+ (((Ground) propriedades[propriedade]).getPriceToSellBuildings() * 9 / 10));
 				}
 			}
+		}
+		else{
+			JOptionPane.showMessageDialog(null, "Voce nao possui nenhuma propriedade que possa ser vendida");
 		}
 
 		return;
@@ -491,80 +498,97 @@ public class CtrlRegras implements ObservadoIF {
 
 	public void comprarCasa() {
 
-		ArrayList<Integer> PlayerPropriedades = playerAtual.getPropriedades();
-		String[] listaNomesPropriedades = new String[PlayerPropriedades.size()];
+		if(jaComprouCasa){
+			JOptionPane.showMessageDialog(null, "voce ja comprou uma casa/hotel nessa rodada, espere mais uma rodada para comprar novamente");
+			return;
+		}
 
-		ArrayList<String> propriedadesGroundNome = new ArrayList<String>();
+		int posicao = playerAtual.getPawnPos();
+
+		boolean pertenceAoPlayer = false;
+
+		ArrayList<Integer> PlayerPropriedades = playerAtual.getPropriedades();
+
+		ArrayList<Integer> propriedadesGround = new ArrayList<Integer>();
 
 		for (int i = 0; i < PlayerPropriedades.size(); i++) {
-			listaNomesPropriedades[i] = propriedades[PlayerPropriedades.get(i)].getNome();
-		}
-
-		for (int i = 0, j = 0; i < listaNomesPropriedades.length; i++) {
 			if (propriedades[PlayerPropriedades.get(i)] instanceof Ground) {
-				propriedadesGroundNome.add(listaNomesPropriedades[i]);
-			} else {
-				PlayerPropriedades.remove(j);
-				j--;
-			}
-			j++;
+				propriedadesGround.add(PlayerPropriedades.get(i));
+			} 
 		}
 
-		if (propriedadesGroundNome.size() == 0) {
-			JOptionPane.showMessageDialog(null, "Voce nao possui propriedades que dispoe da compra de casas e hoteis.");
-		} else {
-			String[] nomePropriedades = propriedadesGroundNome.toArray(new String[propriedadesGroundNome.size()]);
+		for(int i=0; i < propriedadesGround.size(); i++){
+			if(propriedadesGround.get(i) == posicao){
+				pertenceAoPlayer = true;
+			}
+		}
 
-			JComboBox<String> listaPropriedades = new JComboBox<String>(listaNomesPropriedades);
+		if(pertenceAoPlayer){
 
-			Object[] display = { "escolha uma das suas propriedades para comprar uma casa/hotel", listaPropriedades };
-			int pane = JOptionPane.showOptionDialog(null, display, "Vender propriedades", JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+			String mensagem = "";
 
-			if (pane == JOptionPane.OK_OPTION) {
-				int propriedadeEscolhida = PlayerPropriedades.get(listaPropriedades.getSelectedIndex());
+			int casasEhotel = ((Ground) propriedades[posicao]).getHotels()
+						+ ((Ground) propriedades[posicao]).getHouses();
 
-				int casasEhotel = ((Ground) propriedades[propriedadeEscolhida]).getHotels()
-						+ ((Ground) propriedades[propriedadeEscolhida]).getHouses();
+			if(casasEhotel == 0){
+				mensagem = "Voce gostaria de comprar uma casa na propriedade " + propriedades[posicao].getNome();
+			}
+			else{
+				mensagem = "Você gostaria de comprar uma casa ou hotel na propriedade " + propriedades[posicao].getNome();
+			}
+
+			String[] simnao = { "sim", "nao" };
+			int opcao = JOptionPane.showOptionDialog(null,
+					mensagem,
+					"click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, simnao,
+					simnao[0]);
+
+			if (opcao == 0){
+
+				
 				int precoCompra = 0;
 				String compra = "";
 
 				if (casasEhotel == 5) {
 					JOptionPane.showMessageDialog(null,
-							"Voce ja comporou todas as casas e hoteis disponiveis para essa propriedade");
+							"Voce ja comprou todas as casas e hoteis disponiveis para essa propriedade");
 				} else if (casasEhotel == 4) {
-					precoCompra = ((Ground) propriedades[propriedadeEscolhida]).buyHotel();
+					precoCompra = ((Ground) propriedades[posicao]).buyHotel();
 					compra = "hotel";
 				} else if (casasEhotel >= 1) {
 					String[] casahotel = { "Casa", "Hotel" };
-					int opcao = JOptionPane.showOptionDialog(null,
+					int opcao2 = JOptionPane.showOptionDialog(null,
 							"voce gostaria de comprar um hotel ou uma casa nessa propriedade"
-									+ ((Ground) propriedades[propriedadeEscolhida]).getNome(),
+									+ ((Ground) propriedades[posicao]).getNome(),
 							"click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
 							casahotel,
 							casahotel[0]);
-					if (opcao == 0) {
-						precoCompra = ((Ground) propriedades[propriedadeEscolhida]).buyHouse();
+					if (opcao2 == 0) {
+						precoCompra = ((Ground) propriedades[posicao]).buyHouse();
 						compra = "casa";
 					} else {
 						for (int i = casasEhotel; i < 4; i++) {
-							precoCompra += ((Ground) propriedades[propriedadeEscolhida]).buyHouse();
+							precoCompra += ((Ground) propriedades[posicao]).buyHouse();
 						}
-						precoCompra += ((Ground) propriedades[propriedadeEscolhida]).buyHotel();
+						precoCompra += ((Ground) propriedades[posicao]).buyHotel();
 						compra = "hotel";
 					}
 				} else {
-					precoCompra = ((Ground) propriedades[propriedadeEscolhida]).buyHouse();
+					precoCompra = ((Ground) propriedades[posicao]).buyHouse();
 					compra = "casa";
 				}
 				playerAtual.changeMoney(-precoCompra);
+				jaComprouCasa = true;
 				this.notificaAll();
 				if (precoCompra != 0) {
 					JOptionPane.showMessageDialog(null, "Voce comprou " + compra + " pelo valor de R$ " + precoCompra
-							+ " na propriedade " + propriedades[propriedadeEscolhida].getNome());
+							+ " na propriedade " + propriedades[posicao].getNome());
 				}
 
 			}
+		}
+		else{
+			JOptionPane.showMessageDialog(null, "voce nao pode comprar uma casa nessa propriedade");
 		}
 
 	}

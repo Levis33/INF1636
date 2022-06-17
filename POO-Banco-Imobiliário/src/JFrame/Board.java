@@ -155,26 +155,26 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.setStroke(new BasicStroke());
 		g2d.fillRect(740, 200, 150, 30);
 		g2d.setColor(Color.BLACK);
-		g2d.setFont(new Font("Arial", Font.BOLD, 15));
+		g2d.setFont(new Font("Arial", Font.BOLD, 14));
 		g2d.drawString("Terminar Jogada", 750, 220);
 
 		// desenha button Comprar Casa/Hotel
 
 		g2d.setColor(control.getPlayerAtual().getColor());
 		g2d.setStroke(new BasicStroke());
-		g2d.fillRect(740, 400, 150, 30);
+		g2d.fillRect(740, 300, 150, 30);
 		g2d.setColor(Color.BLACK);
-		g2d.setFont(new Font("Arial", Font.BOLD, 15));
-		g2d.drawString("Comprar Casa/Hotel", 745, 420);
+		g2d.setFont(new Font("Arial", Font.BOLD, 14));
+		g2d.drawString("Comprar Casa/Hotel", 745, 320);
 
 		// desenha Button Venda propriedade
 
-		// g2d.setColor(control.getPlayerAtual().getColor());
-		// g2d.setStroke(new BasicStroke());
-		// g2d.fillRect(740, 400, 150, 30);
-		// g2d.setColor(Color.BLACK);
-		// g2d.setFont(new Font("Arial", Font.BOLD, 15));
-		// g2d.drawString("Vender propriedades", 745, 420);
+		g2d.setColor(control.getPlayerAtual().getColor());
+		g2d.setStroke(new BasicStroke());
+		g2d.fillRect(740, 400, 150, 30);
+		g2d.setColor(Color.BLACK);
+		g2d.setFont(new Font("Arial", Font.BOLD, 14));
+		g2d.drawString("Vender propriedade", 745, 420);
 
 
 

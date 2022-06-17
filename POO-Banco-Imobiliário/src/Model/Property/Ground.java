@@ -8,10 +8,12 @@ public class Ground extends Property {
     private int priceBuilding = 0;
     private int numHotels = 0;
     private int numHouses = 0;
+    private int priceHouses = 0;
 
     public Ground(String name, int[] rent, int[] price, int x, int y, Color c, int cardNumber) {
         super(name, rent, price[0], x, y, cardNumber);
-        priceBuilding = price[1];
+        priceBuilding = price[0];
+        priceHouses = price[1];
         color = c;
     }
 
@@ -25,7 +27,9 @@ public class Ground extends Property {
 
     // Building
     public int getPriceToSellBuildings() {
-        return priceBuilding * (numHouses + numHotels);
+
+        return (numHouses + numHotels == 0) ? priceBuilding : priceBuilding * (numHouses + numHotels);
+
     }
 
     public int sellBuildings() {
@@ -38,7 +42,7 @@ public class Ground extends Property {
     // House
     public int buyHouse() {
         numHouses += 1;
-        return priceBuilding;
+        return priceHouses;
     }
 
     public int getHouses() {
@@ -48,7 +52,7 @@ public class Ground extends Property {
     // Hotel
     public int buyHotel() {
         numHotels += 1;
-        return priceBuilding;
+        return priceHouses;
     }
 
     public int getHotels() {

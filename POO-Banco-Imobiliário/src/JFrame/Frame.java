@@ -103,17 +103,17 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener{
 		System.out.println("'pressed'");
 		int x = e.getX();
 		int y = e.getY();
-		System.out.println(x);
-		System.out.println(y);
 		
-		if ( x > 740 && x < 890 && y >230 && y < 280){
-			System.out.print("'spot'");
+		if ( x > 740 && x < 890 && y >230 && y < 260){
 			CtrlRegras.getInstance().controlePlayers();
 		}
 
-		if ( x > 740 && x < 890 && y >400 && y < 450){
-			System.out.print("'spot'");
+		if ( x > 740 && x < 890 && y >330 && y < 360){
 			CtrlRegras.getInstance().comprarCasa();
+		}
+
+		if ( x > 740 && x < 890 && y >430 && y < 460){
+			CtrlRegras.getInstance().venderPropriedade();
 		}
 	}
 	
