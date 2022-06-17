@@ -198,7 +198,7 @@ public class CtrlRegras implements ObservadoIF {
 
 	////////////////////////////////////////////////////
 	public void controlePlayers() {
-		if ((shouldPlayAgain || !jogou) && !stealing) {
+		if ((shouldPlayAgain || !jogou)) {
 			JOptionPane.showMessageDialog(null, "É necessário jogar os dados");
 			shouldPlayAgain = false;
 			return;
@@ -289,7 +289,7 @@ public class CtrlRegras implements ObservadoIF {
 		return;
 	}
 
-	public void lidarComDados() {
+	private void lidarComDados() {
 		playerAtual = playerList.get(playerIndex);
 		int playerPosition = playerAtual.getPawnPos();
 		jogou = true;
@@ -306,6 +306,8 @@ public class CtrlRegras implements ObservadoIF {
 				// dados nessa rodada para andar
 				shouldPlayAgain = true;
 			} else if (dadosRepetidos >= 3) {
+				shouldPlayAgain = false;
+				podeJogar = false;
 				playerAtual.goToPrison();
 				JOptionPane.showMessageDialog(null, "Voce foi preso por tirar o dado 3 vezes iguais");
 				if (playerAtual.getSaidaLivrePrisao()) {
@@ -328,7 +330,7 @@ public class CtrlRegras implements ObservadoIF {
 			}
 		}
 
-		if (stealing || shouldPlayAgain) {
+		if (shouldPlayAgain) {
 			podeJogar = true;
 		}
 
@@ -383,6 +385,8 @@ public class CtrlRegras implements ObservadoIF {
 						playerAtual.changeStatusPreso(); // deixa de estar preso
 						cartas.add(8);
 					}
+					shouldPlayAgain = false;
+					podeJogar = false;
 					break;
 				}
 
@@ -417,6 +421,7 @@ public class CtrlRegras implements ObservadoIF {
 
 		} else if (cartaAtual == 22) { // vai para a prisao
 			playerAtual.goToPrison();
+			mensagem = "Voce recebeu a carta de ir para a prisao e por isso voce foi preso!";
 			podeJogar = false;
 			if (playerAtual.getSaidaLivrePrisao()) {
 				playerAtual.changeStatusPreso();
