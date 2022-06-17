@@ -5,15 +5,11 @@ import javax.swing.*;
 
 import Controller.Observer.ObservadoIF;
 import Controller.Observer.ObservadorIF;
-import Model.Player.Pawn;
-import Model.Property.CriaPropriedades;
-import Model.Property.Property;
 import Regras.CtrlRegras;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 public class Board extends JPanel implements ObservadorIF {
 	public static final int IMG_X = 0;
@@ -110,23 +106,27 @@ public class Board extends JPanel implements ObservadorIF {
 		int larg = IMG_X, alt = IMG_Y;
 		g2d.drawImage(board, larg, alt, 700, 665, null);
 
-		// g2d.drawImage(luckyCards[0], 395, 350, 200, 200, null);
-		// g2d.drawImage(propertyCards[0], 395, 100, 200, 200, null);
 		CtrlRegras control = CtrlRegras.getInstance();
 		for (int j = 0; j < numPlayers; j++) {
 			int x = control.getPlayer(j).getPawnCoordenates()[0];
 			int y = control.getPlayer(j).getPawnCoordenates()[1];
-			if(control.getPlayerAtual() == control.getPlayer(j)){
-				g2d.drawImage(pins[j], x, y, pinWidthAtual, pinHeightAtual, null); 
-			}else{
-				g2d.drawImage(pins[j], x, y, pinWidth, pinHeight, null); 
+			if (control.getPlayerAtual() == control.getPlayer(j)) {
+				g2d.drawImage(pins[j], x, y, pinWidthAtual, pinHeightAtual, null);
+			} else {
+				g2d.drawImage(pins[j], x, y, pinWidth, pinHeight, null);
 			}
 		}
-		
-		System.out.println("'paint'");
-		dice1 = dices[control.getDicesValue()[0]-1];
-		dice2 = dices[control.getDicesValue()[1]-1];
-		
+		if (control.getShowingProperty() != -1) {
+			g2d.drawImage(propertyCards[control.getShowingProperty()], 395, 100, 200, 200, null);
+		}
+		if (control.getShowingCard() != -1) {
+			g2d.drawImage(luckyCards[control.getShowingCard()],395, 350, 200, 200, null);
+		}
+		// g2d.drawImage(luckyCards[0], 395, 350, 200, 200, null);
+
+		dice1 = dices[control.getDicesValue()[0] - 1];
+		dice2 = dices[control.getDicesValue()[1] - 1];
+
 		g2d.setColor(control.getPlayerAtual().getColor());
 		g2d.fillRect(710, 0, 210, 150);
 		g2d.drawImage(dice1, 720, 50, 90, 90, null);
@@ -134,17 +134,30 @@ public class Board extends JPanel implements ObservadorIF {
 
 		g2d.setFont(new Font("Arial", Font.PLAIN, 18));
 		g2d.setColor(Color.BLACK);
-		g2d.drawString("Vez: Player", 950, 50);
+		g2d.drawString("Vez: Player", 970, 20);
 		g2d.setFont(new Font("Arial", Font.BOLD, 20));
 		g2d.setColor(control.getPlayerAtual().getColor());
-		g2d.drawString(String.valueOf(control.getPlayerAtual().getNumber()), 1045, 50);
+		g2d.drawString(String.valueOf(control.getPlayerAtual().getNumber()), 1085, 20);
+		g2d.setFont(new Font("Arial", Font.PLAIN, 16));
+		g2d.setColor(Color.BLACK);
+		g2d.drawString("nome: "+ control.getPlayerAtual().getName(), 970, 40);
+		g2d.drawString("dinheiro: "+ control.getPlayerAtual().getMoney(), 970, 60);
+		g2d.drawString("propriedades: ", 970, 60);
 
-		//desenho button terminar jogada
 		
-		g2d.fillRect(740, 210, 150, 30);
+		
+		
+		// desenho button terminar jogada
+		g2d.setColor(control.getPlayerAtual().getColor());
+		g2d.setStroke(new BasicStroke((float) 2));
+		g2d.drawRect(710, 0, 210, 250);
+		g2d.setStroke(new BasicStroke());
+		g2d.fillRect(740, 200, 150, 30);
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(new Font("Arial", Font.BOLD, 16));
-		g2d.drawString("Terminar Jogada", 750, 230);
+		g2d.drawString("Terminar Jogada", 750, 220);
+
+
 
 		control.add(this);
 	}
@@ -153,5 +166,4 @@ public class Board extends JPanel implements ObservadorIF {
 		displayCarta = o.get(1);
 		this.repaint();
 	}
-
 }

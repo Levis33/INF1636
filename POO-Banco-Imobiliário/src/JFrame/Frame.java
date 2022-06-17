@@ -2,8 +2,6 @@ package JFrame;
 
 import javax.swing.*;
 
-import org.w3c.dom.events.MouseEvent;
-
 import Controller.Observer.ObservadoIF;
 import Controller.Observer.ObservadorIF;
 import Regras.CtrlRegras;
@@ -11,7 +9,7 @@ import Regras.CtrlRegras;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Frame extends JFrame implements ObservadorIF{
+public class Frame extends JFrame implements ObservadorIF, MouseListener{
 	private final int ALTURA = 700;
 	private final int LARGURA = 1200;
 	private int nPlayers;
@@ -19,7 +17,8 @@ public class Frame extends JFrame implements ObservadorIF{
 
 	public Frame(String s) {
 		super(s);
-		nPlayers = CtrlRegras.getInstance().getNumPlayers();
+		CtrlRegras control = CtrlRegras.getInstance();
+		nPlayers = control.getNumPlayers();
 		////////// Frame/////////////
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		Dimension screenSize = tk.getScreenSize();
@@ -35,49 +34,50 @@ public class Frame extends JFrame implements ObservadorIF{
 		p.setLayout(null);
 		setSize(LARGURA, ALTURA);
 
+		addMouseListener(this);
+
 		JButton diceButton = new JButton("Roll");
 		diceButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CtrlRegras.getInstance().jogaDados();
+				if(!control.isStealing()){
+					control.jogaDados();
+				}else{
+					JOptionPane.showMessageDialog(null, "Modo de jogo: Roubando\nMude o modo para poder jogar os dados");
+				}
 			}
 		});
 		
 		JCheckBox dadoRoubar = new JCheckBox();
 		dadoRoubar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CtrlRegras.getInstance().toggleDiceOptions();
+				control.toggleDiceOptions();
 			}
 		});
 		JButton dadosRoubarButton = new JButton("Dados Viciados");
 		dadosRoubarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(CtrlRegras.getInstance().isStealing());
-				if(CtrlRegras.getInstance().isStealing()){
-					CtrlRegras.getInstance().dadoViciado();
+				if(control.isStealing()){
+					control.dadoViciado();
+				}else{
+					JOptionPane.showMessageDialog(null, "Modo de jogo: Normal\nMude o modo para poder escolher os dados");
 				}
+				
 			}
 		});
 
 		JButton finishButton = new JButton("Finalizar");
 		finishButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CtrlRegras.getInstance().endGame();
+				control.endGame();
 			}
 		});
 
 		JButton saveButton = new JButton("Salvar");
 
-		JButton terminarJogada = new JButton("terminar jogada");
-		terminarJogada.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e){
-				CtrlRegras.getInstance().controlePlayers();
-			}
-		});
-
 		diceButton.setBounds(740, 10, 150, 30);
 		p.add(diceButton);
 		
-		dadoRoubar.setBounds(710, 160, 30, 30);
+		dadoRoubar.setBounds(715, 160, 25, 30);
 		p.add(dadoRoubar);
 		
 		dadosRoubarButton.setBounds(740, 160, 150, 30);
@@ -89,41 +89,51 @@ public class Frame extends JFrame implements ObservadorIF{
 		saveButton.setBounds(1070, 620, 100, 30);
 		p.add(saveButton);
 
-		terminarJogada.setBounds(940, 220, 150, 30);
-		p.add(terminarJogada);
 
-		CtrlRegras.getInstance().add(this);
-
-		
+		control.add(this);
+	}
+	
+	@Override
+	public void notify(ObservadoIF o) {
+		this.repaint();
 	}
 
-	// public void mousePressed(MouseEvent e){
-	// 	int x = e.getX();
-	// 	int y = e.getY();
-	// 	System.out.println(x);
-	// 	System.out.println(y);
-
-	// 	if ( x > 740 && x < 890 && y >210 && y < 240){
-	// 		CtrlRegras.getInstance().controlePlayers();
-	// 	}
-	// }
-
-	// public void mouseClicked(MouseEvent e){
-
-	// }
-	// public void mouseEntered(MouseEvent e){
+	@Override
+	public void mousePressed(MouseEvent e) {
+		System.out.println("'pressed'");
+		int x = e.getX();
+		int y = e.getY();
+		System.out.println(x);
+		System.out.println(y);
 		
-	// }
-	// public void mouseExited(MouseEvent e){
+		if ( x > 740 && x < 890 && y >230 && y < 280){
+			System.out.print("'spot'");
+			CtrlRegras.getInstance().controlePlayers();
+		}
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
-	// }
-	// public void mouseReleased(MouseEvent e){
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void notify(ObservadoIF o) {
-		this.repaint();
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -7,14 +7,16 @@ public abstract class Property {
     private int[] aluguel;
     private int posX;
     private int posY;
+    private int cardNumber;
 
-    public Property(String n, int[] a, int v, int posX, int posY) {
+    public Property(String n, int[] a, int v, int posX, int posY, int cardNumber) {
         this.nome = n;
         this.aluguel = a;
         this.valorCompra = v;
         this.nome = n;
         this.posX = posX;
         this.posY = posY;
+        this.cardNumber = cardNumber;
     }
 
     public Property(String n, int posX, int posY) {
@@ -50,6 +52,10 @@ public abstract class Property {
             positions[1] = this.posY - 20;
         }
         return positions;
+    }
+
+    public int getCardNumber(){
+        return cardNumber;
     }
 
     public void setProprietario(int novoProprietario) {

@@ -30,6 +30,11 @@ public class Dice {
 		this.dice2 = rand.nextInt(6) + 1;
 	}
 
+	public void setDice(int x, int y){
+		this.dice1 = x;
+		this.dice2 = y;
+	}
+
 	public int getSumDices() {
 		this.sumDices = this.getDice1() + this.getDice2();
 		return this.sumDices;

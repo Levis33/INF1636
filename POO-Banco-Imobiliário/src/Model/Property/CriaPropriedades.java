@@ -113,12 +113,12 @@ public class CriaPropriedades {
                 fieldsWithoutColor += 1;
             } else if (i == 5 || i == 7 || i == 15 || i == 25 || i == 32 || i == 35) {
                 properties[i] = new Enterprise(name[i], rent[i - inserted_fields], price[i - inserted_fields][0],
-                        pos[i][0], pos[i][1]);
+                        pos[i][0], pos[i][1], i - inserted_fields);
                 fieldsWithoutColor += 1;
             } else {
                 properties[i] = new Ground(name[i], rent[i - inserted_fields], price[i - inserted_fields], pos[i][0],
                         pos[i][1],
-                        color[i - fieldsWithoutColor]);
+                        color[i - fieldsWithoutColor], i-inserted_fields);
             }
         }
         return properties;

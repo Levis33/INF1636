@@ -39,18 +39,18 @@ public class CtrlRegras implements ObservadoIF {
 	private Player playerAtual;
 	private int[] diceValues = new int[2];
 	private int diceSum;
+	private boolean jogou = false;
 	private boolean stealing = false;
-	private String cor;
 
 	private boolean podeJogar;
+	private boolean shouldPlayAgain;
 
 	private int dadosRepetidos = 0;
 	private Dice dados = new Dice();
 	private Property[] propriedades = CriaPropriedades.cria();
-	private Boolean viciado = false;
-	private int dado1, dado2;
 
 	private int cartaAtual = -1;
+	private int propriedadeAtual = -1;
 
 	// para achar o index no criaPropriedades usar
 	// Arrays.asList(posicaoPropriedade).indexOf(posicao);
@@ -180,15 +180,32 @@ public class CtrlRegras implements ObservadoIF {
 		diceValues[0] = 1;
 		diceValues[1] = 1;
 		podeJogar = true;
+		jogou = false;
+		shouldPlayAgain = false;
 	}
 
 	public int[] getDicesValue() {
 		return diceValues;
 	}
 
+	public int getShowingCard() {
+		return cartaAtual;
+	}
+
+	public int getShowingProperty() {
+		return propriedadeAtual;
+	}
+
 	////////////////////////////////////////////////////
 	public void controlePlayers() {
+		if ((shouldPlayAgain || !jogou) && !stealing) {
+			JOptionPane.showMessageDialog(null, "É necessário jogar os dados");
+			shouldPlayAgain = false;
+			return;
+		}
 		int primPlayer = playerIndex;
+		dadosRepetidos = 0;
+		jogou = false;
 		playerIndex = (playerIndex + 1) % numPlayers; // proximo jogador
 		playerAtual = playerList.get(playerIndex);
 
@@ -209,20 +226,28 @@ public class CtrlRegras implements ObservadoIF {
 		this.notificaAll();
 	}
 
-	public void toggleDiceOptions(){
+	public void toggleDiceOptions() {
 		this.stealing = !this.stealing;
+		if (stealing) {
+			podeJogar = true;
+		}
 		notificaAll();
 		return;
 	}
 
-	public boolean isStealing(){
+	public boolean isStealing() {
 		return this.stealing;
 	}
+
 	public void jogaDados() {
-		System.out.println(podeJogar);
+		propriedadeAtual = -1;
+		cartaAtual = -1;
 		if (podeJogar == false) {
 			JOptionPane.showMessageDialog(null, "voce nao pode mais rolar o dado");
 			return;
+		}
+		if (shouldPlayAgain) {
+			shouldPlayAgain = false;
 		}
 
 		dados.rollDice();
@@ -237,17 +262,49 @@ public class CtrlRegras implements ObservadoIF {
 		return;
 	}
 
+	public void dadoViciado() { // Usado para pegar manualmente o valor dos dados
+		if (!podeJogar) {
+			JOptionPane.showMessageDialog(null, "Você não pode mais rolar o dado.");
+			return;
+		}
+
+		String[] valDados = { "1", "2", "3", "4", "5", "6" };
+		JComboBox<String> d1 = new JComboBox<String>(valDados);
+		JComboBox<String> d2 = new JComboBox<String>(valDados);
+
+		Object[] diags = { "Escolha valores para os dois dados\nDado 1:", d1, "Dado 2:", d2 };
+		int esc = JOptionPane.showOptionDialog(null, diags, "Valor dos Dados",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+		// if (esc != JOptionPane.OK_OPTION) {
+		// dados.rollDice();
+		// }
+
+		diceValues[0] = d1.getSelectedIndex() + 1;
+		diceValues[1] = d2.getSelectedIndex() + 1;
+		dados.setDice(diceValues[0], diceValues[1]);
+		diceSum = dados.getSumDices();
+
+		lidarComDados();
+		return;
+	}
+
 	public void lidarComDados() {
 		playerAtual = playerList.get(playerIndex);
 		int playerPosition = playerAtual.getPawnPos();
-		int playerPin = playerAtual.getPin();
-		int newPosition = (playerPosition + diceSum)%40;
+		int newPosition = (playerPosition + diceSum) % 40;
+		jogou = true;
+		podeJogar = false;
 
 		if (dados.dadosIguais()) {
 			dadosRepetidos += 1;
 			if (playerAtual.getPlayerPreso()) {
 				playerAtual.changeStatusPreso();
 				JOptionPane.showMessageDialog(null, "Você está livre da prisão");
+				dadosRepetidos = 0;
+				// dados iguais e jogador preso: como proceder? por enquanto, joga novamente os
+				// dados nessa rodada para andar
+				shouldPlayAgain = true;
 			} else if (dadosRepetidos >= 3) {
 				playerAtual.goToPrison();
 				JOptionPane.showMessageDialog(null, "Você foi preso por tirar o dado 3 vezes iguais");
@@ -255,27 +312,79 @@ public class CtrlRegras implements ObservadoIF {
 					playerAtual.changeStatusSaidaPrisao();
 					cartas.add(8);
 					JOptionPane.showMessageDialog(null, "Você usou sua carta de sair da prisão");
+					// jogou 3 vezes e usou carta da prisão como proceder?
 				} else {
-					playerAtual.setPosition(10);
-					playerAtual.setCoordenates(propriedades[10].getPos(playerPin)[0],
-							propriedades[10].getPos(playerPin)[1]);
+					movePlayer(10);
 				}
-				podeJogar = false;
 			} else {
-				dadosRepetidos = 0;
-				playerAtual.setPosition(newPosition);
-				playerAtual.setCoordenates(propriedades[newPosition].getPos(playerPin)[0],
-						propriedades[newPosition].getPos(playerPin)[1]);
+				shouldPlayAgain = true;
+				movePlayer(newPosition);
 			}
 		} else {
-			playerAtual.setPosition(newPosition);
-			playerAtual.setCoordenates(propriedades[newPosition].getPos(playerPin)[0],
-					propriedades[newPosition].getPos(playerPin)[1]);
-			podeJogar = false;
+			if (!playerAtual.getPlayerPreso()) {
+				movePlayer(newPosition);
+			} else {
+				JOptionPane.showMessageDialog(null, "Para sair da prisão você precisa tirar dados iguais");
+			}
+		}
+
+		if (stealing || shouldPlayAgain) {
+			podeJogar = true;
 		}
 
 		notificaAll();
 
+		return;
+	}
+
+	private void movePlayer(int newPosition) {
+		int playerPin = playerAtual.getPin();
+		playerAtual.setPosition(newPosition);
+		playerAtual.setCoordenates(propriedades[newPosition].getPos(playerPin)[0],
+				propriedades[newPosition].getPos(playerPin)[1]);
+
+		if (propriedades[newPosition] instanceof Enterprise || propriedades[newPosition] instanceof Ground) {
+			int displayC = lidarComPropriedade(newPosition);
+			this.notificaAll();
+			return;
+		} else {
+			switch (propriedades[newPosition].getNome()) {
+				case "Sorte/Reves": {
+					lidarComCartas();
+					break;
+				}
+				case "Ganhe": {
+					playerAtual.changeMoney(200);
+					JOptionPane.showMessageDialog(null,
+							"Sua ação subiu :)\n ganhou R$200,00");
+					break;
+				}
+				case "Perde": {
+					playerAtual.changeMoney(-200);
+					JOptionPane.showMessageDialog(null,
+							"Pagamento de imposto:\n pague R$200,00");
+					
+					break;
+				}
+				case "Prisao": {// rever
+					break;
+				}
+				case "Va para a prisao": {
+					JOptionPane.showMessageDialog(null,
+							"Você caiu na casa: Vá para a prisão,\npara sair deve tirar dados iguais na sua rodada");
+					playerAtual.goToPrison();
+					movePlayer(10);
+					if (playerAtual.getSaidaLivrePrisao()) {
+						playerAtual.changeStatusPreso(); // deixa de estar preso
+						cartas.add(8);
+					}
+					break;
+				}
+
+			}
+		}
+
+		this.notificaAll();
 		return;
 	}
 
@@ -309,48 +418,6 @@ public class CtrlRegras implements ObservadoIF {
 		cartas.add(cartaAtual);
 
 		return cartaAtual;
-	}
-
-	public int movePlayer(int valDados) {
-
-		playerAtual.movePawn(valDados);
-
-		int posicao = playerAtual.getPawnPos();
-
-		if (propriedades[posicao] instanceof Enterprise || propriedades[posicao] instanceof Ground) {
-			int displayC = lidarComPropriedade(posicao);
-			this.notificaAll();
-			return displayC;
-		} else {
-			switch (propriedades[posicao].getNome()) {
-				case "Sorte/Reves": {
-					return lidarComCartas();
-				}
-				case "Ganhe": {
-					playerAtual.changeMoney(200);
-					break;
-				}
-				case "Perde": {
-					playerAtual.changeMoney(-200);
-					break;
-				}
-				case "Prisao": {// rever
-					break;
-				}
-				case "Va para a prisao": {
-					playerAtual.goToPrison();
-					if (playerAtual.getSaidaLivrePrisao()) {
-						playerAtual.changeStatusPreso(); // deixa de estar preso
-						cartas.add(8);
-					}
-					break;
-				}
-
-			}
-		}
-
-		this.notificaAll();
-		return -1;
 	}
 
 	public void venderPropriedade() {
@@ -408,21 +475,19 @@ public class CtrlRegras implements ObservadoIF {
 			listaNomesPropriedades[i] = propriedades[PlayerPropriedades.get(i)].getNome();
 		}
 
-		for(int i=0, j=0; i < listaNomesPropriedades.length; i++){
-			if(propriedades[PlayerPropriedades.get(i)] instanceof Ground){
+		for (int i = 0, j = 0; i < listaNomesPropriedades.length; i++) {
+			if (propriedades[PlayerPropriedades.get(i)] instanceof Ground) {
 				propriedadesGroundNome.add(listaNomesPropriedades[i]);
-			}
-			else{
+			} else {
 				PlayerPropriedades.remove(j);
 				j--;
 			}
 			j++;
 		}
 
-		if(propriedadesGroundNome.size() == 0){
+		if (propriedadesGroundNome.size() == 0) {
 			JOptionPane.showMessageDialog(null, "Você não possui propriedades que dispoe da compra de casas e hoteis.");
-		}
-		else{
+		} else {
 			String[] nomePropriedades = propriedadesGroundNome.toArray(new String[propriedadesGroundNome.size()]);
 
 			JComboBox<String> listaPropriedades = new JComboBox<String>(listaNomesPropriedades);
@@ -434,49 +499,49 @@ public class CtrlRegras implements ObservadoIF {
 			if (pane == JOptionPane.OK_OPTION) {
 				int propriedadeEscolhida = PlayerPropriedades.get(listaPropriedades.getSelectedIndex());
 
-
-				int casasEhotel =((Ground) propriedades[propriedadeEscolhida]).getHotels() + ((Ground) propriedades[propriedadeEscolhida]).getHouses();
+				int casasEhotel = ((Ground) propriedades[propriedadeEscolhida]).getHotels()
+						+ ((Ground) propriedades[propriedadeEscolhida]).getHouses();
 				int precoCompra = 0;
 				String compra = "";
 
-				if(casasEhotel == 5){
-					JOptionPane.showMessageDialog(null, "Voce ja comporou todas as casas e hoteis disponiveis para essa propriedade");
-				}
-				else if(casasEhotel == 4){
-					precoCompra = ((Ground)propriedades[propriedadeEscolhida]).buyHotel();
+				if (casasEhotel == 5) {
+					JOptionPane.showMessageDialog(null,
+							"Voce ja comporou todas as casas e hoteis disponiveis para essa propriedade");
+				} else if (casasEhotel == 4) {
+					precoCompra = ((Ground) propriedades[propriedadeEscolhida]).buyHotel();
 					compra = "hotel";
-				}
-				else if(casasEhotel >= 1){
-					String[] casahotel = {"Casa", "Hotel"};
+				} else if (casasEhotel >= 1) {
+					String[] casahotel = { "Casa", "Hotel" };
 					int opcao = JOptionPane.showOptionDialog(null,
-					"voce gostaria de comprar um hotel ou uma casa nao propriedade" +((Ground)propriedades[propriedadeEscolhida]).getNome(),
-					"click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, casahotel,
-					casahotel[0]);
-					if(opcao == 0){
-						precoCompra = ((Ground)propriedades[propriedadeEscolhida]).buyHouse();
+							"voce gostaria de comprar um hotel ou uma casa nao propriedade"
+									+ ((Ground) propriedades[propriedadeEscolhida]).getNome(),
+							"click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+							casahotel,
+							casahotel[0]);
+					if (opcao == 0) {
+						precoCompra = ((Ground) propriedades[propriedadeEscolhida]).buyHouse();
 						compra = "casa";
-					}
-					else{
-						for(int i = casasEhotel; i<4;i++){
-							precoCompra += ((Ground)propriedades[propriedadeEscolhida]).buyHouse();
+					} else {
+						for (int i = casasEhotel; i < 4; i++) {
+							precoCompra += ((Ground) propriedades[propriedadeEscolhida]).buyHouse();
 						}
-						precoCompra += ((Ground)propriedades[propriedadeEscolhida]).buyHotel();
+						precoCompra += ((Ground) propriedades[propriedadeEscolhida]).buyHotel();
 						compra = "hotel";
 					}
-				}
-				else{
-					precoCompra = ((Ground)propriedades[propriedadeEscolhida]).buyHouse();
+				} else {
+					precoCompra = ((Ground) propriedades[propriedadeEscolhida]).buyHouse();
 					compra = "casa";
 				}
 				playerAtual.changeMoney(-precoCompra);
 				this.notificaAll();
-				if(precoCompra != 0){
-					JOptionPane.showMessageDialog(null, "Voce comprou " + compra + " pelo valor de R$ "+ precoCompra +" na propriedade " + propriedades[propriedadeEscolhida].getNome());
+				if (precoCompra != 0) {
+					JOptionPane.showMessageDialog(null, "Voce comprou " + compra + " pelo valor de R$ " + precoCompra
+							+ " na propriedade " + propriedades[propriedadeEscolhida].getNome());
 				}
-				
+
 			}
 		}
-		
+
 	}
 
 	private int lidarComPropriedade(int propriedade) {
@@ -486,10 +551,11 @@ public class CtrlRegras implements ObservadoIF {
 		String nomePropriedade = propriedades[propriedade].getNome();
 
 		if (proprietario == -1) { // nao existe proprietario
-
+			propriedadeAtual = propriedades[propriedade].getCardNumber();
+			notificaAll();
 			String[] simnao = { "sim", "nao" };
 			int opcao = JOptionPane.showOptionDialog(null,
-					"voce gostaria de comprar a propriedade" + nomePropriedade + " pelo preço: R$" + valorCompra,
+					"Você gostaria de comprar a propriedade\n" + nomePropriedade + "\npelo preço:\nR$" + valorCompra,
 					"click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, simnao,
 					simnao[0]);
 
@@ -499,9 +565,9 @@ public class CtrlRegras implements ObservadoIF {
 					playerAtual.changeMoney(-valorCompra);
 					playerAtual.addPropriedade(propriedade);
 					JOptionPane.showMessageDialog(null,
-							"A propriedade:" + nomePropriedade + " foi comprada por: R$" + valorCompra);
+							"A propriedade:\n" + nomePropriedade + "\nfoi comprada por:\n R$" + valorCompra);
 				} else {
-					JOptionPane.showMessageDialog(null, "Voce nao tem dinheiro suficiente para comprar a propriedade: "
+					JOptionPane.showMessageDialog(null, "Voce nao tem dinheiro suficiente para comprar a propriedade:\n"
 							+ nomePropriedade + " pelo valor: R$" + valorCompra);
 				}
 			}
@@ -570,32 +636,6 @@ public class CtrlRegras implements ObservadoIF {
 		}
 
 		return 0;
-	}
-
-	public void dadoViciado() { // Usado para pegar manualmente o valor dos dados
-		if (!podeJogar) {
-			JOptionPane.showMessageDialog(null, "Você não pode mais rolar o dado.");
-			return;
-		}
-
-		String[] valDados = { "1", "2", "3", "4", "5", "6" };
-		JComboBox<String> d1 = new JComboBox<String>(valDados);
-		JComboBox<String> d2 = new JComboBox<String>(valDados);
-
-		Object[] diags = { "Escolha valores para os dois dados\nDado 1:", d1, "Dado 2:", d2 };
-		int esc = JOptionPane.showOptionDialog(null, diags, "Valor dos Dados",
-				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-		if (esc != JOptionPane.OK_OPTION) {
-			dados.rollDice();
-		}
-
-		diceValues[0] = d1.getSelectedIndex()+1;
-		diceValues[1] = d2.getSelectedIndex()+1;
-		diceSum = diceValues[0]+diceValues[1];
-
-		lidarComDados();
-		return;
 	}
 
 	Comparator<Player> comparator = new Comparator<Player>() { // compara todos os players e coloca na ordem de vencedor

@@ -61,7 +61,6 @@ public class Player {
 	}
 
 	public boolean goToPrison() {
-		pawn.goTo(10);
 		preso = true;
 		return true;
 	}
