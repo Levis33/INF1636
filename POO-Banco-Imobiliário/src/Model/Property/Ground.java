@@ -45,6 +45,10 @@ public class Ground extends Property {
         return priceHouses;
     }
 
+    public int getPriceHouse(){
+        return priceHouses;
+    }
+
     public int getHouses() {
         return numHouses;
     }

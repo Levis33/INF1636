@@ -18,6 +18,7 @@ public class Player {
 	private boolean saidaLivrePrisao = false;
 	private boolean preso = false;
 	private boolean falencia = false;
+	private boolean saiuDoJogo = false;
 
 	private ArrayList<Integer> propriedades = new ArrayList<Integer>();
 
@@ -66,9 +67,6 @@ public class Player {
 
 	public void changeMoney(int value) {
 		this.money += value;
-		if (this.money <= 0) {
-			this.falencia = true;
-		}
 	}
 
 	public void changeStatusPreso() { // player fica preso ou deixa de ficar preso
@@ -144,6 +142,15 @@ public class Player {
 		playerData += "\t\tpropriedades: " + propriedades.toString();
 
 		return playerData;
+	}
+
+	public boolean getSaiuDoJogo(){
+		return saiuDoJogo;
+	}
+
+	public boolean setSaiuDoJogo(){
+		saiuDoJogo = !saiuDoJogo;
+		return saiuDoJogo;
 	}
 
 }

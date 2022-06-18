@@ -35,7 +35,7 @@ public class Board extends JPanel implements ObservadorIF {
 	private int pinWidth = 15;
 	private int pinWidthAtual = 20;
 	private int pinHeightAtual = 30;
-	private int displayCarta;
+	// private int displayCarta;
 
 	private JButton saveButton;
 	private JComboBox comboBox;
@@ -140,9 +140,9 @@ public class Board extends JPanel implements ObservadorIF {
 				g2d.setFont(new Font("Arial", Font.PLAIN, 16));
 				g2d.drawString("Nome: " + control.getShowingProperty().getNome(), 320, 130);
 				if (control.getShowingProperty().getProprietario() == -1) {
-					g2d.drawString("Proprietário: Nenhum", 320, 160);
+					g2d.drawString("Proprietario: Nenhum", 320, 160);
 				} else {
-					g2d.drawString("Proprietário: ", 320, 160);
+					g2d.drawString("Proprietario: ", 320, 160);
 					g2d.setColor(control.getPlayer(control.getShowingProperty().getProprietario()).getColor());
 					g2d.drawString(
 							String.valueOf(control.getPlayer(control.getShowingProperty().getProprietario()).getCor()),
@@ -257,7 +257,7 @@ public class Board extends JPanel implements ObservadorIF {
 	}
 
 	public void notify(ObservadoIF o) {
-		displayCarta = o.get(1);
+		// displayCarta = o.get(1);
 		this.repaint();
 	}
 }
