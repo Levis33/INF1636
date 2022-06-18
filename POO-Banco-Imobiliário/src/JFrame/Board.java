@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import Controller.Observer.ObservadoIF;
 import Controller.Observer.ObservadorIF;
+import Model.Property.Enterprise;
 import Model.Property.Ground;
 import Regras.CtrlRegras;
 
@@ -117,7 +118,7 @@ public class Board extends JPanel implements ObservadorIF {
 				g2d.drawImage(pins[j], x, y, pinWidth, pinHeight, null);
 			}
 		}
-		if (control.getShowingPropertyCardIndex() != -1) {
+		if (control.getShowingPropertyCardIndex() != -1) { // desenho das infos de terreno
 			g2d.drawImage(propertyCards[control.getShowingPropertyCardIndex()], 110, 100, 200, 200, null);
 			g2d.setStroke(new BasicStroke((float) 3));
 			if (control.getShowingProperty() instanceof Ground) {
@@ -139,11 +140,27 @@ public class Board extends JPanel implements ObservadorIF {
 				g2d.drawString("Numero de hoteis: " + ((Ground) control.getShowingProperty()).getHotels(), 320, 215);
 				g2d.setStroke(new BasicStroke());
 			}
+			else if (control.getShowingProperty() instanceof Enterprise){ // desenho das infos de Empresa
+				g2d.setColor(Color.GRAY);
+				g2d.drawRect(105, 98, 490, 204);
+				g2d.setColor(Color.BLACK);
+				g2d.setFont(new Font("Arial", Font.PLAIN, 16));
+				g2d.drawString("Nome: " + control.getShowingProperty().getNome(), 320, 130);
+				if (control.getShowingProperty().getProprietario() == -1) {
+					g2d.drawString("Proprietário: Nenhum", 320, 160);
+				} else {
+					g2d.drawString("Proprietário: ", 320, 160);
+					g2d.setColor(control.getPlayer(control.getShowingProperty().getProprietario()).getColor());
+					g2d.drawString(String.valueOf(control.getPlayer(control.getShowingProperty().getProprietario()).getCor()),
+							415, 160);
+					g2d.setColor(Color.BLACK);
+				}
+			}
 
 		}
 
 		if (control.getShowingCard() != -1) {
-			g2d.drawImage(luckyCards[control.getShowingCard()], 110, 350, 200, 200, null);
+			g2d.drawImage(luckyCards[control.getShowingCard()], 110, 100, 200, 200, null);
 		}
 
 		dice1 = dices[control.getDicesValue()[0] - 1];
