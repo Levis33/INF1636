@@ -50,13 +50,6 @@ public class GameIntro extends JFrame implements ItemListener, ObservadorIF {
 			}
 		});
 
-		JButton continueGameButton = new JButton("Continuar");
-		// continueGameButton.setBounds(210, 70, 30, 20);
-		// continueGameButton.addActionListener(new ActionListener() {
-		// public void actionPerformed(ActionEvent e) {
-		// }
-		// });
-
 		p.add(cb);
 		p.add(title);
 		p.add(newGameButton);
