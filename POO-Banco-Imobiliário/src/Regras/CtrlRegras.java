@@ -265,6 +265,10 @@ public class CtrlRegras implements ObservadoIF {
 	}
 
 	public void dadoViciado() { // Usado para pegar manualmente o valor dos dados
+		if (!podeJogar) {
+			JOptionPane.showMessageDialog(null, "Você nao pode mais rolar o dado.");
+			return;
+		}
 		String[] valDados = { "1", "2", "3", "4", "5", "6" };
 		JComboBox<String> d1 = new JComboBox<String>(valDados);
 		JComboBox<String> d2 = new JComboBox<String>(valDados);
@@ -277,10 +281,6 @@ public class CtrlRegras implements ObservadoIF {
 			return;
 		}
 
-		if (!podeJogar) {
-			JOptionPane.showMessageDialog(null, "Você nao pode mais rolar o dado.");
-			return;
-		}
 		if (shouldPlayAgain) {
 			shouldPlayAgain = false;
 		}
