@@ -53,7 +53,9 @@ public class CtrlRegras implements ObservadoIF {
 	private Property[] propriedades = CriaPropriedades.cria();
 
 	private int cartaAtual = -1;
-	private int propriedadeAtual = -1;
+	private int propriedadeAtualCardIndex = -1;
+	private Property propriedadeAtual = null;
+
 
 	// para achar o index no criaPropriedades usar
 	// Arrays.asList(posicaoPropriedade).indexOf(posicao);
@@ -195,7 +197,11 @@ public class CtrlRegras implements ObservadoIF {
 		return cartaAtual;
 	}
 
-	public int getShowingProperty() {
+	public int getShowingPropertyCardIndex() {
+		return propriedadeAtualCardIndex;
+	}
+
+	public Property getShowingProperty(){
 		return propriedadeAtual;
 	}
 
@@ -210,7 +216,8 @@ public class CtrlRegras implements ObservadoIF {
 		jogou = false;
 		playerIndex = (playerIndex + 1) % numPlayers; // proximo jogador
 		playerAtual = playerList.get(playerIndex);
-		propriedadeAtual = -1;
+		propriedadeAtualCardIndex = -1;
+		propriedadeAtual = null;
 		cartaAtual = -1;
 
 		while (playerAtual.getPlayerFalencia()) {
@@ -249,7 +256,8 @@ public class CtrlRegras implements ObservadoIF {
 		if (shouldPlayAgain) {
 			shouldPlayAgain = false;
 		}
-		propriedadeAtual = -1;
+		propriedadeAtualCardIndex = -1;
+		propriedadeAtual = null;
 		cartaAtual = -1;
 
 		dados.rollDice();
@@ -284,7 +292,8 @@ public class CtrlRegras implements ObservadoIF {
 		if (shouldPlayAgain) {
 			shouldPlayAgain = false;
 		}
-		propriedadeAtual = -1;
+		propriedadeAtualCardIndex = -1;
+		propriedadeAtual = null;
 		cartaAtual = -1;
 
 		diceValues[0] = d1.getSelectedIndex() + 1;
@@ -605,7 +614,8 @@ public class CtrlRegras implements ObservadoIF {
 		String nomePropriedade = propriedades[propriedade].getNome();
 
 		if (proprietario == -1) { // nao existe proprietario
-			propriedadeAtual = propriedades[propriedade].getCardNumber();
+			propriedadeAtualCardIndex = propriedades[propriedade].getCardNumber();
+			propriedadeAtual = propriedades[propriedade];
 			notificaAll();
 			String[] simnao = { "sim", "nao" };
 			int opcao = JOptionPane.showOptionDialog(null,
@@ -628,7 +638,8 @@ public class CtrlRegras implements ObservadoIF {
 			}
 
 		} else { // existe proprietario
-			propriedadeAtual = propriedades[propriedade].getCardNumber();
+			propriedadeAtualCardIndex = propriedades[propriedade].getCardNumber();
+			propriedadeAtual = propriedades[propriedade];
 			notificaAll();
 
 			if (proprietario != playerIndex) { // player atual nao e o proprietario

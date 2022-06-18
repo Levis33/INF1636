@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import Controller.Observer.ObservadoIF;
 import Controller.Observer.ObservadorIF;
+import Model.Property.Ground;
 import Regras.CtrlRegras;
 
 import java.awt.*;
@@ -116,11 +117,33 @@ public class Board extends JPanel implements ObservadorIF {
 				g2d.drawImage(pins[j], x, y, pinWidth, pinHeight, null);
 			}
 		}
-		if (control.getShowingProperty() != -1) {
-			g2d.drawImage(propertyCards[control.getShowingProperty()], 110, 100, 200, 200, null);
+		if (control.getShowingPropertyCardIndex() != -1) {
+			g2d.drawImage(propertyCards[control.getShowingPropertyCardIndex()], 110, 100, 200, 200, null);
+			g2d.setStroke(new BasicStroke((float) 3));
+			if (control.getShowingProperty() instanceof Ground) {
+				g2d.setColor(((Ground) control.getShowingProperty()).getColor());
+				g2d.drawRect(105, 98, 490, 204);
+				g2d.setColor(Color.BLACK);
+				g2d.setFont(new Font("Arial", Font.PLAIN, 16));
+				g2d.drawString("Nome: " + control.getShowingProperty().getNome(), 320, 130);
+				if (control.getShowingProperty().getProprietario() == -1) {
+					g2d.drawString("Proprietário: ", 320, 160);
+				} else {
+					g2d.drawString("Proprietário: ", 320, 160);
+					g2d.setColor(control.getPlayer(control.getShowingProperty().getProprietario()).getColor());
+					g2d.drawString(String.valueOf(control.getPlayer(control.getShowingProperty().getProprietario()).getNumber()),
+							415, 160);
+					g2d.setColor(Color.BLACK);
+				}
+				g2d.drawString("Número de casas: " + ((Ground) control.getShowingProperty()).getHouses(), 320, 190);
+				g2d.drawString("Número de hotéis: " + ((Ground) control.getShowingProperty()).getHotels(), 320, 215);
+				g2d.setStroke(new BasicStroke());
+			}
+
 		}
+
 		if (control.getShowingCard() != -1) {
-			g2d.drawImage(luckyCards[control.getShowingCard()],110, 350, 200, 200, null);
+			g2d.drawImage(luckyCards[control.getShowingCard()], 110, 350, 200, 200, null);
 		}
 
 		dice1 = dices[control.getDicesValue()[0] - 1];
@@ -139,14 +162,11 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.drawString(String.valueOf(control.getPlayerAtual().getNumber()), 1065, 20);
 		g2d.setFont(new Font("Arial", Font.PLAIN, 16));
 		g2d.setColor(Color.BLACK);
-		g2d.drawString("nome: "+ control.getPlayerAtual().getName(), 970, 40);
-		g2d.drawString("dinheiro: "+ control.getPlayerAtual().getMoney(), 970, 60);
+		g2d.drawString("nome: " + control.getPlayerAtual().getName(), 970, 40);
+		g2d.drawString("dinheiro: " + control.getPlayerAtual().getMoney(), 970, 60);
 		g2d.drawString("propriedades: ", 970, 80);
-		// new JComboBox(control.getPlayerAtual().getPropriedades())		
+		// new JComboBox(control.getPlayerAtual().getPropriedades())
 
-		
-		
-		
 		// desenho button terminar jogada
 		g2d.setColor(control.getPlayerAtual().getColor());
 		g2d.setStroke(new BasicStroke((float) 2));
@@ -172,8 +192,6 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(new Font("Arial", Font.BOLD, 14));
 		g2d.drawString("Vender propriedade", 745, 420);
-
-
 
 		control.add(this);
 	}
