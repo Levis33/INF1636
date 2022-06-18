@@ -127,16 +127,16 @@ public class Board extends JPanel implements ObservadorIF {
 				g2d.setFont(new Font("Arial", Font.PLAIN, 16));
 				g2d.drawString("Nome: " + control.getShowingProperty().getNome(), 320, 130);
 				if (control.getShowingProperty().getProprietario() == -1) {
-					g2d.drawString("Proprietário: ", 320, 160);
+					g2d.drawString("Proprietário: Nenhum", 320, 160);
 				} else {
 					g2d.drawString("Proprietário: ", 320, 160);
 					g2d.setColor(control.getPlayer(control.getShowingProperty().getProprietario()).getColor());
-					g2d.drawString(String.valueOf(control.getPlayer(control.getShowingProperty().getProprietario()).getNumber()),
+					g2d.drawString(String.valueOf(control.getPlayer(control.getShowingProperty().getProprietario()).getCor()),
 							415, 160);
 					g2d.setColor(Color.BLACK);
 				}
-				g2d.drawString("Número de casas: " + ((Ground) control.getShowingProperty()).getHouses(), 320, 190);
-				g2d.drawString("Número de hotéis: " + ((Ground) control.getShowingProperty()).getHotels(), 320, 215);
+				g2d.drawString("Numero de casas: " + ((Ground) control.getShowingProperty()).getHouses(), 320, 190);
+				g2d.drawString("Numero de hoteis: " + ((Ground) control.getShowingProperty()).getHotels(), 320, 215);
 				g2d.setStroke(new BasicStroke());
 			}
 
@@ -159,7 +159,7 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.drawString("Vez: Player", 970, 20);
 		g2d.setFont(new Font("Arial", Font.BOLD, 20));
 		g2d.setColor(control.getPlayerAtual().getColor());
-		g2d.drawString(String.valueOf(control.getPlayerAtual().getNumber()), 1065, 20);
+		g2d.drawString(String.valueOf(control.getPlayerAtual().getCor()), 1065, 20);
 		g2d.setFont(new Font("Arial", Font.PLAIN, 16));
 		g2d.setColor(Color.BLACK);
 		g2d.drawString("nome: " + control.getPlayerAtual().getName(), 970, 40);

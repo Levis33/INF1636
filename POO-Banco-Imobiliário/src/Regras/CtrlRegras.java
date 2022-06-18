@@ -615,7 +615,34 @@ public class CtrlRegras implements ObservadoIF {
 		}
 	};
 
+	private void venderTodasPropriedades(int player){
+		ArrayList<Integer> playerPropriedades = playerList.get(player).getPropriedades();
+
+		while(playerPropriedades.size() != 0){
+			int prop = playerPropriedades.remove(0);
+
+			if (propriedades[prop] instanceof Enterprise) { // Empresas
+				playerList.get(player).removePropriedade(prop);
+				propriedades[prop].setProprietario(-1);
+				playerList.get(player).changeMoney(propriedades[prop].getValorCompra() * 9 / 10);
+			}
+			else{ // Ground
+
+				playerList.get(player).removePropriedade(prop);
+				propriedades[prop].setProprietario(-1);
+				playerList.get(player).changeMoney(((Ground) propriedades[prop]).getPriceToSellBuildings() * 9 / 10);
+
+			}
+		}
+
+		return;
+	}
+
 	public void endGame() {
+
+		for(int i = 0; i < playerList.size(); i++){
+			venderTodasPropriedades(i);
+		}
 
 		Collections.sort(playerList, comparator);
 
