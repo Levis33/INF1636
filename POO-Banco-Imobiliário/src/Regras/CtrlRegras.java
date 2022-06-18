@@ -56,6 +56,7 @@ public class CtrlRegras implements ObservadoIF {
 	private int propriedadeAtualCardIndex = -1;
 	private Property propriedadeAtual = null;
 
+	private boolean canSave = false;
 
 	// para achar o index no criaPropriedades usar
 	// Arrays.asList(posicaoPropriedade).indexOf(posicao);
@@ -86,6 +87,10 @@ public class CtrlRegras implements ObservadoIF {
 		if (instance == null)
 			instance = new CtrlRegras();
 		return instance;
+	}
+
+	public boolean canSave() {
+		return canSave;
 	}
 
 	// Methods
@@ -187,6 +192,7 @@ public class CtrlRegras implements ObservadoIF {
 		podeJogar = true;
 		jogou = false;
 		shouldPlayAgain = false;
+		canSave = false;
 	}
 
 	public int[] getDicesValue() {
@@ -201,7 +207,7 @@ public class CtrlRegras implements ObservadoIF {
 		return propriedadeAtualCardIndex;
 	}
 
-	public Property getShowingProperty(){
+	public Property getShowingProperty() {
 		return propriedadeAtual;
 	}
 
@@ -219,7 +225,7 @@ public class CtrlRegras implements ObservadoIF {
 		propriedadeAtualCardIndex = -1;
 		propriedadeAtual = null;
 		cartaAtual = -1;
-
+		canSave = true;
 		while (playerAtual.getPlayerFalencia()) {
 			if (primPlayer == playerIndex) {
 				endGame();
@@ -259,6 +265,7 @@ public class CtrlRegras implements ObservadoIF {
 		propriedadeAtualCardIndex = -1;
 		propriedadeAtual = null;
 		cartaAtual = -1;
+		canSave = false;
 
 		dados.rollDice();
 
@@ -295,11 +302,13 @@ public class CtrlRegras implements ObservadoIF {
 		propriedadeAtualCardIndex = -1;
 		propriedadeAtual = null;
 		cartaAtual = -1;
+		canSave = false;
 
 		diceValues[0] = d1.getSelectedIndex() + 1;
 		diceValues[1] = d2.getSelectedIndex() + 1;
 		dados.setDice(diceValues[0], diceValues[1]);
 		diceSum = dados.getSumDices();
+		notificaAll();
 
 		lidarComDados();
 		return;
@@ -425,8 +434,6 @@ public class CtrlRegras implements ObservadoIF {
 			playerAtual.changeStatusSaidaPrisao();
 			mensagem = "Você recebeu a carta de saida livre da prisao";
 			JOptionPane.showMessageDialog(null, mensagem);
-			podeJogar = false;
-			shouldPlayAgain = false;
 			return cartaAtual;
 		} else if (cartaAtual == 10) { // receba 50 de cada jogador
 			for (int i = 0; i < numPlayers; i++) {

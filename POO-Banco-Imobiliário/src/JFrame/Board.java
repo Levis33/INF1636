@@ -193,6 +193,13 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.setFont(new Font("Arial", Font.BOLD, 14));
 		g2d.drawString("Vender propriedade", 745, 420);
 
+		JButton saveButton = new JButton("Salvar");
+		System.out.println(control.canSave());
+		boolean save = control.canSave();
+		saveButton.setEnabled(control.canSave()? true: false);
+		saveButton.setBounds(1070, 620, 100, 30);
+		this.add(saveButton);
+
 		control.add(this);
 	}
 

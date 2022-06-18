@@ -72,7 +72,7 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener{
 			}
 		});
 
-		JButton saveButton = new JButton("Salvar");
+		// JButton saveButton = new JButton("Salvar");
 
 		diceButton.setBounds(740, 10, 150, 30);
 		p.add(diceButton);
@@ -86,8 +86,10 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener{
 		finishButton.setBounds(920, 620, 100, 30);
 		p.add(finishButton);
 
-		saveButton.setBounds(1070, 620, 100, 30);
-		p.add(saveButton);
+		// System.out.println(control.canSave());
+		// saveButton.setEnabled(control.canSave());
+		// saveButton.setBounds(1070, 620, 100, 30);
+		// p.add(saveButton);
 
 
 		control.add(this);
