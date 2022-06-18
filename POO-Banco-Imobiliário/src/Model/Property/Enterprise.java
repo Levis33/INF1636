@@ -4,7 +4,7 @@ package Model.Property;
 
 public class Enterprise extends Property {
 
-    public Enterprise(String name,  int[] rent, int price, int x, int y, int cardNumber) {
+    public Enterprise(String name, int[] rent, int price, int x, int y, int cardNumber) {
         super(name, rent, price, x, y, cardNumber);
     }
 

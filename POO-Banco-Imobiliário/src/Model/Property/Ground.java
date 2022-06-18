@@ -59,4 +59,8 @@ public class Ground extends Property {
         return numHotels;
     }
 
+    public String genSaveString() {
+        return String.format("casa %d, hotel %d", numHouses, numHotels);
+    }
+
 }
