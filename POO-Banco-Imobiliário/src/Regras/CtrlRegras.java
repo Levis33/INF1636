@@ -287,7 +287,6 @@ public class CtrlRegras implements ObservadoIF {
 		propriedadeAtual = -1;
 		cartaAtual = -1;
 
-
 		diceValues[0] = d1.getSelectedIndex() + 1;
 		diceValues[1] = d2.getSelectedIndex() + 1;
 		dados.setDice(diceValues[0], diceValues[1]);
@@ -316,13 +315,14 @@ public class CtrlRegras implements ObservadoIF {
 			} else if (dadosRepetidos >= 3) {
 				playerAtual.goToPrison();
 				JOptionPane.showMessageDialog(null, "Você foi preso por tirar o dado 3 vezes iguais");
+				movePlayer(10);
 				if (playerAtual.getSaidaLivrePrisao()) {
 					playerAtual.changeStatusSaidaPrisao();
+					playerAtual.changeStatusPreso(); // deixa de estar preso
 					cartas.add(8);
-					JOptionPane.showMessageDialog(null, "Você usou sua carta de sair da prisao");
-					// jogou 3 vezes e usou carta da prisão como proceder?
-				} else {
-					movePlayer(10);
+					JOptionPane.showMessageDialog(null, "Você usou sua carta de sair da prisão");
+					// jogou 3 vezes e usou carta da prisão como proceder? Sugestão: continua a
+					// jogada, mas não joga dnv o dado
 				}
 			} else {
 				shouldPlayAgain = true;
@@ -384,11 +384,13 @@ public class CtrlRegras implements ObservadoIF {
 				}
 				case "Va para a prisao": {
 					JOptionPane.showMessageDialog(null,
-							"Você caiu na casa: Va para a prisao,\npara sair deve tirar dados iguais na sua rodada");
+							"Você caiu na casa: Va para a prisao,\ncaso não tenha a carta de saída\ndeverá tirar dados iguais na sua rodada para sair");
 					playerAtual.goToPrison();
 					movePlayer(10);
 					if (playerAtual.getSaidaLivrePrisao()) {
+						playerAtual.changeStatusSaidaPrisao();
 						playerAtual.changeStatusPreso(); // deixa de estar preso
+						JOptionPane.showMessageDialog(null, "Você usou sua carta de sair da prisão");
 						cartas.add(8);
 					}
 					podeJogar = false;
@@ -431,8 +433,11 @@ public class CtrlRegras implements ObservadoIF {
 			movePlayer(10);
 			mensagem = "Você recebeu a carta de ir para a prisao e por isso voce foi preso!";
 			podeJogar = false;
+			shouldPlayAgain = false;
 			if (playerAtual.getSaidaLivrePrisao()) {
+				playerAtual.changeStatusSaidaPrisao();
 				playerAtual.changeStatusPreso();
+				JOptionPane.showMessageDialog(null, "Você usou sua carta de sair da prisão");
 				cartas.add(8);
 			}
 		} else {
