@@ -8,8 +8,9 @@ import Regras.CtrlRegras;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
-public class Frame extends JFrame implements ObservadorIF, MouseListener{
+public class Frame extends JFrame implements ObservadorIF, MouseListener {
 	private final int ALTURA = 700;
 	private final int LARGURA = 1200;
 	private int nPlayers;
@@ -39,14 +40,15 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener{
 		JButton diceButton = new JButton("Roll");
 		diceButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!control.isStealing()){
+				if (!control.isStealing()) {
 					control.jogaDados();
-				}else{
-					JOptionPane.showMessageDialog(null, "Modo de jogo: Roubando\nMude o modo para poder jogar os dados");
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Modo de jogo: Roubando\nMude o modo para poder jogar os dados");
 				}
 			}
 		});
-		
+
 		JCheckBox dadoRoubar = new JCheckBox();
 		dadoRoubar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -56,12 +58,13 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener{
 		JButton dadosRoubarButton = new JButton("Dados Viciados");
 		dadosRoubarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(control.isStealing()){
+				if (control.isStealing()) {
 					control.dadoViciado();
-				}else{
-					JOptionPane.showMessageDialog(null, "Modo de jogo: Normal\nMude o modo para poder escolher os dados");
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Modo de jogo: Normal\nMude o modo para poder escolher os dados");
 				}
-				
+
 			}
 		});
 
@@ -72,29 +75,38 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener{
 			}
 		});
 
-		// JButton saveButton = new JButton("Salvar");
+		JButton saveButton = new JButton("Salvar");
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					control.saveGame();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 
 		diceButton.setBounds(740, 10, 150, 30);
 		p.add(diceButton);
-		
+
 		dadoRoubar.setBounds(715, 160, 25, 30);
 		p.add(dadoRoubar);
-		
+
 		dadosRoubarButton.setBounds(740, 160, 150, 30);
 		p.add(dadosRoubarButton);
 
 		finishButton.setBounds(920, 620, 100, 30);
 		p.add(finishButton);
 
-		// System.out.println(control.canSave());
-		// saveButton.setEnabled(control.canSave());
-		// saveButton.setBounds(1070, 620, 100, 30);
-		// p.add(saveButton);
-
+		System.out.println(control.canSave());
+		saveButton.setEnabled(control.canSave());
+		saveButton.setBounds(1070, 620, 100, 30);
+		p.add(saveButton);
 
 		control.add(this);
 	}
-	
+
 	@Override
 	public void notify(ObservadoIF o) {
 		this.repaint();
@@ -104,42 +116,42 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener{
 	public void mousePressed(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		
-		if ( x > 740 && x < 890 && y >230 && y < 260){
+
+		if (x > 740 && x < 890 && y > 230 && y < 260) {
 			CtrlRegras.getInstance().controlePlayers();
 		}
 
-		if ( x > 740 && x < 890 && y >330 && y < 360){
+		if (x > 740 && x < 890 && y > 330 && y < 360) {
 			CtrlRegras.getInstance().comprarCasa();
 		}
 
-		if ( x > 740 && x < 890 && y >430 && y < 460){
+		if (x > 740 && x < 890 && y > 430 && y < 460) {
 			CtrlRegras.getInstance().venderPropriedade();
 		}
 	}
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

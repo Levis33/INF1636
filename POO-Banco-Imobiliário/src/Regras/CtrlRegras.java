@@ -615,18 +615,17 @@ public class CtrlRegras implements ObservadoIF {
 		}
 	};
 
-	private void venderTodasPropriedades(int player){
+	private void venderTodasPropriedades(int player) {
 		ArrayList<Integer> playerPropriedades = playerList.get(player).getPropriedades();
 
-		while(playerPropriedades.size() != 0){
+		while (playerPropriedades.size() != 0) {
 			int prop = playerPropriedades.remove(0);
 
 			if (propriedades[prop] instanceof Enterprise) { // Empresas
 				playerList.get(player).removePropriedade(prop);
 				propriedades[prop].setProprietario(-1);
 				playerList.get(player).changeMoney(propriedades[prop].getValorCompra() * 9 / 10);
-			}
-			else{ // Ground
+			} else { // Ground
 
 				playerList.get(player).removePropriedade(prop);
 				propriedades[prop].setProprietario(-1);
@@ -640,7 +639,7 @@ public class CtrlRegras implements ObservadoIF {
 
 	public void endGame() {
 
-		for(int i = 0; i < playerList.size(); i++){
+		for (int i = 0; i < playerList.size(); i++) {
 			venderTodasPropriedades(i);
 		}
 
@@ -655,11 +654,11 @@ public class CtrlRegras implements ObservadoIF {
 		System.exit(1);
 	}
 
-	public boolean cansave() {
+	public boolean canSave() {
 		return !alreadyStarted;
 	}
 
-	public void savegame() throws IOException {
+	public void saveGame() throws IOException {
 		JFileChooser fc = new JFileChooser(".");
 		fc.setFileFilter(new FileNameExtensionFilter("TXT Files (*.txt)", "txt"));
 
