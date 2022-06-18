@@ -100,7 +100,6 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("'pressed'");
 		int x = e.getX();
 		int y = e.getY();
 		

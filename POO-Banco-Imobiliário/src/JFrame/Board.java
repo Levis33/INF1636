@@ -117,12 +117,11 @@ public class Board extends JPanel implements ObservadorIF {
 			}
 		}
 		if (control.getShowingProperty() != -1) {
-			g2d.drawImage(propertyCards[control.getShowingProperty()], 395, 100, 200, 200, null);
+			g2d.drawImage(propertyCards[control.getShowingProperty()], 110, 100, 200, 200, null);
 		}
 		if (control.getShowingCard() != -1) {
-			g2d.drawImage(luckyCards[control.getShowingCard()],395, 350, 200, 200, null);
+			g2d.drawImage(luckyCards[control.getShowingCard()],110, 350, 200, 200, null);
 		}
-		// g2d.drawImage(luckyCards[0], 395, 350, 200, 200, null);
 
 		dice1 = dices[control.getDicesValue()[0] - 1];
 		dice2 = dices[control.getDicesValue()[1] - 1];
@@ -159,7 +158,6 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.drawString("Terminar Jogada", 750, 220);
 
 		// desenha button Comprar Casa/Hotel
-
 		g2d.setColor(control.getPlayerAtual().getColor());
 		g2d.setStroke(new BasicStroke());
 		g2d.fillRect(740, 300, 150, 30);
@@ -168,7 +166,6 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.drawString("Comprar Casa/Hotel", 745, 320);
 
 		// desenha Button Venda propriedade
-
 		g2d.setColor(control.getPlayerAtual().getColor());
 		g2d.setStroke(new BasicStroke());
 		g2d.fillRect(740, 400, 150, 30);

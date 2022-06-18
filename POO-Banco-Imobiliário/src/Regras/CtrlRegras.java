@@ -89,7 +89,7 @@ public class CtrlRegras implements ObservadoIF {
 	// Methods
 	public boolean checkNumPlayers(int num) { // Check number of players
 		if (num > maxPlayers || num < minPlayers) {
-			System.out.println("Número de jogadores inválido. Tente novamente.");
+			JOptionPane.showMessageDialog(null, "Número de jogadores inválido. Tente novamente.");
 			return false;
 		}
 		numPlayers = num;
@@ -243,7 +243,7 @@ public class CtrlRegras implements ObservadoIF {
 
 	public void jogaDados() {
 		if (podeJogar == false) {
-			JOptionPane.showMessageDialog(null, "voce nao pode mais rolar o dado");
+			JOptionPane.showMessageDialog(null, "você nao pode mais rolar o dado");
 			return;
 		}
 		if (shouldPlayAgain) {
@@ -265,16 +265,6 @@ public class CtrlRegras implements ObservadoIF {
 	}
 
 	public void dadoViciado() { // Usado para pegar manualmente o valor dos dados
-		if (!podeJogar) {
-			JOptionPane.showMessageDialog(null, "Voce nao pode mais rolar o dado.");
-			return;
-		}
-		if (shouldPlayAgain) {
-			shouldPlayAgain = false;
-		}
-		propriedadeAtual = -1;
-		cartaAtual = -1;
-
 		String[] valDados = { "1", "2", "3", "4", "5", "6" };
 		JComboBox<String> d1 = new JComboBox<String>(valDados);
 		JComboBox<String> d2 = new JComboBox<String>(valDados);
@@ -283,9 +273,20 @@ public class CtrlRegras implements ObservadoIF {
 		int esc = JOptionPane.showOptionDialog(null, diags, "Valor dos Dados",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-		// if (esc != JOptionPane.OK_OPTION) {
-		// dados.rollDice();
-		// }
+		if (esc != JOptionPane.OK_OPTION) {
+			return;
+		}
+
+		if (!podeJogar) {
+			JOptionPane.showMessageDialog(null, "Você nao pode mais rolar o dado.");
+			return;
+		}
+		if (shouldPlayAgain) {
+			shouldPlayAgain = false;
+		}
+		propriedadeAtual = -1;
+		cartaAtual = -1;
+
 
 		diceValues[0] = d1.getSelectedIndex() + 1;
 		diceValues[1] = d2.getSelectedIndex() + 1;
@@ -307,18 +308,18 @@ public class CtrlRegras implements ObservadoIF {
 			dadosRepetidos += 1;
 			if (playerAtual.getPlayerPreso()) {
 				playerAtual.changeStatusPreso();
-				JOptionPane.showMessageDialog(null, "Voce esta livre da prisao");
+				JOptionPane.showMessageDialog(null, "Você esta livre da prisao");
 				dadosRepetidos = 0;
 				// dados iguais e jogador preso: como proceder? por enquanto, joga novamente os
 				// dados nessa rodada para andar
 				shouldPlayAgain = true;
 			} else if (dadosRepetidos >= 3) {
 				playerAtual.goToPrison();
-				JOptionPane.showMessageDialog(null, "Voce foi preso por tirar o dado 3 vezes iguais");
+				JOptionPane.showMessageDialog(null, "Você foi preso por tirar o dado 3 vezes iguais");
 				if (playerAtual.getSaidaLivrePrisao()) {
 					playerAtual.changeStatusSaidaPrisao();
 					cartas.add(8);
-					JOptionPane.showMessageDialog(null, "Voce usou sua carta de sair da prisao");
+					JOptionPane.showMessageDialog(null, "Você usou sua carta de sair da prisao");
 					// jogou 3 vezes e usou carta da prisão como proceder?
 				} else {
 					movePlayer(10);
@@ -382,7 +383,6 @@ public class CtrlRegras implements ObservadoIF {
 					break;
 				}
 				case "Va para a prisao": {
-
 					JOptionPane.showMessageDialog(null,
 							"Você caiu na casa: Va para a prisao,\npara sair deve tirar dados iguais na sua rodada");
 					playerAtual.goToPrison();
@@ -392,6 +392,7 @@ public class CtrlRegras implements ObservadoIF {
 						cartas.add(8);
 					}
 					podeJogar = false;
+					shouldPlayAgain = false;
 					break;
 				}
 
@@ -411,8 +412,10 @@ public class CtrlRegras implements ObservadoIF {
 
 		if (cartaAtual == 8) { // Saida da prisão
 			playerAtual.changeStatusSaidaPrisao();
-			mensagem = "voce recebeu a carta de saida livre da prisao";
+			mensagem = "Você recebeu a carta de saida livre da prisao";
 			JOptionPane.showMessageDialog(null, mensagem);
+			podeJogar = false;
+			shouldPlayAgain = false;
 			return cartaAtual;
 		} else if (cartaAtual == 10) { // receba 50 de cada jogador
 			for (int i = 0; i < numPlayers; i++) {
@@ -426,7 +429,7 @@ public class CtrlRegras implements ObservadoIF {
 		} else if (cartaAtual == 22) { // vai para a prisao
 			playerAtual.goToPrison();
 			movePlayer(10);
-			mensagem = "Voce recebeu a carta de ir para a prisao e por isso voce foi preso!";
+			mensagem = "Você recebeu a carta de ir para a prisao e por isso voce foi preso!";
 			podeJogar = false;
 			if (playerAtual.getSaidaLivrePrisao()) {
 				playerAtual.changeStatusPreso();
@@ -488,7 +491,7 @@ public class CtrlRegras implements ObservadoIF {
 				}
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Voce nao possui nenhuma propriedade que possa ser vendida");
+			JOptionPane.showMessageDialog(null, "Você nao possui nenhuma propriedade que possa ser vendida");
 		}
 
 		return;
@@ -530,7 +533,7 @@ public class CtrlRegras implements ObservadoIF {
 					+ ((Ground) propriedades[posicao]).getHouses();
 
 			if (casasEhotel == 0) {
-				mensagem = "Voce gostaria de comprar uma casa na propriedade " + propriedades[posicao].getNome();
+				mensagem = "Você gostaria de comprar uma casa na propriedade " + propriedades[posicao].getNome();
 			} else {
 				mensagem = "Você gostaria de comprar uma casa ou hotel na propriedade "
 						+ propriedades[posicao].getNome();
@@ -549,7 +552,7 @@ public class CtrlRegras implements ObservadoIF {
 
 				if (casasEhotel == 5) {
 					JOptionPane.showMessageDialog(null,
-							"Voce ja comprou todas as casas e hoteis disponiveis para essa propriedade");
+							"Você ja comprou todas as casas e hoteis disponiveis para essa propriedade");
 				} else if (casasEhotel == 4) {
 					precoCompra = ((Ground) propriedades[posicao]).buyHotel();
 					compra = "hotel";
@@ -579,7 +582,7 @@ public class CtrlRegras implements ObservadoIF {
 				jaComprouCasa = true;
 				this.notificaAll();
 				if (precoCompra != 0) {
-					JOptionPane.showMessageDialog(null, "Voce comprou " + compra + " pelo valor de R$ " + precoCompra
+					JOptionPane.showMessageDialog(null, "Você comprou " + compra + " pelo valor de R$ " + precoCompra
 							+ " na propriedade " + propriedades[posicao].getNome());
 				}
 
@@ -614,12 +617,14 @@ public class CtrlRegras implements ObservadoIF {
 							"A propriedade:\n" + nomePropriedade + "\nfoi comprada pelo player " + playerAtual.getCor()
 									+ " por:\n R$" + valorCompra);
 				} else {
-					JOptionPane.showMessageDialog(null, "Voce nao tem dinheiro suficiente para comprar a propriedade:\n"
+					JOptionPane.showMessageDialog(null, "Você nao tem dinheiro suficiente para comprar a propriedade:\n"
 							+ nomePropriedade + " pelo valor: R$" + valorCompra);
 				}
 			}
 
 		} else { // existe proprietario
+			propriedadeAtual = propriedades[propriedade].getCardNumber();
+			notificaAll();
 
 			if (proprietario != playerIndex) { // player atual nao e o proprietario
 				if (propriedades[propriedade] instanceof Enterprise) { // ENTERPRISE
@@ -632,7 +637,7 @@ public class CtrlRegras implements ObservadoIF {
 						playerMoney = playerAtual.getMoney();
 
 						JOptionPane.showMessageDialog(null,
-								"Voce nao possui dinheiro suficiente, venda uma de suas propriedades para pagar o Aluguel de R$"
+								"Você nao possui dinheiro suficiente, venda uma de suas propriedades para pagar o Aluguel de R$"
 										+ aluguel);
 
 						if (playerMoneyAntes == playerMoney) {
