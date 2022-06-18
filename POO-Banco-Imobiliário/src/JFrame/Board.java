@@ -8,10 +8,12 @@ import Controller.Observer.ObservadorIF;
 import Model.Property.Enterprise;
 import Model.Property.Ground;
 import Regras.CtrlRegras;
+import Model.Player.Player;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Board extends JPanel implements ObservadorIF {
 	public static final int IMG_X = 0;
@@ -24,8 +26,10 @@ public class Board extends JPanel implements ObservadorIF {
 
 	private Image dice1, dice2;
 
+
 	// private Property[] properties = CriaPropriedades.cria();
 	private int numPlayers = CtrlRegras.getInstance().getNumPlayers();
+	private ArrayList<Player> playerList = CtrlRegras.getInstance().getPlayers();
 
 	private int pinHeight = 23;
 	private int pinWidth = 15;
@@ -182,7 +186,36 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.drawString("nome: " + control.getPlayerAtual().getName(), 970, 40);
 		g2d.drawString("dinheiro: " + control.getPlayerAtual().getMoney(), 970, 60);
 		g2d.drawString("propriedades: ", 970, 80);
-		// new JComboBox(control.getPlayerAtual().getPropriedades())
+
+		String[] jogadorPropriedades = CtrlRegras.getInstance().getPlayerPropriedades();
+
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setBounds(970, 100, 200, 20);
+		this.add(comboBox);
+		
+		comboBox.removeAllItems();
+	
+		comboBox.addItem("Visualizar propriedades");
+		for(int i=0; i<jogadorPropriedades.length;i++){
+			comboBox.addItem(jogadorPropriedades[i]);
+			System.out.println(jogadorPropriedades[i]);
+		}
+		
+		
+		// Desenha Players e dinheiro deles
+
+		for(int i =0; i < playerList.size(); i++){
+			g2d.setFont(new Font("Arial", Font.BOLD, 16));
+			g2d.setColor(Color.BLACK);
+			g2d.drawString("Player:", 110, 430+(i*20));
+
+			g2d.drawString("Dinheiro: " + playerList.get(i).getMoney(), 250, 430+(i*20));
+
+			g2d.setColor(playerList.get(i).getColor());
+			g2d.drawString(playerList.get(i).getCor(), 170, 430+(i*20));
+
+		}
+
 
 		// desenho button terminar jogada
 		g2d.setColor(control.getPlayerAtual().getColor());
@@ -210,6 +243,8 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.setFont(new Font("Arial", Font.BOLD, 14));
 		g2d.drawString("Vender propriedade", 745, 420);
 
+
+		// desenha button salvar
 		JButton saveButton = new JButton("Salvar");
 		System.out.println(control.canSave());
 		boolean save = control.canSave();

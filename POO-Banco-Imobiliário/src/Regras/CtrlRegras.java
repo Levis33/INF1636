@@ -211,6 +211,21 @@ public class CtrlRegras implements ObservadoIF {
 		return propriedadeAtual;
 	}
 
+	public String[] getPlayerPropriedades(){
+		ArrayList<Integer> listaPropriedades = playerAtual.getPropriedades();
+		String[] nomePropriedades = new String[listaPropriedades.size()];
+
+		for(int i = 0; i<listaPropriedades.size(); i++){
+			nomePropriedades[i] = propriedades[listaPropriedades.get(i)].getNome();
+		}
+
+		return nomePropriedades;
+	}
+
+	public ArrayList<Player> getPlayers(){
+		return playerList;
+	}
+
 	////////////////////////////////////////////////////
 	public void controlePlayers() {
 		if (shouldPlayAgain || !jogou) {
@@ -751,7 +766,8 @@ public class CtrlRegras implements ObservadoIF {
 	public void endGame() {
 
 		for (int i = 0; i < playerList.size(); i++) {
-			venderTodasPropriedades(i);
+			if(!playerList.get(i).getPlayerFalencia())
+				venderTodasPropriedades(i);
 		}
 
 		Collections.sort(playerList, comparator);
