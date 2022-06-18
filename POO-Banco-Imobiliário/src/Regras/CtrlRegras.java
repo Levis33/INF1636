@@ -376,7 +376,7 @@ public class CtrlRegras implements ObservadoIF {
 
 		this.notificaAll();
 		if (propriedades[newPosition] instanceof Enterprise || propriedades[newPosition] instanceof Ground) {
-			int displayC = lidarComPropriedade(newPosition);
+			int lidarProp = lidarComPropriedade(newPosition);
 			return;
 		} else {
 			switch (propriedades[newPosition].getNome()) {
@@ -765,55 +765,6 @@ public class CtrlRegras implements ObservadoIF {
 		System.exit(1);
 	}
 
-<<<<<<< HEAD
-	public boolean canSave() {
-		return !alreadyStarted;
-	}
-
-	public void saveGame() throws IOException {
-		JFileChooser fc = new JFileChooser(".");
-		fc.setFileFilter(new FileNameExtensionFilter("TXT Files (*.txt)", "txt"));
-
-		if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
-			// cancelar save caso tenha clicado cancel ou X
-			return;
-		}
-
-		File file = fc.getSelectedFile();
-
-		FileWriter writer = new FileWriter(file);
-
-		writer.append("numplayers: " + numPlayers + ";\n");
-		for (int i = 0; i < this.numPlayers; i++) {
-			writer.append("\tPlayer " + i + ": ");
-			writer.append(playerList.get(i).genSaveString());
-			writer.append(";\n");
-		}
-		writer.append("Player da vez: " + playerAtual.getCor() + ";\n");
-		writer.append("Cartas Sorte ou Revés: " + cartas.toString() + ";\n");
-		writer.append("Propriedades: " + allProperties.length + ";\n");
-		for (int i = 0; i < allProperties.length; i++) {
-			Property p = allProperties[i];
-			if (p instanceof Ground) {
-				writer.append("\tTerreno " + i + ": ");
-				Ground t = (Ground) p;
-				writer.append(t.genSaveString());
-				writer.append(";\n");
-			} else if (p instanceof Enterprise) {
-				writer.append("\tEmpresa " + i + ";\n");
-				// Enterprise e = (Enterprise) p;
-				// writer.append(e.genSaveString());
-				// writer.append(";\n");
-			}
-		}
-
-		writer.close();
-
-		JOptionPane.showMessageDialog(null, "O jogo foi salvo com sucesso!");
-	}
-
-=======
->>>>>>> parent of 0bcc19d (add salvamento de jogo)
 	@Override
 	public void add(ObservadorIF o) {
 		observers.add(o);
