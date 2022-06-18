@@ -37,6 +37,14 @@ public class Board extends JPanel implements ObservadorIF {
 	private int pinHeightAtual = 30;
 	private int displayCarta;
 
+	private JButton saveButton;
+	private JComboBox comboBox;
+
+	public Board(JButton saveButton, JComboBox comboBox) {
+		this.saveButton = saveButton;
+		this.comboBox = comboBox;
+	}
+
 	// imagem tabuleiro
 	private void getBoard() {
 		try {
@@ -136,15 +144,15 @@ public class Board extends JPanel implements ObservadorIF {
 				} else {
 					g2d.drawString("Proprietário: ", 320, 160);
 					g2d.setColor(control.getPlayer(control.getShowingProperty().getProprietario()).getColor());
-					g2d.drawString(String.valueOf(control.getPlayer(control.getShowingProperty().getProprietario()).getCor()),
+					g2d.drawString(
+							String.valueOf(control.getPlayer(control.getShowingProperty().getProprietario()).getCor()),
 							415, 160);
 					g2d.setColor(Color.BLACK);
 				}
 				g2d.drawString("Numero de casas: " + ((Ground) control.getShowingProperty()).getHouses(), 320, 190);
 				g2d.drawString("Numero de hoteis: " + ((Ground) control.getShowingProperty()).getHotels(), 320, 215);
 				g2d.setStroke(new BasicStroke());
-			}
-			else if (control.getShowingProperty() instanceof Enterprise){ // desenho das infos de Empresa
+			} else if (control.getShowingProperty() instanceof Enterprise) { // desenho das infos de Empresa
 				g2d.setColor(Color.GRAY);
 				g2d.drawRect(105, 98, 490, 204);
 				g2d.setColor(Color.BLACK);
@@ -155,7 +163,8 @@ public class Board extends JPanel implements ObservadorIF {
 				} else {
 					g2d.drawString("Proprietário: ", 320, 160);
 					g2d.setColor(control.getPlayer(control.getShowingProperty().getProprietario()).getColor());
-					g2d.drawString(String.valueOf(control.getPlayer(control.getShowingProperty().getProprietario()).getCor()),
+					g2d.drawString(
+							String.valueOf(control.getPlayer(control.getShowingProperty().getProprietario()).getCor()),
 							415, 160);
 					g2d.setColor(Color.BLACK);
 				}
@@ -188,11 +197,6 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.drawString("propriedades: ", 970, 80);
 
 		String[] jogadorPropriedades = CtrlRegras.getInstance().getPlayerPropriedades();
-
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(970, 100, 200, 20);
-		this.add(comboBox);
-		
 		comboBox.removeAllItems();
 	
 		comboBox.addItem("Visualizar propriedades");
@@ -243,14 +247,11 @@ public class Board extends JPanel implements ObservadorIF {
 		g2d.setFont(new Font("Arial", Font.BOLD, 14));
 		g2d.drawString("Vender propriedade", 745, 420);
 
-
-		// desenha button salvar
-		JButton saveButton = new JButton("Salvar");
-		System.out.println(control.canSave());
-		boolean save = control.canSave();
-		saveButton.setEnabled(control.canSave()? true: false);
-		saveButton.setBounds(1070, 620, 100, 30);
-		this.add(saveButton);
+		if (control.canSave()) {
+			saveButton.setEnabled(true);
+		} else {
+			saveButton.setEnabled(false);
+		}
 
 		control.add(this);
 	}

@@ -28,7 +28,7 @@ public class Ground extends Property {
     // Building
     public int getPriceToSellBuildings() {
 
-        return (numHouses + numHotels == 0) ? priceBuilding : priceBuilding * (numHouses + numHotels);
+        return (priceBuilding + (numHouses+ numHotels)*priceHouses);
 
     }
 

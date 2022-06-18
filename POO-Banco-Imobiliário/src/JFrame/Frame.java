@@ -8,6 +8,7 @@ import Regras.CtrlRegras;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.Console;
 import java.io.IOException;
 
 public class Frame extends JFrame implements ObservadorIF, MouseListener {
@@ -15,6 +16,8 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener {
 	private final int LARGURA = 1200;
 	private int nPlayers;
 	JPanel p;
+	JButton saveButton = new JButton("Salvar");
+	JComboBox<String> comboBox = new JComboBox<String>();
 
 	public Frame(String s) {
 		super(s);
@@ -30,7 +33,7 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener {
 		setBounds(x, y, LARGURA, ALTURA);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//////////////////////////
-		Board p = new Board();
+		Board p = new Board(saveButton, comboBox);
 		getContentPane().add(p);
 		p.setLayout(null);
 		setSize(LARGURA, ALTURA);
@@ -75,17 +78,21 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener {
 			}
 		});
 
-		JButton saveButton = new JButton("Salvar");
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					control.saveGame();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				// try {
+				// 	// control.saveGame();
+				// 	control.getAllPlayers();
+				// 	System.out.println("a");
+				// } catch (IOException e1) {
+				// 	// TODO Auto-generated catch block
+				// 	e1.printStackTrace();
+				// }
 			}
 		});
+
+		comboBox.setBounds(970, 100, 200, 20);
+		p.add(comboBox);
 
 		diceButton.setBounds(740, 10, 150, 30);
 		p.add(diceButton);
@@ -99,8 +106,6 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener {
 		finishButton.setBounds(920, 620, 100, 30);
 		p.add(finishButton);
 
-		System.out.println(control.canSave());
-		saveButton.setEnabled(control.canSave());
 		saveButton.setBounds(1070, 620, 100, 30);
 		p.add(saveButton);
 
