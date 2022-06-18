@@ -43,7 +43,6 @@ public class Player {
 		return this.name;
 	}
 
-
 	public String getCor() {
 		return this.cor;
 	}
@@ -122,17 +121,29 @@ public class Player {
 		return pawn.getPos();
 	}
 
-	public int[] getPawnCoordenates(){
+	public int[] getPawnCoordenates() {
 		return pawn.getCoordenates();
 	}
 
-	public void setPosition(int x){
+	public void setPosition(int x) {
 		pawn.setPosition(x);
-		return; 
+		return;
 	}
-	public void setCoordenates(int x, int y){
+
+	public void setCoordenates(int x, int y) {
 		pawn.setCoordenates(x, y);
 		return;
+	}
+
+	public String genSaveString() {
+		String playerData = "";
+
+		playerData += String.format("casa %d, money %d, saidaLivrePrisao %b, preso %b;\n",
+				pawn.getPos(), money, saidaLivrePrisao, preso);
+
+		playerData += "\t\tpropriedades: " + propriedades.toString();
+
+		return playerData;
 	}
 
 }
