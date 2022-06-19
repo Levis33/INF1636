@@ -136,19 +136,19 @@ public class Player {
 	public String genSaveString() {
 		String playerData = "";
 
-		playerData += String.format("casa %d, money %d, saidaLivrePrisao %b, preso %b;\n",
+		playerData += String.format("\n\tPosição: %d;\n\tMoney: %d;\n\tSaidaLivrePrisao: %b;\n\tPreso: %b;\n",
 				pawn.getPos(), money, saidaLivrePrisao, preso);
 
-		playerData += "\t\tpropriedades: " + propriedades.toString();
+		playerData += "\tPropriedades: " + propriedades.toString();
 
 		return playerData;
 	}
 
-	public boolean getSaiuDoJogo(){
+	public boolean getSaiuDoJogo() {
 		return saiuDoJogo;
 	}
 
-	public boolean setSaiuDoJogo(){
+	public boolean setSaiuDoJogo() {
 		saiuDoJogo = !saiuDoJogo;
 		return saiuDoJogo;
 	}

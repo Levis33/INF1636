@@ -28,7 +28,7 @@ public class Ground extends Property {
     // Building
     public int getPriceToSellBuildings() {
 
-        return (priceBuilding + (numHouses+ numHotels)*priceHouses);
+        return (priceBuilding + (numHouses + numHotels) * priceHouses);
 
     }
 
@@ -45,7 +45,7 @@ public class Ground extends Property {
         return priceHouses;
     }
 
-    public int getPriceHouse(){
+    public int getPriceHouse() {
         return priceHouses;
     }
 
@@ -64,7 +64,8 @@ public class Ground extends Property {
     }
 
     public String genSaveString() {
-        return String.format("casa %d, hotel %d", numHouses, numHotels);
+        return String.format("\n\tProprietario: %d;\n\tCasa: %d;\n\tHotel: %d", getProprietario(), numHouses,
+                numHotels);
     }
 
 }

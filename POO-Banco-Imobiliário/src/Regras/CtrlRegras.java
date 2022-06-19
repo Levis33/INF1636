@@ -4,13 +4,7 @@ import Model.Player.Player;
 import Model.Dice;
 import Model.Property.*;
 
-import java.util.ArrayList; // import the ArrayList class
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -20,18 +14,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultStyledDocument.ElementSpec;
 
 import java.awt.Color;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.*;
 //import Model.Player;
-import java.io.IOException;
 
 // import javax.swing.JOptionPane;
 
-import Controller.Observer.ObservadoIF;
-import Controller.Observer.ObservadorIF;
+import Controller.Observer.*;
 import JFrame.GameIntro;
-import JFrame.GamePlayers;
 
 public class CtrlRegras implements ObservadoIF {
 
@@ -65,7 +54,6 @@ public class CtrlRegras implements ObservadoIF {
 	private int cartaAtual = -1;
 	private int propriedadeAtualCardIndex = -1;
 	private Property propriedadeAtual = null;
-	private Property p;
 
 	private boolean canSave = false;
 
@@ -97,6 +85,7 @@ public class CtrlRegras implements ObservadoIF {
 			// sair caso tenha clicado X
 			System.exit(0);
 		} else if (optGame == 0) { // Nova partida
+			// new GameIntro("Banco Imobiliario");
 
 			// preenche e faz shuffle das cartas
 			for (int i = 0; i < 30; i++) {
@@ -104,10 +93,51 @@ public class CtrlRegras implements ObservadoIF {
 			}
 			Collections.shuffle(cartas);
 
-		}
-		// else { // referente ao jogo salvo
+		} else { // referente ao jogo salvo
+			JFileChooser fc = new JFileChooser(".txt");
+			fc.setFileFilter(new FileNameExtensionFilter("TXT Files (*.txt)", "txt"));
+			File file = fc.getSelectedFile();
 
-		// }
+			if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+				// sair caso tenha clicado cancel ou X
+				System.exit(0);
+			}
+
+			if (fc.getSelectedFile().length() > 10000) {
+				JOptionPane.showMessageDialog(null,
+						"Erro: arquivo muito grande. Provavelmente não foi gerado pelo jogo.");
+				System.exit(0);
+			}
+
+			Scanner sc = null;
+			String fStr = null;
+			try {
+				sc = new Scanner(file);
+				while (sc.hasNextLine()) {
+					fStr += sc.nextLine();
+					System.out.printf(fStr);
+				}
+
+				// load saved game
+				Scanner s = null;
+
+				try {
+					s = new Scanner(new BufferedReader(new FileReader(file)));
+					while (s.hasNextLine()) {
+						s.nextLine();
+						System.out.println(s.nextLine());
+					}
+				} finally {
+					if (s != null) {
+						s.close();
+					}
+				}
+				// end of load saved game
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(null, "Erro: arquivo não encontrado.");
+				System.exit(0);
+			}
+		}
 
 	}
 
@@ -914,7 +944,7 @@ public class CtrlRegras implements ObservadoIF {
 		System.exit(1);
 	}
 
-	public void saveGame() throws IOException {
+	public void saveGame() {
 		JFileChooser fc = new JFileChooser(".");
 		fc.setFileFilter(new FileNameExtensionFilter("TXT Files (*.txt)", "txt"));
 
@@ -925,35 +955,43 @@ public class CtrlRegras implements ObservadoIF {
 
 		File file = fc.getSelectedFile();
 
-		FileWriter writer = new FileWriter(file);
+		FileWriter writer;
+		try {
+			writer = new FileWriter(file);
 
-		writer.append("numplayers: " + numPlayers + ";\n");
-		for (int i = 0; i < this.numPlayers; i++) {
-			writer.append("\tPlayer " + i + ": ");
-			writer.append(playerList.get(i).genSaveString());
-			writer.append(";\n");
-		}
-		writer.append("Player da vez: " + playerAtual.getCor() + ";\n");
-		writer.append("Cartas Sorte ou Revés: " + cartas.toString() + ";\n");
-		writer.append("Propriedades: " + propriedades.length + ";\n");
-		for (int i = 0; i < propriedades.length; i++) {
-			Property p = propriedades[i];
-			if (p instanceof Ground) {
-				writer.append("\tTerreno " + i + ": ");
-				Ground t = (Ground) p;
-				writer.append(t.genSaveString());
+			writer.append("-----> PLAYERS: ");
+			writer.append("\n\nNúmero de players: " + numPlayers + ";\n\n");
+			for (int i = 0; i < this.numPlayers; i++) {
+				writer.append("\nPlayer " + (i + 1) + ":");
+				writer.append(playerList.get(i).genSaveString());
 				writer.append(";\n");
-			} else if (p instanceof Enterprise) {
-				writer.append("\tEmpresa " + i + ";\n");
-				// Enterprise e = (Enterprise) p;
-				// writer.append(e.genSaveString());
-				// writer.append(";\n");
 			}
+			writer.append("\n\nPlayer da vez: " + playerAtual.getCor() + ";\n");
+			writer.append("Cartas Sorte ou Revés: " + cartas.toString() + ";\n");
+			writer.append("Propriedades: " + propriedades.length + ";\n\n\n");
+
+			writer.append("-----> TERRENOS E EMPRESAS:");
+			for (int i = 0; i < propriedades.length; i++) {
+				Property p = propriedades[i];
+				if (p instanceof Ground) {
+					writer.append("\n\nTerreno " + i + ":");
+					Ground t = (Ground) p;
+					writer.append(t.genSaveString());
+					writer.append(";\n");
+				} else if (p instanceof Enterprise) {
+					writer.append("\n\nEmpresa " + i + ";");
+					Enterprise e = (Enterprise) p;
+					writer.append(e.genSaveString());
+					writer.append(";\n");
+				}
+			}
+
+			writer.close();
+
+			JOptionPane.showMessageDialog(null, "O jogo foi salvo com sucesso!");
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-
-		writer.close();
-
-		JOptionPane.showMessageDialog(null, "O jogo foi salvo com sucesso!");
 	}
 
 	@Override

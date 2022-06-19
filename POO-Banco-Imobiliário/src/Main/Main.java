@@ -1,14 +1,10 @@
 package Main;
 
-import Model.*;
+
 import Model.Property.CriaPropriedades;
 import Model.Property.Property;
-import Model.Property.Ground;
 import JFrame.*;
 import Regras.CtrlRegras;
-
-
-import java.awt.Color;
 
 public class Main {
 

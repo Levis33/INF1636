@@ -12,4 +12,8 @@ public class Enterprise extends Property {
         return rent[0] * sumDices;
     }
 
+    public String genSaveString() {
+        return String.format("\n\tProprietario: %d;", getProprietario());
+    }
+
 }

@@ -8,7 +8,7 @@ import Regras.CtrlRegras;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.Console;
+// import java.io.Console;
 import java.io.IOException;
 
 public class Frame extends JFrame implements ObservadorIF, MouseListener {
@@ -80,14 +80,9 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener {
 
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// try {
-				// 	// control.saveGame();
-				// 	control.getAllPlayers();
-				// 	System.out.println("a");
-				// } catch (IOException e1) {
-				// 	// TODO Auto-generated catch block
-				// 	e1.printStackTrace();
-				// }
+				control.saveGame();
+				// control.getAllPlayers();
+				// System.out.println("a");
 			}
 		});
 

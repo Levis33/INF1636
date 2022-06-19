@@ -26,7 +26,6 @@ public class Board extends JPanel implements ObservadorIF {
 
 	private Image dice1, dice2;
 
-
 	// private Property[] properties = CriaPropriedades.cria();
 	private int numPlayers = CtrlRegras.getInstance().getNumPlayers();
 	private ArrayList<Player> playerList = CtrlRegras.getInstance().getPlayers();
@@ -198,28 +197,26 @@ public class Board extends JPanel implements ObservadorIF {
 
 		String[] jogadorPropriedades = CtrlRegras.getInstance().getPlayerPropriedades();
 		comboBox.removeAllItems();
-	
+
 		comboBox.addItem("Visualizar propriedades");
-		for(int i=0; i<jogadorPropriedades.length;i++){
+		for (int i = 0; i < jogadorPropriedades.length; i++) {
 			comboBox.addItem(jogadorPropriedades[i]);
 			System.out.println(jogadorPropriedades[i]);
 		}
-		
-		
+
 		// Desenha Players e dinheiro deles
 
-		for(int i =0; i < playerList.size(); i++){
+		for (int i = 0; i < playerList.size(); i++) {
 			g2d.setFont(new Font("Arial", Font.BOLD, 16));
 			g2d.setColor(Color.BLACK);
-			g2d.drawString("Player:", 110, 430+(i*20));
+			g2d.drawString("Player:", 110, 430 + (i * 20));
 
-			g2d.drawString("Dinheiro: " + playerList.get(i).getMoney(), 250, 430+(i*20));
+			g2d.drawString("Dinheiro: " + playerList.get(i).getMoney(), 250, 430 + (i * 20));
 
 			g2d.setColor(playerList.get(i).getColor());
-			g2d.drawString(playerList.get(i).getCor(), 170, 430+(i*20));
+			g2d.drawString(playerList.get(i).getCor(), 170, 430 + (i * 20));
 
 		}
-
 
 		// desenho button terminar jogada
 		g2d.setColor(control.getPlayerAtual().getColor());
