@@ -16,7 +16,7 @@ public class Enterprise extends Property {
         int p = getProprietario();
         if (p != -1)
             p += 1;
-        return String.format("\n\tProprietario: %d;", p);
+        return String.format("\n\tProprietario: %d", p);
     }
 
 }
