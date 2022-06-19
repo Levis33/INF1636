@@ -71,12 +71,4 @@ public class Ground extends Property {
                 numHotels);
     }
 
-    public void setHouses(int qtdHouses){
-        this.numHouses = qtdHouses;
-    }
-
-    public void setHotels(int qtdHotel){
-        this.numHotels = qtdHotel;
-    }
-
 }

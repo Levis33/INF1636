@@ -168,15 +168,11 @@ public class CtrlRegras implements ObservadoIF {
 			if(saiuDoJogo){
 				novoPlayer.setSaiuDoJogo();
 			}
-
-			novoPlayer.setPosition(pin);
+			// ir para a posicao (PIN) novoPlayer.got
 
 			for(int i=0; i < propriedadesPlayer.size(); i++){
 				novoPlayer.addPropriedade(propriedadesPlayer.get(i));
 			}
-
-			System.out.println("INFO NOVO PLAYER");
-			System.out.println(novoPlayer.getMoney());
 
 			playerList.add(novoPlayer);
 			
@@ -256,13 +252,6 @@ public class CtrlRegras implements ObservadoIF {
 				int contadorLinha = 0;
 				int contadorLinhaPlayer = 0;
 
-				int contadorLinhasGround = 0;
-				int contadorLinhasEnterprise = 0;
-				boolean infoTerreno = false;
-				boolean infoEmpresa = false;
-
-				int valPropriedade =0;
-
 				boolean infosPlayer = false;
 
 				int playerNumber = 0;
@@ -287,10 +276,7 @@ public class CtrlRegras implements ObservadoIF {
 						numPlayers = Integer.parseInt(line);
 					}
 					
-
 					if(infosPlayer){
-						System.out.println("CONTADOR LINHA PLAYER");
-						System.out.println(contadorLinhaPlayer);
 						if(contadorLinhaPlayer == 0){
 							pos = Integer.parseInt(line.substring(line.lastIndexOf(" ") + 1));
 						}
@@ -377,32 +363,10 @@ public class CtrlRegras implements ObservadoIF {
 						contadorLinhaPlayer++;
 
 					}
-					if(infoTerreno){
-						contadorLinhasGround++;
-
-					}
-
-					if(infoEmpresa){
-						contadorLinhasEnterprise++;
-					}
-
-
 					if(line.contains("Player")){
 						infosPlayer = true;
 						playerNumber += 1;
 					}
-
-					if(line.contains("Terreno")){
-						valPropriedade = Integer.parseInt(line.substring(line.lastIndexOf(" ") + 1));
-						infoTerreno = true;
-
-					}
-					
-					if(line.contains("Empresa")){
-						valPropriedade = Integer.parseInt(line.substring(line.lastIndexOf(" ") + 1));
-						infoEmpresa = true;
-					}
-					
 				
 					contadorLinha++;
 
