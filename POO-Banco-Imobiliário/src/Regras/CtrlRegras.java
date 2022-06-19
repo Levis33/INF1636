@@ -268,50 +268,26 @@ public class CtrlRegras implements ObservadoIF {
 				String nome = "";
 				ArrayList<Integer> props = new ArrayList<Integer>();
 
-				String line = "";
-
 				while (s.hasNextLine()) {
-					line =s.nextLine();
+					String line =s.nextLine();
+					//s.
 					if(contadorLinha == 0){
 						numPlayers = Integer.parseInt(line);
 					}
-					
+					if(line == "Player"){
+						infosPlayer = true;
+						playerNumber += 1;
+					}
 					if(infosPlayer){
 						if(contadorLinhaPlayer == 0){
 							pos = Integer.parseInt(line.substring(line.lastIndexOf(" ") + 1));
 						}
 						else if(contadorLinhaPlayer == 1){
 							cor = (line.substring(line.lastIndexOf(" ") + 1));
-							System.out.println("COR");
-							System.out.println(cor);
 						}
 						else if(contadorLinhaPlayer == 2){
-							System.out.println("COR AUX");
-							System.out.println((line.substring(line.lastIndexOf(" ") + 1)));
-							System.out.println(corAux);
-
-							if(cor == "Vermelho"){
-								corAux = Color.red;
-							}
-							else if(cor == "Azul"){
-								corAux = Color.blue;
-							}
-							else if(cor == "Laranja"){
-								corAux = Color.orange;
-							}
-							else if(cor == "Amarelo"){
-								corAux = Color.yellow;
-							}
-							else if(cor == "Roxo"){
-								corAux = Color.magenta;
-							}
-							else if(cor == "Cinza"){
-								corAux = Color.gray;
-							}
-							
-							
+							corAux = Color.decode(line.substring(line.lastIndexOf(" ") + 1));
 						}
-					
 						else if(contadorLinhaPlayer == 3){
 							moneyPlayer = Integer.parseInt(line.substring(line.lastIndexOf(" ") + 1));
 						}
@@ -326,54 +302,41 @@ public class CtrlRegras implements ObservadoIF {
 						else if(contadorLinhaPlayer == 6){
 							falencia = Boolean.parseBoolean(line.substring(line.lastIndexOf(" ") + 1));
 						}
-						else if(contadorLinhaPlayer == 7){
-							saiudojogo = Boolean.parseBoolean(line.substring(line.lastIndexOf(" ") + 1));
-							
-						}
 						else if(contadorLinhaPlayer == 8){
-							nome = (line.substring(line.lastIndexOf(" ") + 1)); 
+							saiudojogo = Boolean.parseBoolean(line.substring(line.lastIndexOf(" ") + 1));
 							
 						}
 						else if(contadorLinhaPlayer == 9){
 
-							String strprops = (line.substring(line.lastIndexOf(" ") + 1));
+							String strprops = line;
 							int auxProp;
-							strprops = strprops.replace("[", "");
-							strprops = strprops.replace("]", "");
+							strprops.replace("[", "");
+							strprops.replace("]", "");
 
-							if(!strprops.contains(",")){
-								auxProp = Integer.parseInt(strprops);
+							Integer.parseInt(line.substring(line.lastIndexOf(" ") + 1));
+
+							while(strprops != ""){
+								auxProp = Integer.parseInt(line.substring(0,line.indexOf(",")));
+								line.substring(line.indexOf(",")+1);
 								props.add(auxProp);
 							}
-							else{
-								while(strprops != ""){
-									auxProp = Integer.parseInt(strprops.substring(0,strprops.indexOf(",")));
-									strprops.substring(strprops.indexOf(",")+1);
-									props.add(auxProp);
-								}
 
-							}
+
 
 							carregaPlayers(pos, cor, corAux, moneyPlayer, saidalivreprisao, preso, falencia, saiudojogo, props, playerNumber, nome);
 
 							infosPlayer = false;
 							contadorLinhaPlayer = 0;
 						}
-
 						contadorLinhaPlayer++;
+					}
 
-					}
-					if(line.contains("Player")){
-						infosPlayer = true;
-						playerNumber += 1;
-					}
-				
+
+					System.out.println(line);
 					contadorLinha++;
 
 				}
-
-			} 
-			finally {
+			} finally {
 				if (s != null) {
 					s.close();
 				}
@@ -1096,7 +1059,7 @@ public class CtrlRegras implements ObservadoIF {
 				writer.append("\nPlayer");
 				writer.append(playerList.get(i).genSaveString());
 			}
-			writer.append("\nJogador da vez: " + playerAtual.getCor() + ";\n");
+			writer.append("\nPlayer da vez: " + playerAtual.getCor() + ";\n");
 			writer.append("Cartas Sorte ou Reves: " + cartas.toString() + ";\n");
 			writer.append("Propriedades: " + propriedades.length + ";\n\n\n");
 
