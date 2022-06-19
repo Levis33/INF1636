@@ -9,19 +9,29 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultStyledDocument.ElementSpec;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 //import Model.Player;
+import java.io.IOException;
 
 // import javax.swing.JOptionPane;
 
 import Controller.Observer.ObservadoIF;
 import Controller.Observer.ObservadorIF;
+import JFrame.GameIntro;
+import JFrame.GamePlayers;
 
 public class CtrlRegras implements ObservadoIF {
 
@@ -55,6 +65,7 @@ public class CtrlRegras implements ObservadoIF {
 	private int cartaAtual = -1;
 	private int propriedadeAtualCardIndex = -1;
 	private Property propriedadeAtual = null;
+	private Property p;
 
 	private boolean canSave = false;
 
@@ -76,10 +87,28 @@ public class CtrlRegras implements ObservadoIF {
 	// Constructors
 	public CtrlRegras() {
 
-		for (int i = 0; i < 30; i++) {
-			cartas.add(i);
+		// Escolher nova partida ou load de jogo salvo
+		String[] optionsGame = { "Nova Partida", "Continuar" };
+		int optGame = JOptionPane.showOptionDialog(null, "Iniciar uma nova partida ou continuar de jogo salvo?",
+				"Iniciar Partida", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, optionsGame,
+				optionsGame[0]);
+
+		if (optGame == -1) {
+			// sair caso tenha clicado X
+			System.exit(0);
+		} else if (optGame == 0) { // Nova partida
+
+			// preenche e faz shuffle das cartas
+			for (int i = 0; i < 30; i++) {
+				cartas.add(i);
+			}
+			Collections.shuffle(cartas);
+
 		}
-		Collections.shuffle(cartas);
+		// else { // referente ao jogo salvo
+
+		// }
+
 	}
 
 	// instance
@@ -107,7 +136,7 @@ public class CtrlRegras implements ObservadoIF {
 		return numPlayers;
 	}
 
-	public void initPlayers(JComboBox pColors[], JTextField pNames[]) {
+	public void initPlayers(JComboBox<String> pColors[], JTextField pNames[]) {
 		Color auxColor = Color.red;
 		String auxColorName = "Vermelho";
 		int pinNumber = 0;
@@ -154,7 +183,7 @@ public class CtrlRegras implements ObservadoIF {
 					auxColorName = "Vermelho";
 					pinNumber = 0;
 			}
-			playerList.add(new Player(i + 1,200, auxColor, auxColorName, pinNumber, pNames[i].getText()));
+			playerList.add(new Player(i + 1, 4000, auxColor, auxColorName, pinNumber, pNames[i].getText()));
 		}
 	}
 
@@ -243,7 +272,7 @@ public class CtrlRegras implements ObservadoIF {
 		canSave = true;
 
 		falenciaCartaEspecial();
-		
+
 		while (playerAtual.getPlayerFalencia()) {
 			if (primPlayer == playerIndex) {
 				endGame();
@@ -252,35 +281,35 @@ public class CtrlRegras implements ObservadoIF {
 			playerAtual = playerList.get(playerIndex);
 			falenciaCartaEspecial();
 		}
-		
+
 		if (playerIndex == primPlayer) { // todos menos atual foram a falencia
 			endGame();
 		}
-		
+
 		dadosRepetidos = 0;
 		podeJogar = true;
 		jaComprouCasa = false;
 		this.notificaAll();
 	}
-	
-	private void falenciaCartaEspecial(){
+
+	private void falenciaCartaEspecial() {
 		int playerMoney = playerAtual.getMoney();
 		notificaAll();
-	
+
 		while (playerMoney < 0 && !playerAtual.getPlayerFalencia()) {
 			int playerMoneyAntes = playerMoney;
 			JOptionPane.showMessageDialog(null,
 					"Voce nao possui dinheiro suficiente, venda uma de suas propriedades para a pagar R$ 50");
 			venderPropriedade();
 			playerMoney = playerAtual.getMoney();
-	
+
 			if (playerMoneyAntes == playerMoney) {
 				playerAtual.changeStatusFalencia();
 				break;
 			}
-			
+
 		}
-	
+
 		if (playerAtual.getPlayerFalencia() && !playerAtual.getSaiuDoJogo()) {
 			JOptionPane.showMessageDialog(null,
 					" o player " + playerAtual.getCor()
@@ -288,7 +317,7 @@ public class CtrlRegras implements ObservadoIF {
 			podeJogar = false;
 			shouldPlayAgain = false;
 			playerAtual.setSaiuDoJogo();
-		} 
+		}
 		return;
 
 	}
@@ -449,7 +478,6 @@ public class CtrlRegras implements ObservadoIF {
 						venderPropriedade();
 						playerMoney = playerAtual.getMoney();
 
- 
 						if (playerMoneyAntes == playerMoney) {
 							playerAtual.changeStatusFalencia();
 							break;
@@ -499,7 +527,7 @@ public class CtrlRegras implements ObservadoIF {
 		playerAtual = playerList.get(playerIndex);
 		// System.out.println(playerIndex);
 		cartaAtual = cartas.remove(0);
-		
+
 		String mensagem = "";
 
 		if (cartaAtual == 8) { // Saida da prisão
@@ -543,7 +571,6 @@ public class CtrlRegras implements ObservadoIF {
 									+ cartasSorteReves[cartaAtual] * -1);
 					venderPropriedade();
 					playerMoney = playerAtual.getMoney();
-
 
 					if (playerMoneyAntes == playerMoney) {
 						playerAtual.changeStatusFalencia();
@@ -775,7 +802,6 @@ public class CtrlRegras implements ObservadoIF {
 						venderPropriedade();
 						playerMoney = playerAtual.getMoney();
 
-
 						if (playerMoneyAntes == playerMoney) {
 							playerAtual.changeStatusFalencia();
 							break;
@@ -809,7 +835,6 @@ public class CtrlRegras implements ObservadoIF {
 										+ aluguel);
 						venderPropriedade();
 						playerMoney = playerAtual.getMoney();
-
 
 						if (playerMoney == playerMoneyAntes) {
 							playerAtual.changeStatusFalencia();
@@ -845,9 +870,7 @@ public class CtrlRegras implements ObservadoIF {
 			int m1, m2;
 			m1 = p1.getMoney();
 			m2 = p2.getMoney();
-			return m1 > m2 ? -1
-					: m1 < m2 ? 1
-							: 0;
+			return m1 > m2 ? -1 : m1 < m2 ? 1 : 0;
 		}
 	};
 
@@ -889,6 +912,48 @@ public class CtrlRegras implements ObservadoIF {
 		}
 		JOptionPane.showMessageDialog(null, ranking);
 		System.exit(1);
+	}
+
+	public void saveGame() throws IOException {
+		JFileChooser fc = new JFileChooser(".");
+		fc.setFileFilter(new FileNameExtensionFilter("TXT Files (*.txt)", "txt"));
+
+		if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+			// cancelar save caso tenha clicado cancel ou X
+			return;
+		}
+
+		File file = fc.getSelectedFile();
+
+		FileWriter writer = new FileWriter(file);
+
+		writer.append("numplayers: " + numPlayers + ";\n");
+		for (int i = 0; i < this.numPlayers; i++) {
+			writer.append("\tPlayer " + i + ": ");
+			writer.append(playerList.get(i).genSaveString());
+			writer.append(";\n");
+		}
+		writer.append("Player da vez: " + playerAtual.getCor() + ";\n");
+		writer.append("Cartas Sorte ou Revés: " + cartas.toString() + ";\n");
+		writer.append("Propriedades: " + propriedades.length + ";\n");
+		for (int i = 0; i < propriedades.length; i++) {
+			Property p = propriedades[i];
+			if (p instanceof Ground) {
+				writer.append("\tTerreno " + i + ": ");
+				Ground t = (Ground) p;
+				writer.append(t.genSaveString());
+				writer.append(";\n");
+			} else if (p instanceof Enterprise) {
+				writer.append("\tEmpresa " + i + ";\n");
+				// Enterprise e = (Enterprise) p;
+				// writer.append(e.genSaveString());
+				// writer.append(";\n");
+			}
+		}
+
+		writer.close();
+
+		JOptionPane.showMessageDialog(null, "O jogo foi salvo com sucesso!");
 	}
 
 	@Override

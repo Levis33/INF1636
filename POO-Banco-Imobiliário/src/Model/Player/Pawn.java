@@ -8,7 +8,11 @@ public class Pawn {
 
     private int pawnNumber;
 
-    Pawn(int pawnNumber){
+    public Pawn() {
+
+    }
+
+    public Pawn(int pawnNumber) {
         this.pawnNumber = pawnNumber;
     }
 
@@ -25,21 +29,22 @@ public class Pawn {
     }
 
     int[] getCoordenates() {
-        int[] position = {this.posX, this.posY};
+        int[] position = { this.posX, this.posY };
         return position;
     }
 
-    int getPawnNumber(){
+    int getPawnNumber() {
         return this.pawnNumber;
     }
 
-    public void setPosition(int x){
-		this.pos = x;
+    public void setPosition(int x) {
+        this.pos = x;
         return;
-	}
-	public void setCoordenates(int x, int y){
-		this.posX = x;
+    }
+
+    public void setCoordenates(int x, int y) {
+        this.posX = x;
         this.posY = y;
-	}
+    }
 
 }

@@ -16,7 +16,7 @@ public class GameIntro extends JFrame implements ItemListener, ObservadorIF {
 	JPanel p;
 	static String nPlayers[] = { "3", "4", "5", "6" };
 	static JLabel title = new JLabel("Escolha a quantidade de jogadores");
-	static JComboBox cb = new JComboBox(nPlayers);
+	static JComboBox<String> cb = new JComboBox<String>(nPlayers);
 
 	public GameIntro(String s) {
 		super(s);
@@ -32,14 +32,14 @@ public class GameIntro extends JFrame implements ItemListener, ObservadorIF {
 		getContentPane().add(p);
 		p.setLayout(null);
 		cb.addItemListener(this);
-		JButton newGameButton = new JButton("Proximo");
+		JButton nextButton = new JButton("Proximo");
 
 		title.setBounds(250, 70, 300, 20);
 		cb.setSelectedItem("3");
 		cb.setBounds(280, 95, 50, 20);
 
-		newGameButton.setBounds(330, 95, 90, 20);
-		newGameButton.addActionListener(new ActionListener() {
+		nextButton.setBounds(330, 95, 90, 20);
+		nextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int numPlayers = cb.getSelectedIndex() + 3;
 				if (CtrlRegras.getInstance().checkNumPlayers(numPlayers)) {
@@ -52,8 +52,7 @@ public class GameIntro extends JFrame implements ItemListener, ObservadorIF {
 
 		p.add(cb);
 		p.add(title);
-		p.add(newGameButton);
-		// p.add(continueGameButton);
+		p.add(nextButton);
 		setVisible(true);
 		CtrlRegras.getInstance().add(this);
 	}
