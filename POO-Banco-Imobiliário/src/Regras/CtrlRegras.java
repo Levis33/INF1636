@@ -31,7 +31,7 @@ public class CtrlRegras implements ObservadoIF {
 	private int maxPlayers = 6;
 	private int minPlayers = 3;
 
-	private int numPlayers;
+	private int numPlayers = 0;
 
 	private ArrayList<Player> playerList = new ArrayList<Player>();
 	private int playerIndex = 0;
@@ -152,13 +152,14 @@ public class CtrlRegras implements ObservadoIF {
 		}
 	}
 
-	public void carregaPlayers(String pColors[], String pNames[], int posicao, int money, boolean saidaLivrePrisao, boolean preso, boolean falencia, boolean saiuDoJogo, int[] propriedades) {
+	public void carregaPlayers(int nPlayers, String[] pColors, String[] pNames, int posicao[], int money[],
+			boolean saidaLivrePrisao[], boolean preso[], boolean falencia[], boolean[] saiuDoJogo) {
 		Color auxColor = Color.red;
 		String auxColorName = "Vermelho";
 		int pinNumber = 0;
-		for (int i = 0; i < numPlayers; i++) {
+		for (int i = 0; i < nPlayers; i++) {
 			switch (pColors[i]) {
-				case "Vermelho" : {
+				case "Vermelho": {
 					auxColor = Color.red;
 					auxColorName = "Vermelho";
 					pinNumber = 0;
@@ -199,8 +200,25 @@ public class CtrlRegras implements ObservadoIF {
 					auxColorName = "Vermelho";
 					pinNumber = 0;
 			}
-			playerList.add(new Player(i + 1, money, auxColor, auxColorName, pinNumber, pNames[i]));
-			
+			playerList.add(new Player(i + 1, money[i], auxColor, auxColorName, pinNumber, pNames[i]));
+
+			Player p = playerList.get(i);
+
+			p.setPosition(posicao[i]);
+
+			if (saidaLivrePrisao[i]) {
+				p.changeStatusSaidaPrisao();
+			}
+			if (preso[i]) {
+				p.changeStatusPreso();
+			}
+			if (falencia[i]) {
+				p.changeStatusFalencia();
+			}
+			if (saiuDoJogo[i]) {
+				p.setSaiuDoJogo();
+			}
+
 		}
 	}
 
@@ -250,41 +268,172 @@ public class CtrlRegras implements ObservadoIF {
 		// referente ao jogo salvo
 		JFileChooser fc = new JFileChooser(".txt");
 		fc.setFileFilter(new FileNameExtensionFilter("TXT Files (*.txt)", "txt"));
-		
+
 		if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
 			// sair caso tenha clicado cancel ou X
 			System.exit(0);
 		}
-		
+
 		File file = fc.getSelectedFile();
 
 		if (fc.getSelectedFile().length() > 10000) {
 			JOptionPane.showMessageDialog(null,
-			"Erro: arquivo muito grande. Provavelmente não foi gerado pelo jogo.");
+					"Erro: arquivo muito grande. Provavelmente não foi gerado pelo jogo.");
 			System.exit(0);
 		}
-		
-		Scanner sc;
-		String fStr = new String();
+
+		String cores[] = null;
+		String nomes[] = null;
+		int posicoes[] = null;
+		int dinheiro[] = null;
+		boolean cSaidaPrisao[] = null;
+		boolean preso[] = null;
+		boolean falencia[] = null;
+		boolean saiuJogo[] = null;
+
+		int pA=1;
+
+		int proprietarios[] = null;
+		int casas[] = null;
+		int hotels[]= null;
+
+		boolean temCarta = false;
+
 		try {
-			sc = new Scanner(file);
-			
+			// sc = new Scanner(file);
+
 			// load saved game
 			Scanner s = null;
 
 			try {
 				s = new Scanner(new BufferedReader(new FileReader(file)));
 				while (s.hasNextLine()) {
-					String line =s.nextLine();
-					s.
-
-					System.out.println(line);
+					String line = s.nextLine();
+					if (numPlayers == 0) {
+						numPlayers = Integer.parseInt(line);
+					}
+					if (line.compareTo("Cores") == 0) {
+						cores = new String[numPlayers];
+						for (int k = 0; k < numPlayers; k++) {
+							cores[k] = s.nextLine();
+						}
+					}
+					if (line.compareTo("Nomes") == 0) {
+						nomes = new String[numPlayers];
+						for (int k = 0; k < numPlayers; k++) {
+							nomes[k] = s.nextLine();
+						}
+					}
+					if (line.compareTo("Posicoes") == 0) {
+						posicoes = new int[numPlayers];
+						for (int k = 0; k < numPlayers; k++) {
+							posicoes[k] = Integer.parseInt(s.nextLine());
+						}
+					}
+					if (line.compareTo("Dinheiro") == 0) {
+						dinheiro = new int[numPlayers];
+						for (int k = 0; k < numPlayers; k++) {
+							dinheiro[k] = Integer.parseInt(s.nextLine());
+						}
+					}
+					if (line.compareTo("saidaLivrePrisao") == 0) {
+						cSaidaPrisao = new boolean[numPlayers];
+						for (int k = 0; k < numPlayers; k++) {
+							cSaidaPrisao[k] = Boolean.parseBoolean(s.nextLine());
+							if (cSaidaPrisao[k]){
+								temCarta = true;
+							}
+						}
+					}
+					if (line.compareTo("preso") == 0) {
+						preso = new boolean[numPlayers];
+						for (int k = 0; k < numPlayers; k++) {
+							preso[k] = Boolean.parseBoolean(s.nextLine());
+						}
+					}
+					if (line.compareTo("falencia") == 0) {
+						falencia = new boolean[numPlayers];
+						for (int k = 0; k < numPlayers; k++) {
+							falencia[k] = Boolean.parseBoolean(s.nextLine());
+						}
+					}
+					if (line.compareTo("saiu do Jogo") == 0) {
+						saiuJogo = new boolean[numPlayers];
+						for (int k = 0; k < numPlayers; k++) {
+							saiuJogo[k] = Boolean.parseBoolean(s.nextLine());
+						}
+					}
+					if (line.compareTo("playerAtual") == 0) {
+						pA = Integer.parseInt(s.nextLine());
+					}
+					if (line.compareTo("proprietarios") == 0) {
+						proprietarios = new int[28];
+						for (int k = 0; k < 28; k++) {
+							proprietarios[k] = Integer.parseInt(s.nextLine());
+						}
+					}
+					if (line.compareTo("casas") == 0) {
+						casas = new int[22];
+						for (int k = 0; k < 22; k++) {
+							casas[k] = Integer.parseInt(s.nextLine());
+						}
+					}
+					if (line.compareTo("hotels") == 0) {
+						hotels = new int[22];
+						for (int k = 0; k < 22; k++) {
+							hotels[k] = Integer.parseInt(s.nextLine());
+						}
+					}
 				}
 			} finally {
 				if (s != null) {
 					s.close();
 				}
 			}
+			carregaPlayers(numPlayers, cores, nomes, posicoes, dinheiro, cSaidaPrisao, preso, falencia, saiuJogo);
+
+			diceValues[0]=1;
+			diceValues[1]=1;
+
+			playerIndex = pA-1;
+			playerAtual = playerList.get(playerIndex);
+			
+			for (int i = 0; i < numPlayers; i++) {
+				int posX = propriedades[playerList.get(i).getPawnPos()].getPos(i)[0];
+				int posY = propriedades[playerList.get(i).getPawnPos()].getPos(i)[1];
+				playerList.get(i).setCoordenates(posX, posY);
+			}
+
+			for(int i=0, j=0, k=0; i< 40; i++){
+				if(propriedades[i] instanceof Ground || propriedades[i] instanceof Enterprise ){
+					propriedades[i].setProprietario(proprietarios[j]);
+					if(proprietarios[j]!=-1){
+						playerList.get(proprietarios[j]).addPropriedade(i);
+					}
+					j=j+1;
+				}
+				if(propriedades[i] instanceof Ground ){
+					((Ground) propriedades[i]).setHouses(casas[k]);
+					((Ground) propriedades[i]).setHotels(hotels[k]);
+					k=k+1;
+				}
+			}
+
+			podeJogar=true;
+
+			if(temCarta){
+				for (int i = 0; i < 30; i++) {
+					cartas.add(i);
+				}
+				cartas.remove(8);
+				Collections.shuffle(cartas);
+			}else{
+				for (int i = 0; i < 30; i++) {
+					cartas.add(i);
+				}
+				Collections.shuffle(cartas);		
+			}
+
 			// end of load saved game
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null, "Erro: arquivo não encontrado.");
@@ -593,7 +742,6 @@ public class CtrlRegras implements ObservadoIF {
 
 	public int lidarComCartas() {
 		playerAtual = playerList.get(playerIndex);
-		// System.out.println(playerIndex);
 		cartaAtual = cartas.remove(0);
 
 		String mensagem = "";
@@ -996,30 +1144,118 @@ public class CtrlRegras implements ObservadoIF {
 		FileWriter writer;
 		try {
 			writer = new FileWriter(file);
-			writer.append(""+ numPlayers);
-			
+			writer.append("" + numPlayers);
+			writer.append("\n");
+			// cor
+			writer.append("Cores");
+			writer.append("\n");
 			for (int i = 0; i < this.numPlayers; i++) {
-				writer.append("\nPlayer " + (i + 1) + ":");
-				writer.append(playerList.get(i).genSaveString());
-				writer.append(";\n");
+				writer.append(playerList.get(i).getCor());
+				writer.append("\n");
 			}
-			writer.append("\nPlayer da vez: " + playerAtual.getCor() + ";\n");
+			writer.append("\n");
+			// nome
+			writer.append("Nomes");
+			writer.append("\n");
+			for (int i = 0; i < this.numPlayers; i++) {
+				writer.append(playerList.get(i).getName());
+				writer.append("\n");
+			}
+			writer.append("\n");
+			// posicao
+			writer.append("Posicoes");
+			writer.append("\n");
+			for (int i = 0; i < this.numPlayers; i++) {
+				writer.append("" + playerList.get(i).getPawnPos());
+				writer.append("\n");
+			}
+			writer.append("\n");
+			// money
+			writer.append("Dinheiro");
+			writer.append("\n");
+			for (int i = 0; i < this.numPlayers; i++) {
+				writer.append("" + playerList.get(i).getMoney());
+				writer.append("\n");
+			}
+			writer.append("\n");
+			// saidaLivrePrisao
+			writer.append("saidaLivrePrisao");
+			writer.append("\n");
+			for (int i = 0; i < this.numPlayers; i++) {
+				writer.append("" + playerList.get(i).getSaidaLivrePrisao());
+				writer.append("\n");
+			}
+			writer.append("\n");
+			// preso
+			writer.append("preso");
+			writer.append("\n");
+			for (int i = 0; i < this.numPlayers; i++) {
+				writer.append("" + playerList.get(i).getPlayerPreso());
+				writer.append("\n");
+			}
+			writer.append("\n");
+			// falencia
+			writer.append("falencia");
+			writer.append("\n");
+			for (int i = 0; i < this.numPlayers; i++) {
+				writer.append("" + playerList.get(i).getPlayerFalencia());
+				writer.append("\n");
+			}
+			writer.append("\n");
+			// saiuDoJogo
+			writer.append("saiu do Jogo");
+			writer.append("\n");
+			for (int i = 0; i < this.numPlayers; i++) {
+				writer.append("" + playerList.get(i).getSaiuDoJogo());
+				writer.append("\n");
+			}
+			writer.append("\n");
+			// propriedades
+			writer.append("propriedades");
+			writer.append("\n");
+			for (int i = 0; i < this.numPlayers; i++) {
+				writer.append("" + playerList.get(i).getPropriedades().size());
+				writer.append("\n");
+				for (int j = 0; j < playerList.get(i).getPropriedades().size(); j++) {
+					writer.append("" + playerList.get(i).getPropriedades().get(j));
+					writer.append("\n");
+				}
+			}
+			writer.append("\n");
+
+			writer.append("playerAtual");
+			writer.append("\n");
+			writer.append(playerAtual.getNumber() + "\n");
 			writer.append("Cartas Sorte ou Reves: " + cartas.toString() + ";\n");
 			writer.append("Propriedades: " + propriedades.length + ";\n\n\n");
 
-			writer.append("-----> TERRENOS E EMPRESAS:");
-			for (int i = 0; i < propriedades.length; i++) {
+			writer.append("proprietarios");
+			writer.append("\n");
+			for (int i = 0; i < 40; i++) {
+				Property p = propriedades[i];
+				if (p instanceof Ground || p instanceof Enterprise) {
+					writer.append("" + propriedades[i].getProprietario());
+					writer.append("\n");
+				}
+			}
+
+			writer.append("casas");
+			writer.append("\n");
+			for (int i = 0; i < 40; i++) {
 				Property p = propriedades[i];
 				if (p instanceof Ground) {
-					writer.append("\n\nTerreno " + i + ":");
-					Ground t = (Ground) p;
-					writer.append(t.genSaveString());
-					writer.append(";\n");
-				} else if (p instanceof Enterprise) {
-					writer.append("\n\nEmpresa " + i + ";");
-					Enterprise e = (Enterprise) p;
-					writer.append(e.genSaveString());
-					writer.append(";\n");
+					writer.append("" + ((Ground) propriedades[i]).getHouses());
+					writer.append("\n");
+				}
+			}
+
+			writer.append("hotels");
+			writer.append("\n");
+			for (int i = 0; i < 40; i++) {
+				Property p = propriedades[i];
+				if (p instanceof Ground) {
+					writer.append("" + ((Ground) propriedades[i]).getHotels());
+					writer.append("\n");
 				}
 			}
 

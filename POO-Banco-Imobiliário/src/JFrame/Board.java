@@ -201,12 +201,11 @@ public class Board extends JPanel implements ObservadorIF {
 		comboBox.addItem("Visualizar propriedades");
 		for (int i = 0; i < jogadorPropriedades.length; i++) {
 			comboBox.addItem(jogadorPropriedades[i]);
-			System.out.println(jogadorPropriedades[i]);
 		}
 
 		// Desenha Players e dinheiro deles
 
-		for (int i = 0; i < playerList.size(); i++) {
+		for (int i = 0; i < 3; i++) {
 			g2d.setFont(new Font("Arial", Font.BOLD, 16));
 			g2d.setColor(Color.BLACK);
 			g2d.drawString("Player:", 110, 430 + (i * 20));

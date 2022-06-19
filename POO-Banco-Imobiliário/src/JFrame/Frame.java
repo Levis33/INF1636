@@ -81,8 +81,6 @@ public class Frame extends JFrame implements ObservadorIF, MouseListener {
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				control.saveGame();
-				// control.getAllPlayers();
-				// System.out.println("a");
 			}
 		});
 

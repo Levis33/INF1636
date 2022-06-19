@@ -53,6 +53,16 @@ public class Ground extends Property {
         return numHouses;
     }
 
+    public void setHouses(int h) {
+        this.numHouses = h;
+        return;
+    }
+
+    public void setHotels(int h) {
+        this.numHotels = h;
+        return;
+    }
+
     // Hotel
     public int buyHotel() {
         numHotels += 1;
