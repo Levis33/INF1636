@@ -64,7 +64,10 @@ public class Ground extends Property {
     }
 
     public String genSaveString() {
-        return String.format("\n\tProprietario: %d;\n\tCasa: %d;\n\tHotel: %d", getProprietario(), numHouses,
+        int p = getProprietario();
+        if (p != -1)
+            p += 1;
+        return String.format("\n\tProprietario: %d;\n\tCasa: %d;\n\tHotel: %d", p, numHouses,
                 numHotels);
     }
 

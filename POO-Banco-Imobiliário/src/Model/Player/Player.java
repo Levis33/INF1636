@@ -136,8 +136,9 @@ public class Player {
 	public String genSaveString() {
 		String playerData = "";
 
-		playerData += String.format("\n\tPosição: %d;\n\tMoney: %d;\n\tSaidaLivrePrisao: %b;\n\tPreso: %b;\n",
-				pawn.getPos(), money, saidaLivrePrisao, preso);
+		playerData += String.format(
+				"\n\tPosição: %d;\n\tMoney: %d;\n\tSaidaLivrePrisao: %b;\n\tPreso: %b;\n\tFalência: %b;\n\tSaiu do jogo: %b;\n",
+				pawn.getPos(), money, saidaLivrePrisao, preso, falencia, saiuDoJogo);
 
 		playerData += "\tPropriedades: " + propriedades.toString();
 

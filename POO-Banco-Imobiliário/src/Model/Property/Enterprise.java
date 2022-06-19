@@ -13,7 +13,10 @@ public class Enterprise extends Property {
     }
 
     public String genSaveString() {
-        return String.format("\n\tProprietario: %d;", getProprietario());
+        int p = getProprietario();
+        if (p != -1)
+            p += 1;
+        return String.format("\n\tProprietario: %d;", p);
     }
 
 }
