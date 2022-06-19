@@ -9,13 +9,10 @@ import Regras.CtrlRegras;
 public class Main {
 
 	public static void main(String[] args) {
-		CtrlRegras match = new CtrlRegras();
-
 
 		GameIntro f2 = new GameIntro("Banco Imobiliario");
 		f2.setVisible(true);
 		f2.repaint();
-
 
 	}
 

@@ -20,10 +20,6 @@ public class Pawn {
         pos = (pos + dices) % 40; // 40 posicoes para andar
     }
 
-    void goTo(int position) {
-        this.pos = position;
-    }
-
     int getPos() {
         return this.pos;
     }

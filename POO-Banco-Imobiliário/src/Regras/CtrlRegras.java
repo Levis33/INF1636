@@ -5,13 +5,13 @@ import Model.Dice;
 import Model.Property.*;
 
 import java.util.*;
+import java.util.function.Function;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.DefaultStyledDocument.ElementSpec;
 
 import java.awt.Color;
 import java.io.*;
@@ -20,7 +20,6 @@ import java.io.*;
 // import javax.swing.JOptionPane;
 
 import Controller.Observer.*;
-import JFrame.GameIntro;
 
 public class CtrlRegras implements ObservadoIF {
 
@@ -72,74 +71,10 @@ public class CtrlRegras implements ObservadoIF {
 	// Scanner, Random etc
 	Scanner scan = new Scanner(System.in);
 
-	// Constructors
-	public CtrlRegras() {
+	// // Constructors
+	// public CtrlRegras() {
 
-		// Escolher nova partida ou load de jogo salvo
-		String[] optionsGame = { "Nova Partida", "Continuar" };
-		int optGame = JOptionPane.showOptionDialog(null, "Iniciar uma nova partida ou continuar de jogo salvo?",
-				"Iniciar Partida", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, optionsGame,
-				optionsGame[0]);
-
-		if (optGame == -1) {
-			// sair caso tenha clicado X
-			System.exit(0);
-		} else if (optGame == 0) { // Nova partida
-			// new GameIntro("Banco Imobiliario");
-
-			// preenche e faz shuffle das cartas
-			for (int i = 0; i < 30; i++) {
-				cartas.add(i);
-			}
-			Collections.shuffle(cartas);
-
-		} else { // referente ao jogo salvo
-			JFileChooser fc = new JFileChooser(".txt");
-			fc.setFileFilter(new FileNameExtensionFilter("TXT Files (*.txt)", "txt"));
-			File file = fc.getSelectedFile();
-
-			if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
-				// sair caso tenha clicado cancel ou X
-				System.exit(0);
-			}
-
-			if (fc.getSelectedFile().length() > 10000) {
-				JOptionPane.showMessageDialog(null,
-						"Erro: arquivo muito grande. Provavelmente não foi gerado pelo jogo.");
-				System.exit(0);
-			}
-
-			Scanner sc = null;
-			String fStr = null;
-			try {
-				sc = new Scanner(file);
-				while (sc.hasNextLine()) {
-					fStr += sc.nextLine();
-					System.out.printf(fStr);
-				}
-
-				// load saved game
-				Scanner s = null;
-
-				try {
-					s = new Scanner(new BufferedReader(new FileReader(file)));
-					while (s.hasNextLine()) {
-						s.nextLine();
-						System.out.println(s.nextLine());
-					}
-				} finally {
-					if (s != null) {
-						s.close();
-					}
-				}
-				// end of load saved game
-			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(null, "Erro: arquivo não encontrado.");
-				System.exit(0);
-			}
-		}
-
-	}
+	// }
 
 	// instance
 	public static CtrlRegras getInstance() {
@@ -217,6 +152,58 @@ public class CtrlRegras implements ObservadoIF {
 		}
 	}
 
+	public void carregaPlayers(String pColors[], String pNames[], int posicao, int money, boolean saidaLivrePrisao, boolean preso, boolean falencia, boolean saiuDoJogo, int[] propriedades) {
+		Color auxColor = Color.red;
+		String auxColorName = "Vermelho";
+		int pinNumber = 0;
+		for (int i = 0; i < numPlayers; i++) {
+			switch (pColors[i]) {
+				case "Vermelho" : {
+					auxColor = Color.red;
+					auxColorName = "Vermelho";
+					pinNumber = 0;
+					break;
+				}
+				case "Azul": {
+					auxColor = Color.blue;
+					auxColorName = "Azul";
+					pinNumber = 1;
+					break;
+				}
+				case "Laranja": {
+					auxColor = Color.orange;
+					auxColorName = "Laranja";
+					pinNumber = 2;
+					break;
+				}
+				case "Amarelo": {
+					auxColor = Color.yellow;
+					auxColorName = "Amarelo";
+					pinNumber = 3;
+					break;
+				}
+				case "Roxo": {
+					auxColor = Color.magenta;
+					auxColorName = "Roxo";
+					pinNumber = 4;
+					break;
+				}
+				case "Cinza": {
+					auxColor = Color.gray;
+					auxColorName = "Cinza";
+					pinNumber = 5;
+					break;
+				}
+				default:
+					auxColor = Color.red;
+					auxColorName = "Vermelho";
+					pinNumber = 0;
+			}
+			playerList.add(new Player(i + 1, money, auxColor, auxColorName, pinNumber, pNames[i]));
+			
+		}
+	}
+
 	public Player getPlayer(int i) {
 		return playerList.get(i);
 	}
@@ -238,6 +225,11 @@ public class CtrlRegras implements ObservadoIF {
 	}
 
 	public void organizePlay() {
+		for (int i = 0; i < 30; i++) {
+			cartas.add(i);
+		}
+		Collections.shuffle(cartas);
+
 		for (int i = 0; i < numPlayers; i++) {
 			int posX = propriedades[0].getPos(i)[0];
 			int posY = propriedades[0].getPos(i)[1];
@@ -252,6 +244,52 @@ public class CtrlRegras implements ObservadoIF {
 		jogou = false;
 		shouldPlayAgain = false;
 		canSave = false;
+	}
+
+	public void organizeLoadedGame() {
+		// referente ao jogo salvo
+		JFileChooser fc = new JFileChooser(".txt");
+		fc.setFileFilter(new FileNameExtensionFilter("TXT Files (*.txt)", "txt"));
+		
+		if (fc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+			// sair caso tenha clicado cancel ou X
+			System.exit(0);
+		}
+		
+		File file = fc.getSelectedFile();
+
+		if (fc.getSelectedFile().length() > 10000) {
+			JOptionPane.showMessageDialog(null,
+			"Erro: arquivo muito grande. Provavelmente não foi gerado pelo jogo.");
+			System.exit(0);
+		}
+		
+		Scanner sc;
+		String fStr = new String();
+		try {
+			sc = new Scanner(file);
+			
+			// load saved game
+			Scanner s = null;
+
+			try {
+				s = new Scanner(new BufferedReader(new FileReader(file)));
+				while (s.hasNextLine()) {
+					String line =s.nextLine();
+					s.
+
+					System.out.println(line);
+				}
+			} finally {
+				if (s != null) {
+					s.close();
+				}
+			}
+			// end of load saved game
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "Erro: arquivo não encontrado.");
+			System.exit(0);
+		}
 	}
 
 	public int[] getDicesValue() {
@@ -958,16 +996,15 @@ public class CtrlRegras implements ObservadoIF {
 		FileWriter writer;
 		try {
 			writer = new FileWriter(file);
-
-			writer.append("-----> PLAYERS: ");
-			writer.append("\n\nNúmero de players: " + numPlayers + ";\n\n");
+			writer.append(""+ numPlayers);
+			
 			for (int i = 0; i < this.numPlayers; i++) {
 				writer.append("\nPlayer " + (i + 1) + ":");
 				writer.append(playerList.get(i).genSaveString());
 				writer.append(";\n");
 			}
-			writer.append("\n\nPlayer da vez: " + playerAtual.getCor() + ";\n");
-			writer.append("Cartas Sorte ou Revés: " + cartas.toString() + ";\n");
+			writer.append("\nPlayer da vez: " + playerAtual.getCor() + ";\n");
+			writer.append("Cartas Sorte ou Reves: " + cartas.toString() + ";\n");
 			writer.append("Propriedades: " + propriedades.length + ";\n\n\n");
 
 			writer.append("-----> TERRENOS E EMPRESAS:");

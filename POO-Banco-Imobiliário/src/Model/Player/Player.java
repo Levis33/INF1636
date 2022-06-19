@@ -137,8 +137,8 @@ public class Player {
 		String playerData = "";
 
 		playerData += String.format(
-				"\n\tPosição: %d;\n\tMoney: %d;\n\tSaidaLivrePrisao: %b;\n\tPreso: %b;\n\tFalência: %b;\n\tSaiu do jogo: %b;\n",
-				pawn.getPos(), money, saidaLivrePrisao, preso, falencia, saiuDoJogo);
+				"\n\tPosicao: %d;\n\tCor: %s\n\tMoney: %d;\n\tSaidaLivrePrisao: %b;\n\tPreso: %b;\n\tFalencia: %b;\n\tSaiu do jogo: %b;\n",
+				pawn.getPos(), cor, money, saidaLivrePrisao, preso, falencia, saiuDoJogo);
 
 		playerData += "\tPropriedades: " + propriedades.toString();
 

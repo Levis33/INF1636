@@ -32,13 +32,14 @@ public class GameIntro extends JFrame implements ItemListener, ObservadorIF {
 		getContentPane().add(p);
 		p.setLayout(null);
 		cb.addItemListener(this);
-		JButton nextButton = new JButton("Proximo");
+		JButton nextButton = new JButton("Nova Partida");
+		JButton loadButton = new JButton("Carregar Partida");
 
-		title.setBounds(250, 70, 300, 20);
+		title.setBounds(250, 50, 300, 25);
 		cb.setSelectedItem("3");
-		cb.setBounds(280, 95, 50, 20);
+		cb.setBounds(270, 75, 50, 25);
 
-		nextButton.setBounds(330, 95, 90, 20);
+		nextButton.setBounds(320, 75, 110, 25);
 		nextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int numPlayers = cb.getSelectedIndex() + 3;
@@ -50,9 +51,24 @@ public class GameIntro extends JFrame implements ItemListener, ObservadorIF {
 			}
 		});
 
+		loadButton.setBounds(270, 130, 160, 25);
+		loadButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					CtrlRegras.getInstance().organizeLoadedGame();
+					
+					Frame f = new Frame("Banco Imobiliario");
+					f.setVisible(true);
+					removeSelf();
+					setVisible(false);
+			}
+		});
+
+
+
 		p.add(cb);
 		p.add(title);
 		p.add(nextButton);
+		p.add(loadButton);
 		setVisible(true);
 		CtrlRegras.getInstance().add(this);
 	}

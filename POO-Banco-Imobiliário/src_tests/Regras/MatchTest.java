@@ -7,7 +7,7 @@ public class MatchTest {
 	private static final int TIMEOUT = 1000;
 
 	@Test(timeout = TIMEOUT)
-	private void testConstructor() {
+	void testConstructor() {
 		Match m = new Match();
 		assertNotNull("Erro na cria��o da partida", m);
 	}
