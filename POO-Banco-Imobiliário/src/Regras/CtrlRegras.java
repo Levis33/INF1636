@@ -1210,25 +1210,11 @@ public class CtrlRegras implements ObservadoIF {
 				writer.append("\n");
 			}
 			writer.append("\n");
-			// propriedades
-			writer.append("propriedades");
-			writer.append("\n");
-			for (int i = 0; i < this.numPlayers; i++) {
-				writer.append("" + playerList.get(i).getPropriedades().size());
-				writer.append("\n");
-				for (int j = 0; j < playerList.get(i).getPropriedades().size(); j++) {
-					writer.append("" + playerList.get(i).getPropriedades().get(j));
-					writer.append("\n");
-				}
-			}
-			writer.append("\n");
-
+			
 			writer.append("playerAtual");
 			writer.append("\n");
 			writer.append(playerAtual.getNumber() + "\n");
-			writer.append("Cartas Sorte ou Reves: " + cartas.toString() + ";\n");
-			writer.append("Propriedades: " + propriedades.length + ";\n\n\n");
-
+			
 			writer.append("proprietarios");
 			writer.append("\n");
 			for (int i = 0; i < 40; i++) {

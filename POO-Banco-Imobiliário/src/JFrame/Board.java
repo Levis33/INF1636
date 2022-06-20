@@ -205,7 +205,7 @@ public class Board extends JPanel implements ObservadorIF {
 
 		// Desenha Players e dinheiro deles
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < numPlayers; i++) {
 			g2d.setFont(new Font("Arial", Font.BOLD, 16));
 			g2d.setColor(Color.BLACK);
 			g2d.drawString("Player:", 110, 430 + (i * 20));
